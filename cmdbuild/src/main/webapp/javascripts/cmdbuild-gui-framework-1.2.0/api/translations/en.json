@@ -1,0 +1,25 @@
+{
+	"cgf_core_cfw_add_row": "Add row",
+	"cgf_core_cfw_modify_row": "Edit row",
+	"cgf_core_cfw_clone_row": "Clone row",
+	"cgf_core_cfw_delete_row": "Delete row",
+	"cgf_core_dialog_close": "Close",
+	"cgf_core_dialog_fixerrors": "Correct indicated errors.",
+	"cgf_core_cfw_required": "Data required",
+	"cgf_core_cfw_wrongdata": "Wrong data",
+	"cgf_core_boolfield_yes" : "Yes",
+	"cgf_core_boolfield_no" : "No",
+
+	"cgf_core_error_title" : "Error!",
+	"cgf_core_error_content" : "We're sorry, but there seems to be an error.",
+
+	"cgf_pagination_first": "First",
+	"cgf_pagination_previous": "Previous",
+	"cgf_pagination_next": "Next",
+	"cgf_pagination_last": "Last",
+	"cgf_pagination_info": "Page _PAGE_ of _PAGES_ (records _TOTAL_)",
+	"cgf_pagination_search" : "Search",
+
+	"cgf_label_description" : "Description",
+	"cgf_label_report_extension" : "Extension"
+}

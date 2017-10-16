@@ -1,0 +1,25 @@
+{
+	"cgf_core_cfw_add_row": "Aggiungi riga",
+	"cgf_core_cfw_modify_row": "Modifica riga",
+	"cgf_core_cfw_clone_row": "Clona riga",
+	"cgf_core_cfw_delete_row": "Elimina riga",
+	"cgf_core_dialog_close": "Chiudi",
+	"cgf_core_dialog_fixerrors": "Correggi gli errori",
+	"cgf_core_cfw_required": "Dati obbligatori",
+	"cgf_core_cfw_wrongdata": "Dati non corretti",
+	"cgf_core_boolfield_yes" : "Sì",
+	"cgf_core_boolfield_no" : "No",
+
+	"cgf_core_error_title" : "Errore!",
+	"cgf_core_error_content" : "Ci dispiace ma si è verificato un errore.",
+
+	"cgf_pagination_first": "Prima",
+	"cgf_pagination_previous": "Precedente",
+	"cgf_pagination_next": "Successiva",
+	"cgf_pagination_last": "Ultima",
+	"cgf_pagination_info": "Pagina _PAGE_ di _PAGES_ (_TOTAL_ elementi)",
+	"cgf_pagination_search" : "Cerca",
+
+	"cgf_label_description" : "Descrizione",
+	"cgf_label_report_extension" : "Estensione"
+}

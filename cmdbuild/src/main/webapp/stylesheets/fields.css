@@ -1,0 +1,18 @@
+/* ComboCox: Icon */
+	.cmdb-combobox-icon-list-item {
+		height: 44px;
+		line-height: 44px
+	}
+	.cmdb-combobox-icon-list-item img {
+		float: left;
+		max-height: 40px;
+		max-width: 40px;
+	}
+	.cmdb-combobox-icon-list-item span {
+		float: left;
+		height: 40px;
+		line-height: 40px;
+	}
+	.cmdb-button-filter span {
+		text-align:left;
+	}

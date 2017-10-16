@@ -1,0 +1,44 @@
+<html>
+<head>
+<style type="text/css">
+table.card th {
+	padding: 5px;
+	text-align: right;
+	font-weight: bold;
+}
+table.card th:after {
+	content: ":";
+}
+table.card td {
+	padding: 5px;
+}
+table.related-cards,
+table.related-cards tr,
+table.related-cards th,
+table.related-cards td {
+	border-collapse: collapse;
+	border: 1px solid #ccc;
+}
+table.related-cards {
+	width: 100%;
+}
+table.related-cards th {
+	padding: 5px;
+	background-color: #ddd:
+}
+table.related-cards td {
+	padding: 5px;
+}
+</style>
+</head>
+<body>
+	<img src="../../images/logo.jpg" width="150" style="float: right;" />
+	<h1>%PRINT_NETWORK_TITLE</h1>
+	<h3>%PRINT_NETWORK_SUBTITLE</h3>
+	%PRINT_NETWORK_CARD %PRINT_NETWORK_IMAGE
+	<h3>%PRINT_NETWORK_TABLETITLE</h3>
+	<table class="related-cards">%PRINT_NETWORK_ROWS</table>
+	<h3>%PRINT_NETWORK_FOOTER</h3>
+</body>
+</html>
+

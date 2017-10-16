@@ -1,0 +1,40 @@
+<DATA>
+	<params>
+		<type>popup</type>
+		<title>Custom Form Widget</title>
+	</params>
+
+	<!-- popup content -->
+	<div id="customform_widget_grid_container"
+		class="cmdbuild-dialog-content">
+		<onInit>
+			<command>navigate</command>
+			<container>customform_widget_grid_container</container>
+			<form>customform_widget_grid</form>
+		</onInit>
+		<form id="customform_widget_grid">
+ 			<params>
+				<type>customform_grid</type>
+				<instanceForm>$parameters.instanceForm</instanceForm>
+				<widgetId>$parameters.widgetId</widgetId>
+			</params>
+		</form>
+	</div>
+
+	<!-- popup footer -->
+	<div class='cmdbuild-dialog-footer'>
+		<button text="Close" i18nText="cgf_core_dialog_close" id="customform_widget_grid_popup_close">
+			<onClick>
+				<command>dialogClose</command>
+				<dialog>$parameters.dialog</dialog>
+			</onClick>
+		</button>
+	</div>
+
+	<!-- edit form dialog -->
+	<form title="Edit data" id="include_customform_widget_grid_form_dialog" 
+		include="widgets/CustomForm_form.xml" fileType='core'
+		withId="customform_widget_grid_form" />
+	<dialog id="customform_widget_grid_form_dialog"></dialog>
+
+</DATA>

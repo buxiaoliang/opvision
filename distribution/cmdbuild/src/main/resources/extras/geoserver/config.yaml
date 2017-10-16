@@ -1,0 +1,359 @@
+#===========================================================================
+# allowed DPIs
+#===========================================================================
+dpis: [75, 150, 300]
+
+#===========================================================================
+# the allowed scales
+#===========================================================================
+scales:
+  - 250
+  - 500
+  - 1000
+  - 2000
+  - 3000
+  - 4000
+  - 5000
+  - 10000
+  - 25000
+  - 50000
+  - 100000
+  - 200000
+  - 500000
+  - 1000000
+  - 2000000
+  - 4000000
+  - 8000000
+  - 16000000
+  - 32000000
+  - 64000000
+  - 128000000
+  - 500000000
+  - 1000000000
+
+#===========================================================================
+# the list of allowed hosts
+#===========================================================================
+hosts:
+  - !localMatch
+    dummy: true
+  - !ipMatch
+    ip: www.camptocamp.org
+  - !dnsMatch
+    host: demo.opengeo.org
+    port: 80
+  - !dnsMatch
+    host: terraservice.net
+    port: 80
+  - !dnsMatch
+    host: sigma.openplans.org
+    host: a.tile.openstreetmap.org 
+  - !dnsMatch
+    host: demo.mapfish.org
+  - !dnsMatch
+    host: 10.0.0.107:10080/geoserver
+
+outputFilename: 'CMDBuild-Gis-Service-${yyyyMMdd}.pdf'
+
+
+layouts:
+  #===========================================================================
+  2) A4 Landscape:
+  #===========================================================================
+    metaData:
+      title: '${mapTitle}'
+      author: 'MapFish print module'
+      subject: 'Simple layout'
+      keywords: 'map,print'
+      creator: 'MapFish'
+
+    mainPage:
+      pageSize: A4
+      rotation: false
+      landscape: true
+      footer:
+        height: 30
+        items:
+          - !columns
+            config:
+              borderWidth: 0
+              borderColor: gray
+            items:
+              - !text
+                condition: data
+                font: Verdana
+                fontSize: 8
+                vertAlign: middle
+                text:  '${now dd.MM.yyyy}'
+              - !text
+                condition: mapPage
+                font: Verdana
+                fontSize: 8
+                vertAlign: middle
+                text:  '${now dd.MM.yyyy}    Scale: 1:${scale}'
+              - !text
+                font: Verdana
+                fontSize: 8
+                vertAlign: middle
+                align: right
+                text:  'Pg. ${pageNum}'
+      header:
+        height: 45
+        items:
+          - !columns
+            config:
+              borderWidth: 0
+              borderColor: gray
+            items:
+              - !text
+                font: Verdana
+                fontSize: 8
+                vertAlign: middle
+                text: CMDBuild
+              - !image
+                align: right
+                maxWidth: 45
+                maxHeight: 35
+                url: '${logo}'
+      items:
+         - !text
+            condition: mapPage
+            text: '${mapTitle}'
+            font: Verdana
+            fontSize: 18
+            vertAlign: middle
+            align: center
+            spacingAfter: 30
+         - !map
+           condition: mapPage
+           spacingAfter: 15
+           width: 750
+           height: 350
+         - !columns
+           condition: mapPage
+           absoluteX: 650
+           absoluteY: 180
+           width: 100
+           items:
+              - !scalebar
+               type: bar
+               maxSize: 100
+               barBgColor: white
+               fontSize: 8
+               align: right
+         - !text
+            condition: mapPage
+            text: '${comment}'
+            font: Verdana
+            fontSize: 8
+            vertAlign: middle
+         - !text
+            condition: data
+            text: 'Thematic Legend: ${thematismName}'
+            font: Verdana
+            fontSize: 8
+            vertAlign: middle
+            spacingAfter: 30
+         - !attributes
+          condition: data
+          tableConfig:
+            width: 200
+            borderWidth: 1
+            borderColor: gray
+            cells:
+               - borderColor: gray
+                 borderWidthBottom: 0.5
+                 borderWidthLeft: 0.5
+                 padding: 4
+                 paddingTop: 0
+          source: data
+          columnDefs: 	
+            value: 	
+              columnWeight: 6	
+              header: !text
+                text: Value
+                font: Verdana
+                fontSize: 8
+                align: left
+                vertAlign: middle
+              cell: !text
+                borderWidth: 1
+                borderColor: gray
+                text: '${value}'
+                font: Verdana
+                fontSize: 8
+            cardinality: 	
+              columnWeight: 1	
+              header: !text
+                text: Qt.
+                font: Verdana
+                fontSize: 8
+              cell: !text
+                text: '${cardinality}'
+                font: Verdana
+                fontSize: 8
+                align: left
+                vertAlign: middle
+            color:
+              columnWeight: 2	
+              header: !text
+                text: Color
+                font: Verdana
+                fontSize: 8
+              cell: !text
+                text: ''
+                backgroundColor: '${color}'
+   #===========================================================================
+  1) A4 Portrait:
+  #===========================================================================
+    metaData:
+      title: '${mapTitle}'
+      author: 'MapFish print module'
+      subject: 'Simple layout'
+      keywords: 'map,print'
+      creator: 'MapFish'
+
+    mainPage:
+      pageSize: A4
+      rotation: true
+      landscape: false
+      footer:
+        height: 30
+        items:
+          - !columns
+            config:
+              borderWidth: 0
+              borderColor: gray
+            items:
+              - !text
+                condition: data
+                font: Verdana
+                fontSize: 8
+                vertAlign: middle
+                text:  '${now dd.MM.yyyy}'
+              - !text
+                condition: mapPage
+                font: Verdana
+                fontSize: 8
+                vertAlign: middle
+                text:  '${now dd.MM.yyyy}    Scale: 1:${scale}'
+              - !text
+                font: Verdana
+                fontSize: 8
+                vertAlign: middle
+                align: right
+                text:  'Pg. ${pageNum}'
+      header:
+        height: 45
+        items:
+          - !columns
+            config:
+              borderWidth: 0
+              borderColor: gray
+            items:
+              - !text
+                font: Verdana
+                fontSize: 8
+                vertAlign: middle
+                text: CMDBuild
+              - !image
+                align: right
+                maxWidth: 45
+                maxHeight: 35
+                url: '${logo}'
+      items:
+         - !text
+            condition: mapPage
+            text: '${mapTitle}'
+            font: Verdana
+            fontSize: 18
+            vertAlign: middle
+            align: center
+            spacingAfter: 30
+         - !map
+           condition: mapPage
+           spacingAfter: 15
+           width: 500
+           height: 600
+         - !text
+            condition: mapPage
+            text: '${comment}'
+            font: Verdana
+            fontSize: 8
+            vertAlign: middle
+            spacingAfter: 15
+         - !columns
+           condition: mapPage
+           absoluteX: 420
+           absoluteY: 150
+           width: 100
+           items:
+              - !scalebar
+               type: bar
+               maxSize: 100
+               barBgColor: white
+               fontSize: 8
+               align: right
+         - !text
+            condition: data
+            text: 'Thematic Legend: ${thematismName}'
+            font: Verdana
+            fontSize: 8
+            vertAlign: middle
+            spacingAfter: 30
+         - !attributes
+          condition: data
+          tableConfig:
+            borderWidth: 1
+            borderColor: gray
+            cells:
+               - borderColor: gray
+                 borderWidthBottom: 0.5
+                 borderWidthLeft: 0.5
+                 padding: 4
+                 paddingTop: 0
+          source: data
+          columnDefs: 	
+            value: 
+              columnWeight: 6	
+              header: !text
+                text: Value
+                font: Verdana
+                fontSize: 8
+                fontColor: black
+                align: left
+                vertAlign: middle
+                borderWidthBottom : 1
+                borderColorBottom : gray
+              cell: !text
+                text: '${value}'
+                font: Verdana
+                fontSize: 8
+                config:
+                  borderWidthBottom : 1
+                  borderColorBottom : gray
+                vertAlign: middle
+            cardinality: 	
+              columnWeight: 1
+              header: !text
+                text: Qt.
+                font: Verdana
+                fontSize: 8
+                vertAlign: middle
+              cell: !text
+                text: '${cardinality}'
+                font: Verdana
+                fontSize: 8
+                align: left
+                vertAlign: middle
+            color: 	
+              columnWeight: 2
+              header: !text
+                text: Color
+                font: Verdana
+                fontSize: 8
+              cell: !text
+                text: ''
+                backgroundColor: '${color}'
+ 
+

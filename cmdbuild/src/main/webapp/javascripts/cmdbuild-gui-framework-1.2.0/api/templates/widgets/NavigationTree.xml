@@ -1,0 +1,21 @@
+<DATA>
+	<params>
+		<type>popup</type>
+		<title>Navigation Tree Widget</title>
+	</params>
+	<div id="navigationtree_container" class="navigationtree_container cmdbuild-dialog-content">
+		<onInit>
+			<command>navigate</command>
+			<container>navigationtree_container</container>
+			<form>navigationtree_tree</form>
+		</onInit>
+		<form id="navigationtree_tree">
+ 			<params>
+				<type>navigationtree</type>
+				<widgetId>$parameters.widgetId</widgetId>
+				<instanceForm>$parameters.instanceForm</instanceForm>
+			</params>
+		</form>
+	</div>
+	
+</DATA>

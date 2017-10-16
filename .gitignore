@@ -1,0 +1,15 @@
+syntax: glob
+.project
+.classpath
+.settings
+target
+.externalToolBuilders
+META-INF/MANIFEST.MF
+DatabaseManager.log
+alfresco.log
+.springBeans
+.hgignore
+.hgtags
+.hg/**
+*.iml
+.idea/**

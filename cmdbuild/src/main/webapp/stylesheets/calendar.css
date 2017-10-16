@@ -1,0 +1,8 @@
+/*
+ * Overrides
+ */
+	/* The text color for non-all-day events that have no background color */
+	.x-cal-default,
+	.x-cal-default-x .ext-cal-evb,
+	.ext-ie .x-cal-default-ad,
+	.ext-opera .x-cal-default-ad { color: #555555 !important; }
