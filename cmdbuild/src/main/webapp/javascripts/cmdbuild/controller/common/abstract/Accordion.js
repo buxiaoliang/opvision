@@ -222,7 +222,7 @@
 					node.bubble(function () {
 						this.expand();
 					});
-
+					
 					this.view.getSelectionModel().select(node);
 
 					if (parameters.mode != 'silently')
@@ -271,7 +271,7 @@
 					id: this.cmfg('accordionIdentifierGet'),
 					node: selection
 				});
-			}
+			} 
 		},
 
 		/**
@@ -311,7 +311,10 @@
 					return _error('onAccordionBeforeItemClick(): unmanaged node', this, node);
 			// END: Error handling
 
-			this.eventForwardSelection();
+			if(node.raw.cmName != 'folder')	{
+				this.eventForwardSelection();
+			}
+
 		},
 
 		/**
@@ -355,8 +358,19 @@
 					this.cmfg('accordionNodeByIdSelect', { id: parameters.selectionId });
 
 				// Select first selectable item if no selection and expanded
-				if (!this.view.getSelectionModel().hasSelection() && this.view.getCollapsed() === false && this.view.isVisible())
-					this.cmfg('accordionFirstSelectableNodeSelect');
+				if (!this.view.getSelectionModel().hasSelection() && this.view.getCollapsed() === false && this.view.isVisible()) {
+					
+					var nav = Ext.getCmp(this.view.id)
+					
+					if (nav.isDisabled()){
+						this.parentDelegate.cmfg('mainViewAccordionSetLock', false);
+						this.cmfg('accordionFirstSelectableNodeSelect');
+						this.parentDelegate.cmfg('mainViewAccordionSetLock', true);
+					} else {
+						this.cmfg('accordionFirstSelectableNodeSelect');
+					}
+
+				}
 			}
 
 			// Hide if accordion is empty

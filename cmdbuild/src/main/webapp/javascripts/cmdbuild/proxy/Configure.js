@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.Configure', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.configurations.Timeout',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json'

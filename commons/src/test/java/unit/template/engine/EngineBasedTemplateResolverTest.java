@@ -1,17 +1,25 @@
 package unit.template.engine;
 
+import static org.cmdbuild.common.template.engine.Engines.map;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.cmdbuild.common.template.engine.Engine;
 import org.cmdbuild.common.template.engine.EngineBasedTemplateResolver;
 import org.junit.Test;
 
 public class EngineBasedTemplateResolverTest {
+
+	private static Engine engineWithParam(final String name, final Object value) {
+		final Map<String, Object> map = new HashMap<>();
+		map.put(name, value);
+		return map(map);
+	}
 
 	@Test
 	public void nullStringResolvedAsNull() throws Exception {
@@ -139,14 +147,18 @@ public class EngineBasedTemplateResolverTest {
 		assertThat(value, equalTo("foo \\ bar baz$"));
 	}
 
-	/*
-	 * Utilities
-	 */
+	@Test
+	public void jsonTemplateResolved() throws Exception {
+		// given
+		final EngineBasedTemplateResolver tr = EngineBasedTemplateResolver.newInstance() //
+				.withEngine(engineWithParam("foo", "this is the output"), "e0") //
+				.build();
 
-	private Engine engineWithParam(final String name, final Object value) {
-		final Engine engine = mock(Engine.class);
-		when(engine.eval(name)).thenReturn(value);
-		return engine;
+		// when
+		final String value = tr.resolve("{\"a key\": \"a value\", \"another key\": \"{e0:foo}\"}");
+
+		// then
+		assertThat(value, equalTo("{\"a key\": \"a value\", \"another key\": \"this is the output\"}"));
 	}
 
 }

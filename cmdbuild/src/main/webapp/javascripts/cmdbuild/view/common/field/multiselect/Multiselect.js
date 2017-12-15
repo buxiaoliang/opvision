@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.common.field.multiselect.Multiselect', {
 		extend: 'Ext.ux.form.MultiSelect',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @property {CMDBuild.controller.common.field.multiselect.Multiselect}

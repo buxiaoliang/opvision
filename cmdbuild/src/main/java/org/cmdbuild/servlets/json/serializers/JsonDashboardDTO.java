@@ -23,6 +23,7 @@ import org.cmdbuild.dao.entrytype.attributetype.TextAttributeType;
 import org.cmdbuild.dao.entrytype.attributetype.TimeAttributeType;
 import org.cmdbuild.dao.function.CMFunction;
 import org.cmdbuild.dao.function.CMFunction.CMFunctionParameter;
+import org.cmdbuild.dao.function.CMFunction.CMFunctionOutputParameter;
 import org.cmdbuild.model.dashboard.DashboardDefinition;
 import org.cmdbuild.servlets.json.util.AttributeType;
 
@@ -73,6 +74,14 @@ public interface JsonDashboardDTO {
 			}
 		};
 
+		static Function<CMFunctionOutputParameter, JsonDataSourceOutputParameter> outputParameterConverter = new Function<CMFunctionOutputParameter, JsonDataSourceOutputParameter>() {
+			@Override
+			public JsonDataSourceOutputParameter apply(final CMFunctionOutputParameter output) {
+				return new JsonDataSourceOutputParameter(output);
+			}
+		};
+		
+
 		private final CMFunction inner;
 
 		private JsonDataSource(final CMFunction inner) {
@@ -87,9 +96,10 @@ public interface JsonDashboardDTO {
 			return Lists.newArrayList(Iterables.transform(inner.getInputParameters(), parameterConverter));
 		}
 
-		public Iterable<JsonDataSourceParameter> getOutput() {
-			return Lists.newArrayList(Iterables.transform(inner.getOutputParameters(), parameterConverter));
+		public Iterable<JsonDataSourceOutputParameter> getOutput() {
+			 return Lists.newArrayList(Iterables.transform(inner.getOutputParameters(), outputParameterConverter));
 		}
+		
 	}
 
 	public class JsonDataSourceParameter {
@@ -97,7 +107,7 @@ public interface JsonDashboardDTO {
 		private final String name;
 		private final String type;
 
-		private JsonDataSourceParameter(final CMFunctionParameter parameter) {
+		public JsonDataSourceParameter(final CMFunctionParameter parameter) {
 			this.name = parameter.getName();
 			this.type = new TypeConverter(parameter.getType()).getTypeName();
 		}
@@ -203,5 +213,23 @@ public interface JsonDashboardDTO {
 			}
 
 		};
+		
+		
+	}
+	
+	public class JsonDataSourceOutputParameter extends JsonDataSourceParameter {
+		
+		protected JsonDataSourceOutputParameter(CMFunctionOutputParameter parameter) {
+			super(parameter);
+			basedsp = parameter.getBasedsp();
+			
+		}
+
+		private Boolean basedsp = Boolean.TRUE;//default
+		
+		public Boolean getBasedsp() {
+			return basedsp;
+		}
+		
 	}
 }

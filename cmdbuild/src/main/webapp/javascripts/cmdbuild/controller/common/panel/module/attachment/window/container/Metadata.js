@@ -6,7 +6,7 @@
 	Ext.define('CMDBuild.controller.common.panel.module.attachment.window.container.Metadata', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {Object}

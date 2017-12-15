@@ -11,6 +11,7 @@ import org.cmdbuild.services.soap.Card;
 import org.cmdbuild.services.soap.Private;
 import org.cmdbuild.services.soap.Query;
 import org.cmdbuild.services.soap.Relation;
+import org.junit.After;
 import org.junit.Before;
 import org.mockito.ArgumentCaptor;
 
@@ -49,6 +50,12 @@ public abstract class AbstractWsFluentApiTest {
 		final FluentApiExecutor executor = new WsFluentApiExecutor(proxy);
 
 		api = new ExecutorBasedFluentApi(executor);
+	}
+
+	@After
+	public void cleanupProxyAndApi() {
+		api = null;
+		proxy = null;
 	}
 
 	protected Private proxy() {

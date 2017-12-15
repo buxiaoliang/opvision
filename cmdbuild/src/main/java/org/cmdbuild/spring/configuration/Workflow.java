@@ -1,10 +1,12 @@
 package org.cmdbuild.spring.configuration;
 
+import static org.cmdbuild.auth.context.PrivilegeContexts.systemPrivilegeContext;
 import static org.cmdbuild.spring.util.Constants.PROTOTYPE;
 import static org.cmdbuild.spring.util.Constants.SYSTEM;
 
 import org.apache.commons.lang3.builder.Builder;
-import org.cmdbuild.auth.acl.PrivilegeContext;
+import org.cmdbuild.common.cache.ClusterMessageReceiver;
+import org.cmdbuild.common.cache.ClusterMessageSender;
 import org.cmdbuild.common.template.TemplateResolver;
 import org.cmdbuild.config.WorkflowConfiguration;
 import org.cmdbuild.logger.WorkflowLogger;
@@ -68,10 +70,6 @@ public class Workflow {
 	private Other other;
 
 	@Autowired
-	@Qualifier(SYSTEM)
-	private PrivilegeContext systemPrivilegeContext;
-
-	@Autowired
 	private SystemUser systemUser;
 
 	@Autowired
@@ -79,6 +77,12 @@ public class Workflow {
 
 	@Autowired
 	private WorkflowConfiguration workflowConfiguration;
+	
+	@Autowired
+	private ClusterMessageReceiver clusterMessageReceiver;
+	
+	@Autowired
+	private ClusterMessageSender clusterMessageSender;
 
 	@Bean
 	public AbstractSharkService workflowService() {
@@ -155,7 +159,7 @@ public class Workflow {
 	@Scope(PROTOTYPE)
 	protected WorkflowPersistence systemWorkflowPersistence() {
 		return DataViewWorkflowPersistence.newInstance() //
-				.withPrivilegeContext(systemPrivilegeContext) //
+				.withPrivilegeContext(systemPrivilegeContext()) //
 				.withOperationUser(systemUser.operationUserWithSystemPrivileges()) //
 				.withDataView(data.systemDataView()) //
 				.withProcessDefinitionManager(processDefinitionManager()) //
@@ -172,7 +176,12 @@ public class Workflow {
 
 	@Bean
 	protected WorkflowEventManager workflowEventManager() {
-		return new WorkflowEventManagerImpl(systemWorkflowPersistence(), workflowService(), workflowTypesConverter());
+		WorkflowEventManagerImpl workflowEventManager = new WorkflowEventManagerImpl(systemWorkflowPersistence(), 
+				workflowService(), 
+				workflowTypesConverter(),
+				clusterMessageSender);
+		workflowEventManager.register(clusterMessageReceiver);
+		return workflowEventManager;
 	}
 
 	@Bean
@@ -193,7 +202,7 @@ public class Workflow {
 	@Scope(PROTOTYPE)
 	public SystemWorkflowLogicBuilder systemWorkflowLogicBuilder() {
 		return new SystemWorkflowLogicBuilder( //
-				systemPrivilegeContext, //
+				systemPrivilegeContext(), //
 				systemWorkflowEngineBuilder(), //
 				data.systemDataView(), //
 				workflowConfiguration, //

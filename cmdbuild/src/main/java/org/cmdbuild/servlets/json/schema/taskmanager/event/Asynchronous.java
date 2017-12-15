@@ -12,7 +12,14 @@ import static org.cmdbuild.servlets.json.CommunicationConstants.ID;
 import static org.cmdbuild.servlets.json.CommunicationConstants.NOTIFICATION_ACTIVE;
 import static org.cmdbuild.servlets.json.CommunicationConstants.NOTIFICATION_EMAIL_ACCOUNT;
 import static org.cmdbuild.servlets.json.CommunicationConstants.NOTIFICATION_EMAIL_TEMPLATE;
+import static org.cmdbuild.servlets.json.CommunicationConstants.REPORTNAME;
+import static org.cmdbuild.servlets.json.CommunicationConstants.REPORT_ACTIVE;
+import static org.cmdbuild.servlets.json.CommunicationConstants.REPORT_EXTENSION;
+import static org.cmdbuild.servlets.json.CommunicationConstants.REPORT_PARAMETERS;
 import static org.cmdbuild.servlets.json.schema.TaskManager.TASK_TO_JSON_TASK;
+import static org.cmdbuild.servlets.json.schema.Utils.toMap;
+
+import java.util.Map;
 
 import org.cmdbuild.logic.taskmanager.Task;
 import org.cmdbuild.logic.taskmanager.task.event.asynchronous.AsynchronousEventTask;
@@ -21,6 +28,7 @@ import org.cmdbuild.servlets.json.JSONBaseWithSpringContext;
 import org.cmdbuild.servlets.json.schema.TaskManager.JsonElements;
 import org.cmdbuild.servlets.utils.Parameter;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.json.JSONObject;
 
 public class Asynchronous extends JSONBaseWithSpringContext {
 
@@ -82,6 +90,26 @@ public class Asynchronous extends JSONBaseWithSpringContext {
 			return delegate.getNotificationTemplate();
 		}
 
+		@JsonProperty(REPORT_ACTIVE)
+		public boolean isReportActive() {
+			return delegate.isReportActive();
+		}
+
+		@JsonProperty(REPORTNAME)
+		public String getReportName() {
+			return delegate.getReportName();
+		}
+
+		@JsonProperty(REPORT_EXTENSION)
+		public String getReportExtension() {
+			return delegate.getReportExtension();
+		}
+
+		@JsonProperty(REPORT_PARAMETERS)
+		public Map<String, String> getReportParameters() {
+			return delegate.getReportParameters();
+		}
+
 	}
 
 	@Admin
@@ -94,7 +122,11 @@ public class Asynchronous extends JSONBaseWithSpringContext {
 			@Parameter(value = FILTER, required = false) final String filter, //
 			@Parameter(value = NOTIFICATION_ACTIVE, required = false) final Boolean emailActive, //
 			@Parameter(value = NOTIFICATION_EMAIL_ACCOUNT, required = false) final String emailAccount, //
-			@Parameter(value = NOTIFICATION_EMAIL_TEMPLATE, required = false) final String emailTemplate //
+			@Parameter(value = NOTIFICATION_EMAIL_TEMPLATE, required = false) final String emailTemplate, //
+			@Parameter(value = REPORT_ACTIVE, required = false) final Boolean reportActive, //
+			@Parameter(value = REPORTNAME, required = false) final String reportName, //
+			@Parameter(value = REPORT_EXTENSION, required = false) final String reportExtension, //
+			@Parameter(value = REPORT_PARAMETERS, required = false) final JSONObject reportParameters //
 	) {
 		final AsynchronousEventTask task = AsynchronousEventTask.newInstance() //
 				.withDescription(description) //
@@ -105,6 +137,10 @@ public class Asynchronous extends JSONBaseWithSpringContext {
 				.withNotificationStatus(emailActive) //
 				.withNotificationAccount(emailAccount) //
 				.withNotificationErrorTemplate(emailTemplate) //
+				.withReportActive(reportActive) //
+				.withReportName(reportName) //
+				.withReportExtension(reportExtension) //
+				.withReportParameters(toMap(reportParameters)) //
 				.build();
 		final Long id = taskManagerLogic().create(task);
 		return success(id);
@@ -141,7 +177,11 @@ public class Asynchronous extends JSONBaseWithSpringContext {
 			@Parameter(value = FILTER, required = false) final String filter, //
 			@Parameter(value = NOTIFICATION_ACTIVE, required = false) final Boolean emailActive, //
 			@Parameter(value = NOTIFICATION_EMAIL_ACCOUNT, required = false) final String emailAccount, //
-			@Parameter(value = NOTIFICATION_EMAIL_TEMPLATE, required = false) final String emailTemplate //
+			@Parameter(value = NOTIFICATION_EMAIL_TEMPLATE, required = false) final String emailTemplate, //
+			@Parameter(value = REPORT_ACTIVE, required = false) final Boolean reportActive, //
+			@Parameter(value = REPORTNAME, required = false) final String reportName, //
+			@Parameter(value = REPORT_EXTENSION, required = false) final String reportExtension, //
+			@Parameter(value = REPORT_PARAMETERS, required = false) final JSONObject reportParameters //
 	) {
 		final AsynchronousEventTask task = AsynchronousEventTask.newInstance() //
 				.withId(id) //
@@ -153,6 +193,10 @@ public class Asynchronous extends JSONBaseWithSpringContext {
 				.withNotificationStatus(emailActive) //
 				.withNotificationAccount(emailAccount) //
 				.withNotificationErrorTemplate(emailTemplate) //
+				.withReportActive(reportActive) //
+				.withReportName(reportName) //
+				.withReportExtension(reportExtension) //
+				.withReportParameters(toMap(reportParameters)) //
 				.build();
 		taskManagerLogic().update(task);
 		return success();

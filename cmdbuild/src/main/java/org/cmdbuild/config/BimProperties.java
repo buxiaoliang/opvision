@@ -7,7 +7,7 @@ import java.io.IOException;
 import org.cmdbuild.bim.service.bimserver.BimserverConfiguration;
 import org.cmdbuild.services.Settings;
 
-public class BimProperties extends DefaultProperties implements BimserverConfiguration {
+public final class BimProperties extends DefaultProperties implements BimserverConfiguration {
 
 	private static final long serialVersionUID = 1L;
 
@@ -16,8 +16,8 @@ public class BimProperties extends DefaultProperties implements BimserverConfigu
 
 	private ChangeListener listener;
 
-	public BimProperties() {
-		super();
+	public BimProperties(PropertyContainer propertyContainer) {
+		super(propertyContainer);
 		setProperty(ENABLED, "false");
 		setProperty(URL, EMPTY);
 		setProperty(USERNAME, EMPTY);

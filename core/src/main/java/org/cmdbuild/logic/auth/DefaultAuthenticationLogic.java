@@ -3,6 +3,7 @@ package org.cmdbuild.logic.auth;
 import static com.google.common.collect.Iterables.getFirst;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.cmdbuild.auth.context.PrivilegeContexts.nullPrivilegeContext;
 import static org.cmdbuild.auth.user.AuthenticatedUserImpl.ANONYMOUS_USER;
 import static org.cmdbuild.common.Constants.ROLE_CLASS_NAME;
 import static org.cmdbuild.dao.query.clause.QueryAliasAttribute.attribute;
@@ -25,7 +26,6 @@ import org.cmdbuild.auth.acl.CMGroup;
 import org.cmdbuild.auth.acl.NullGroup;
 import org.cmdbuild.auth.acl.PrivilegeContext;
 import org.cmdbuild.auth.acl.PrivilegeContextFactory;
-import org.cmdbuild.auth.context.NullPrivilegeContext;
 import org.cmdbuild.auth.user.AuthenticatedUser;
 import org.cmdbuild.auth.user.CMUser;
 import org.cmdbuild.auth.user.OperationUser;
@@ -142,9 +142,8 @@ public class DefaultAuthenticationLogic implements AuthenticationLogic {
 					.withValue(loginDTO.getLoginString()) //
 					.build();
 			final AuthenticatedUser authenticated = authService.authenticate(login, loginDTO.getPassword());
-			authUser =
-					(!loginDTO.isServiceUsersAllowed() && (authenticated.isService() || authenticated.isPrivileged()))
-							? ANONYMOUS_USER : authenticated;
+			authUser = (!loginDTO.isServiceUsersAllowed()
+					&& (authenticated.isService() || authenticated.isPrivileged())) ? ANONYMOUS_USER : authenticated;
 		} else {
 			final Login login = Login.newInstance() //
 					.withValue(loginDTO.getLoginString()) //
@@ -173,8 +172,8 @@ public class DefaultAuthenticationLogic implements AuthenticationLogic {
 				for (final String name : authUser.getGroupNames()) {
 					groupsForLogin.add(getGroupInfoForGroup(name));
 				}
-				final OperationUser operationUser =
-						new OperationUser(authUser, new NullPrivilegeContext(), new NullGroup());
+				final OperationUser operationUser = new OperationUser(authUser, nullPrivilegeContext(),
+						new NullGroup());
 				userStore.setUser(operationUser);
 				return DefaultResponse.newInstance(false, AuthExceptionType.AUTH_MULTIPLE_GROUPS.toString(),
 						groupsForLogin);
@@ -199,8 +198,8 @@ public class DefaultAuthenticationLogic implements AuthenticationLogic {
 				selectedGroupName = groupName;
 			} else {
 				final String defaultGroupName = authUser.getDefaultGroupName();
-				selectedGroupName =
-						(defaultGroupName == null) ? getFirst(authUser.getGroupNames(), groupName) : defaultGroupName;
+				selectedGroupName = (defaultGroupName == null) ? getFirst(authUser.getGroupNames(), groupName)
+						: defaultGroupName;
 			}
 			final CMGroup selectedGroup = getGroupWithName(selectedGroupName);
 			privilegeCtx = buildPrivilegeContext(selectedGroup);
@@ -236,7 +235,7 @@ public class DefaultAuthenticationLogic implements AuthenticationLogic {
 				privilegeContext = buildPrivilegeContext(groups);
 			} else {
 				group = new NullGroup();
-				privilegeContext = new NullPrivilegeContext();
+				privilegeContext = nullPrivilegeContext();
 			}
 			final OperationUser operationUser = new OperationUser(authenticatedUser, privilegeContext, group);
 			userStore.setUser(operationUser);

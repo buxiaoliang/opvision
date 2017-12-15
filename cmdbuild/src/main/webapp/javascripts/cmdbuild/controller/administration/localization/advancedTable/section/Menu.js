@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.administration.localization.advancedTable.section.Menu', {
 		extend: 'CMDBuild.controller.administration.localization.advancedTable.section.Abstract',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.localization.Localization'
 		],

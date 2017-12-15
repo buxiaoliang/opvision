@@ -1,12 +1,12 @@
 (function() {
 
-	Ext.require([
-		'CMDBuild.bim.proxy.Bim',
-		'CMDBuild.bim.proxy.Ifc',
-		'CMDBuild.bim.proxy.Layer'
-	]);
-
 	Ext.define('CMDBuild.controller.administration.filter.CMBIMPanelController', {
+		uses: [
+			'CMDBuild.bim.proxy.Bim',
+			'CMDBuild.bim.proxy.Ifc',
+			'CMDBuild.bim.proxy.Layer'
+		],
+
 		extend: 'CMDBuild.controller.common.CMBasePanelController',
 
 		mixins: {

@@ -6,7 +6,7 @@
 	Ext.define('CMDBuild.view.common.panel.module.form.toolbar.gridAndForm.TopView', {
 		extend: 'Ext.toolbar.Toolbar',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.common.panel.module.form.toolbar.gridAndForm.Top}

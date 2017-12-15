@@ -1,18 +1,16 @@
 (function() {
 
-	Ext.require([ // Legacy
-		'CMDBuild.controller.management.common.widgets.workflow.CMWorkflowController',
-		'CMDBuild.controller.management.widget.linkCards.LinkCardsController',
-		'CMDBuild.controller.management.widget.manageRelation.CMManageRelationController',
-		'CMDBuild.core.configurations.Timeout',
-		'CMDBuild.core.Message'
-	]);
-
 	/**
 	 * @link CMDBuild.controller.management.common.CMWidgetManagerController
 	 */
 	Ext.define("CMDBuild.controller.management.widget.linkCards.cardWindow.CMWidgetManagerController", {
-
+		uses: [ // Legacy
+			'CMDBuild.controller.management.common.widgets.workflow.CMWorkflowController',
+			'CMDBuild.controller.management.widget.linkCards.LinkCardsController',
+			'CMDBuild.controller.management.widget.manageRelation.CMManageRelationController',
+			'CMDBuild.core.configurations.Timeout',
+			'CMDBuild.core.Message'
+		],
 		/**
 		 * @property {Object}
 		 */

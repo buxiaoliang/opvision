@@ -52,7 +52,6 @@
 			this.callParent(arguments);
 
 			this.view = Ext.create(this.subClassesNames.view, { delegate: this });
-
 			/**
 			 * Build sub-components
 			 *
@@ -88,8 +87,11 @@
 					}
 				})
 			);
-
-			this.setupVisibleState();
+			
+			var me = this;
+			setTimeout(function(){
+				me.setupVisibleState();
+			}, 0)
 		},
 
 		/**

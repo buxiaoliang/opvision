@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.management.common.tabs.email.emailWindow.EditWindow', {
 		extend: 'CMDBuild.core.window.AbstractModal',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.management.common.tabs.email.EmailWindow}

@@ -1,6 +1,6 @@
 (function() {
 	Ext.define('CMDBuild.view.management.classes.map.geoextension.InteractionDocument', {
-		requires : [ 'CMDBuild.view.management.classes.map.proxy.Tree' ],
+		uses : [ 'CMDBuild.view.management.classes.map.proxy.Tree' ],
 		observers : [],
 		layerObservers : [],
 		featureObservers : [],

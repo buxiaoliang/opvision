@@ -13,7 +13,7 @@
 		extend: 'Ext.data.reader.Json',
 		alias: 'reader.classstore',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @param {Object} rowObject

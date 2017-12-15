@@ -1,5 +1,6 @@
 package org.cmdbuild.dao.view.user;
 
+import static com.google.common.base.Suppliers.memoize;
 import static com.google.common.collect.FluentIterable.from;
 
 import org.cmdbuild.auth.acl.PrivilegeContext;
@@ -32,25 +33,31 @@ import org.cmdbuild.dao.view.AbstractDataView;
 import org.cmdbuild.dao.view.CMAttributeDefinition;
 import org.cmdbuild.dao.view.CMDataView;
 import org.cmdbuild.dao.view.user.privileges.RowAndColumnPrivilegeFetcher;
+import org.cmdbuild.dao.view.user.privileges.RowAndColumnPrivilegeFetcherFactory;
 
 import com.google.common.base.Function;
+import com.google.common.base.Supplier;
 
 public class UserDataView extends AbstractDataView {
 
 	private final CMDataView view;
-	private final PrivilegeContext privilegeContext;
-	private final RowAndColumnPrivilegeFetcher rowColumnPrivilegeFetcher;
+	private final RowAndColumnPrivilegeFetcherFactory rowColumnPrivilegeFetcherFactory;
+	private final Supplier<RowAndColumnPrivilegeFetcher> rowColumnPrivilegeFetcher;
 	private final OperationUser operationUser;
 
-	public UserDataView( //
-			final CMDataView view, //
-			final PrivilegeContext privilegeContext, //
-			final RowAndColumnPrivilegeFetcher rowPrivilegeFetcher, //
-			final OperationUser operationUser //
-	) {
+	public UserDataView(final CMDataView view,
+			final RowAndColumnPrivilegeFetcherFactory rowColumnPrivilegeFetcherFactory,
+			final OperationUser operationUser) {
 		this.view = view;
-		this.privilegeContext = privilegeContext;
-		this.rowColumnPrivilegeFetcher = rowPrivilegeFetcher;
+		this.rowColumnPrivilegeFetcherFactory = rowColumnPrivilegeFetcherFactory;
+		this.rowColumnPrivilegeFetcher = memoize(new Supplier<RowAndColumnPrivilegeFetcher>() {
+
+			@Override
+			public RowAndColumnPrivilegeFetcher get() {
+				return rowColumnPrivilegeFetcherFactory.create(operationUser.getPrivilegeContext());
+			}
+
+		});
 		this.operationUser = operationUser;
 	}
 
@@ -59,8 +66,8 @@ public class UserDataView extends AbstractDataView {
 		return view;
 	}
 
-	public PrivilegeContext getPrivilegeContext() {
-		return privilegeContext;
+	PrivilegeContext getPrivilegeContext() {
+		return operationUser.getPrivilegeContext();
 	}
 
 	@Override
@@ -130,7 +137,7 @@ public class UserDataView extends AbstractDataView {
 	/**
 	 * Returns the active and not active domains. It does not return reserved
 	 * domains
-	 * 
+	 *
 	 * @return all domains (active and non active)
 	 */
 	@Override
@@ -184,7 +191,7 @@ public class UserDataView extends AbstractDataView {
 
 	@Override
 	public Iterable<? extends WhereClause> getAdditionalFiltersFor(final CMEntryType classToFilter) {
-		return rowColumnPrivilegeFetcher.fetchPrivilegeFiltersFor(classToFilter);
+		return rowColumnPrivilegeFetcher.get().fetchPrivilegeFiltersFor(classToFilter);
 	}
 
 	/*
@@ -194,7 +201,7 @@ public class UserDataView extends AbstractDataView {
 	/**
 	 * Note that a UserClass is null if the user does not have the privileges to
 	 * read the class or if the class is a system class (reserved)
-	 * 
+	 *
 	 * @param source
 	 * @return
 	 */
@@ -284,7 +291,11 @@ public class UserDataView extends AbstractDataView {
 	}
 
 	CMAttribute proxy(final CMAttribute attribute) {
-		return UserAttribute.newInstance(this, attribute, rowColumnPrivilegeFetcher);
+		return UserAttribute.newInstance(this, attribute, rowColumnPrivilegeFetcher.get());
+	}
+
+	CMAttribute proxy(final CMAttribute attribute, final CMCard card) {
+		return UserAttribute.newInstance(this, attribute, rowColumnPrivilegeFetcher.get(), card);
 	}
 
 	QuerySpecsBuilder proxy(final QuerySpecsBuilder querySpecsBuilder) {
@@ -292,7 +303,7 @@ public class UserDataView extends AbstractDataView {
 	}
 
 	QuerySpecs proxy(final QuerySpecs querySpecs) {
-		return UserQuerySpecs.newInstance(this, querySpecs, operationUser, rowColumnPrivilegeFetcher);
+		return UserQuerySpecs.newInstance(this, querySpecs, operationUser, rowColumnPrivilegeFetcher.get());
 	}
 
 	FromClause proxy(final FromClause fromClause) {
@@ -375,6 +386,13 @@ public class UserDataView extends AbstractDataView {
 	@Override
 	public QuerySpecsBuilder select(final QueryAttribute... attrDef) {
 		return proxy(super.select(attrDef));
+	}
+
+	@Override
+	public CMDataView use(final PrivilegeContext value) {
+		final OperationUser _operationUser = new OperationUser(operationUser.getAuthenticatedUser(), value,
+				operationUser.getPreferredGroup());
+		return new UserDataView(view, rowColumnPrivilegeFetcherFactory, _operationUser);
 	}
 
 }

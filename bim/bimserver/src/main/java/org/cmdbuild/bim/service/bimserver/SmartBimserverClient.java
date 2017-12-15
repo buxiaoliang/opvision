@@ -4,6 +4,8 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
+import org.cmdbuild.bim.service.BimProject;
+
 public class SmartBimserverClient extends ForwardingBimServerClient {
 
 	private final BimserverClient delegate;
@@ -60,5 +62,10 @@ public class SmartBimserverClient extends ForwardingBimServerClient {
 	@Override
 	public boolean isConnected() {
 		return delegate.isConnected();
+	}
+
+	@Override
+	public BimProject updateProject(final BimProject project) {
+		return delegate.updateProject(project);
 	}
 }

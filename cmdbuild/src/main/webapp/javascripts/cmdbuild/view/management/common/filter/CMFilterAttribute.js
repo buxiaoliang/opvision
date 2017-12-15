@@ -234,7 +234,8 @@
 		if (Ext.isEmpty(me.fieldsetCategory[category])) {
 			var fieldset = Ext.create('CMDBuild.view.management.common.filter.CMFilterAttributes.AttributeFieldset', {
 				title: attribute.description,
-				attributeName: category
+				attributeName: category,
+				taskManager : me.taskManager
 			});
 
 			fieldset.addDelegate(me);
@@ -242,7 +243,7 @@
 			me.add(fieldset);
 		}
 
-		var filterCondition = Ext.create('CMDBuild.Management.FieldManager.getFieldSetForFilter', attribute);
+		var filterCondition = Ext.create('CMDBuild.Management.FieldManager.getFieldSetForFilter', attribute, me.taskManager);
 		me.fieldsetCategory[category].addCondition(filterCondition);
 		filterCondition.setData(data);
 

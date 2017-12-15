@@ -4,29 +4,32 @@ import org.cmdbuild.bim.model.AttributeDefinition;
 
 public abstract class DefaultAttributeDefinition implements AttributeDefinition {
 
-	private String name;
-	private String label;
+	private String ifcName;
+	private String cmName;
 
-	public String getLabel() {
-		return label;
+	@Override
+	public String getCmName() {
+		return cmName;
 	}
 
-	public void setLabel(String label) {
-		this.label = label;
+	@Override
+	public void setCmName(final String label) {
+		this.cmName = label;
 	}
 
 	public DefaultAttributeDefinition() {
 	};
 
-	public DefaultAttributeDefinition(String name) {
-		this.name = name;
+	public DefaultAttributeDefinition(final String name) {
+		this.ifcName = name;
 	}
 
 	@Override
-	public String getName() {
-		return name;
+	public String getIfcName() {
+		return ifcName;
 	}
-	
+
+	@Override
 	public abstract String toString();
 
 }

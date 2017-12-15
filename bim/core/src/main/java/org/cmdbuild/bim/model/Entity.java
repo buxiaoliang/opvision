@@ -34,22 +34,29 @@ public interface Entity {
 		public String getTypeName() {
 			return "";
 		}
-		
+
 		@Override
 		public String toString() {
 			return "NULL_ENTITY";
 		}
 
+		@Override
+		public String getGlobalId() {
+			return "";
+		}
+
 	};
 
 	boolean isValid();
-	
+
 	Map<String, Attribute> getAttributes();
-	
+
 	Attribute getAttributeByName(String attributeName);
 
 	String getKey();
-	
+
 	String getTypeName();
+	
+	String getGlobalId();
 
 }

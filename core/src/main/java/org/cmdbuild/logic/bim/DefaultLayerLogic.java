@@ -127,18 +127,8 @@ public class DefaultLayerLogic implements LayerLogic {
 		}
 
 		@Override
-		public boolean isContainer() {
-			return delegate.isContainer();
-		}
-
-		@Override
 		public String getRootReference() {
 			return delegate.getRootReference();
-		}
-
-		@Override
-		public boolean isExport() {
-			return delegate.isExport();
 		}
 
 		@Override

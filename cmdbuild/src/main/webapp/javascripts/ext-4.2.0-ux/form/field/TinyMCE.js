@@ -16,7 +16,7 @@
 
 		alias: 'widget.tinymcefield',
 
-		requires: ['Ext.ux.form.field.TinyMCEWindowManager'],
+		uses: ['Ext.ux.form.field.TinyMCEWindowManager'],
 
 		mixins: {
 			observable: 'Ext.util.Observable'

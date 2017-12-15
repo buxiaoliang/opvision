@@ -42,8 +42,8 @@ public class SimpleFunctionQueryCreatorTest {
 
 	@Test
 	public void withAttributeListAndNoParameters() {
-		setFunc.addOutputParameter("o1", UndefinedAttributeType.undefined());
-		setFunc.addOutputParameter("o2", UndefinedAttributeType.undefined());
+		setFunc.addOutputParameter("o1", UndefinedAttributeType.undefined(),true);
+		setFunc.addOutputParameter("o2", UndefinedAttributeType.undefined() ,true);
 		final QuerySpecsImpl querySpecs = QuerySpecsImpl.newInstance() //
 				.fromClause(new FunctionFromClause(call(setFunc), f)) //
 				.distinct(false) //
@@ -60,7 +60,7 @@ public class SimpleFunctionQueryCreatorTest {
 		setFunc.addInputParameter("i1", new IdentityAttributeType());
 		setFunc.addInputParameter("i2", new IdentityAttributeType());
 		setFunc.addInputParameter("i3", new IdentityAttributeType());
-		setFunc.addOutputParameter("o", new IdentityAttributeType());
+		setFunc.addOutputParameter("o", new IdentityAttributeType(),true);
 		final QuerySpecsImpl querySpecs = QuerySpecsImpl.newInstance() //
 				.fromClause(new FunctionFromClause(call(setFunc, "12", 34, null), f)) //
 				.distinct(false) //

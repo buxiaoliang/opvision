@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.email.template.GridPanel', {
 		extend: 'Ext.grid.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.email.Template'
 		],

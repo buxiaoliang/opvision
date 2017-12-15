@@ -58,11 +58,11 @@
 			}
 		},
 
-		getFieldSetForFilter: function(attribute) {
+		getFieldSetForFilter: function(attribute, taskManager) {
 			if (attributeTypeIsNotHandled(attribute)) {
 				return undefined;
 			}
-			return attributesMap[attribute.type].getFieldSetForFilter(attribute);
+			return attributesMap[attribute.type].getFieldSetForFilter(attribute, taskManager);
 		},
 
 		getCellEditorForAttribute: function(attribute) {

@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.accordion.Menu', {
 		extend: 'CMDBuild.controller.common.abstract.Accordion',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.ModuleIdentifiers',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.CustomPage',
@@ -251,7 +251,12 @@
 								);
 
 								if (!Ext.isEmpty(entryType)) {
-									nodeStructure['cmName'] = 'class';
+									var cmName = 'class';
+									if (entryType.get("type") === 'processclass') {
+										cmName = CMDBuild.core.constants.ModuleIdentifiers.getWorkflow();
+									}
+
+									nodeStructure['cmName'] = cmName;
 									nodeStructure[CMDBuild.core.constants.Proxy.ENTITY_ID] = entryType.getId();
 									nodeStructure[CMDBuild.core.constants.Proxy.ID] = this.cmfg('accordionBuildId', [
 										'dataview-filter',

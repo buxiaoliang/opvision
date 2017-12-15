@@ -1,10 +1,10 @@
 (function() {
 
-	Ext.require('CMDBuild.proxy.gis.Gis');
-
 	var GEOSERVER = "GeoServer";
 
 	Ext.define("CMDBuild.controller.management.classes.CMCardBrowserTreeDataSource", {
+		uses: ['CMDBuild.proxy.gis.Gis'],
+
 		GEOSERVER: GEOSERVER,
 		constructor: function(navigationPanel, mapState) {
 			this.navigationPanel = navigationPanel;

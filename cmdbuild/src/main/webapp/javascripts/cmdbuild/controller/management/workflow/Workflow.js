@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.workflow.Workflow', {
 		extend: 'CMDBuild.controller.common.panel.gridAndForm.GridAndForm',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Metadata',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.constants.WorkflowStates',
@@ -185,11 +185,11 @@
 				this.form = this.controllerForm.getView()
 			]);
 
-			// unlock process instances when panel will be hidden
-			this.view.mon(this.view, "hide", function() {
+			// unlock process instances event listener
+			this.view.mon(this.view, "workflowUnlockOnContentChange", function() {
 				this.controllerForm.cmfg('onWorkflowFormAbortButtonClick');
 			}, this);
-			
+
 		},
 
 		/**
@@ -255,6 +255,11 @@
 					}
 				});
 			} else {
+				if (Ext.isString(filter)) {
+					node.set(CMDBuild.core.constants.Proxy.FILTER, Ext.create('CMDBuild.model.management.workflow.panel.tree.filter.advanced.Filter', {
+						configuration: JSON.parse(filter)
+					}));
+				}
 				Ext.callback(callback, this);
 			}
 		},

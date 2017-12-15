@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.common.field.comboBox.DrivedCheckbox', {
 		extend: 'Ext.form.FieldContainer',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @property {CMDBuild.controller.common.field.comboBox.DrivedCheckbox}

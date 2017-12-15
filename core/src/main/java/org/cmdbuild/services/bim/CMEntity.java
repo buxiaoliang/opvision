@@ -34,7 +34,7 @@ public class CMEntity implements Entity {
 	}
 
 	@Override
-	public Attribute getAttributeByName(String attributeName) {
+	public Attribute getAttributeByName(final String attributeName) {
 		throw new BimError("Not implemented");
 	}
 
@@ -47,10 +47,15 @@ public class CMEntity implements Entity {
 	public String getTypeName() {
 		throw new BimError("Not implemented");
 	}
-	
+
 	@Override
 	public String toString() {
 		return card.getClass().getName() + " " + card.getId();
+	}
+
+	@Override
+	public String getGlobalId() {
+		throw new BimError("Not implemented");
 	}
 
 }

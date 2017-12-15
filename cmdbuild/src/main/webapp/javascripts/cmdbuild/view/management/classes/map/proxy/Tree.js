@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.view.management.classes.map.proxy.Tree', {
 
-		requires : [ 'CMDBuild.core.constants.Proxy', 'CMDBuild.proxy.index.Json' ],
+		uses : [ 'CMDBuild.core.constants.Proxy', 'CMDBuild.proxy.index.Json' ],
 
 		singleton : true,
 

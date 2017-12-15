@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.management.utility.bulkUpdate.ClassesTree', {
 		extend: 'Ext.tree.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.utility.BulkUpdate'
 		],

@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.classes.tabs.widgets.form.CreateModifyCardPanel', {
 		extend: 'CMDBuild.view.administration.classes.tabs.widgets.form.AbstractWidgetDefinitionPanel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.administration.classes.tabs.widgets.CreateModifyCard'

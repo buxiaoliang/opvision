@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.taskManager.task.connector.Step3', {
 		extend: 'Ext.panel.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.administration.taskManager.task.Connector'

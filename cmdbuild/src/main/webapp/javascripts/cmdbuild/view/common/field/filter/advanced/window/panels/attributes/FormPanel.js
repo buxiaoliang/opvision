@@ -6,7 +6,7 @@
 	Ext.define('CMDBuild.view.common.field.filter.advanced.window.panels.attributes.FormPanel', {
 		extend: 'Ext.form.Panel',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.view.common.field.filter.advanced.window.panels.Attributes}

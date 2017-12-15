@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.widget.customForm.CustomForm', {
 		extend: 'CMDBuild.controller.common.abstract.Widget',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Message',
 			'CMDBuild.core.Utils',

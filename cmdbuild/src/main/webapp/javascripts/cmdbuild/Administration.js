@@ -5,8 +5,10 @@
 	 */
 	Ext.application({
 		extend: 'Ext.app.Application',
+		
+		requires: [ 'CMDBuild.core.navigation.Chronology' ],
 
-		requires: [
+		uses: [
 			'Ext.tip.QuickTipManager', // Avoid core override
 			'CMDBuild.core.Administration'
 		],
@@ -18,6 +20,7 @@
 		 * @returns {Void}
 		 */
 		launch: function () {
+			
 			Ext.WindowManager.getNextZSeed(); // To increase the default zseed. Is needed for the combo on windows probably it fix also the prev problem
 			Ext.enableFx = false;
 			Ext.tip.QuickTipManager.init();
@@ -30,6 +33,8 @@
 			Ext.create('CMDBuild.core.interfaces.Init'); // Interfaces configuration
 			Ext.create('CMDBuild.core.Data'); // Data connections configuration
 			Ext.create('CMDBuild.core.cache.Cache');
+			
+			Ext.create('CMDBuild.core.navigation.Chronology'); // Navigation chronology
 
 			CMDBuild.core.Administration.init();
 		}

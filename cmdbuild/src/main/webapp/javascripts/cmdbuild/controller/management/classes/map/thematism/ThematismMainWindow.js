@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.classes.map.thematism.ThematismMainWindow', {
 		extend : 'CMDBuild.controller.common.abstract.Base',
 
-		requires : [ 'CMDBuild.view.management.classes.map.thematism.ThematismMainWindow' ],
+		uses : [ 'CMDBuild.view.management.classes.map.thematism.ThematismMainWindow' ],
 
 		/**
 		 * @cfg {??}

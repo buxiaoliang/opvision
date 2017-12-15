@@ -4,13 +4,13 @@
 	 * FIXME: build own class
 	 */
 
-	Ext.require('CMDBuild.proxy.index.Json');
-
 	/**
 	 * @link CMDBuild.view.management.common.CMCardGridPagingBar
 	 */
 	Ext.define("CMDBuild.view.common.panel.gridAndForm.panel.common.filter.advanced.filterEditor.relations.CMCardGridPagingBar", {
 		extend: "Ext.toolbar.Paging",
+
+		uses: ['CMDBuild.proxy.index.Json'],
 
 		// configuration
 		grid: undefined,
@@ -34,7 +34,10 @@
 	Ext.define("CMDBuild.view.common.panel.gridAndForm.panel.common.filter.advanced.filterEditor.relations.CardGridPanel", {
 		extend: "Ext.grid.Panel",
 
-		requires: ['CMDBuild.core.constants.Global'],
+		uses: [
+			'CMDBuild.proxy.index.Json',
+			'CMDBuild.core.constants.Global'
+		],
 
 		mixins: {
 			delegable: "CMDBuild.core.CMDelegable"

@@ -10,6 +10,7 @@ import org.cmdbuild.logic.taskmanager.TaskManagerLogic;
 import org.slf4j.Logger;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
+import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;

@@ -1,5 +1,6 @@
 package org.cmdbuild.dao.driver.postgres.quote;
 
+import static com.google.common.base.Objects.equal;
 import org.cmdbuild.dao.driver.postgres.quote.EntryTypeQuoter.DomainIdentifier;
 import org.cmdbuild.dao.entrytype.CMDomain;
 import org.cmdbuild.dao.entrytype.CMIdentifier;
@@ -36,7 +37,7 @@ public class AliasQuoter implements Quoter {
 					identifier = new DomainIdentifier(identifier);
 				}
 
-				if (identifier.getNameSpace() != CMIdentifier.DEFAULT_NAMESPACE) {
+				if (!equal(identifier.getNameSpace(), CMIdentifier.DEFAULT_NAMESPACE)) {
 					entryTypeName.append(identifier.getNameSpace()).append(NAMESPACE_LOCALNAME_SEPARATOR);
 				}
 				entryTypeName.append(identifier.getLocalName());

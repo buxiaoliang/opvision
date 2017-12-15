@@ -6,7 +6,7 @@
 	Ext.define('CMDBuild.view.management.workflow.panel.tree.filter.advanced.saveDialog.FormPanel', {
 		extend: 'Ext.form.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Utils'
 		],

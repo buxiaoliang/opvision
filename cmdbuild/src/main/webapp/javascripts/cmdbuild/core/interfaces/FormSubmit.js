@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.core.interfaces.FormSubmit', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.CookiesManager',
 			'CMDBuild.core.interfaces.messages.Error',

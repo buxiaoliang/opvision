@@ -23,6 +23,7 @@ public abstract class AbstractJobFactory<T extends ScheduledTask> implements Job
 		return BuildableCommandBasedJob.newInstance() //
 				.withName(name(specificTask)) //
 				.withCommand(execution ? command(specificTask) : nullCommand()) //
+				.withTaskId(task.getId())
 				.build();
 	}
 

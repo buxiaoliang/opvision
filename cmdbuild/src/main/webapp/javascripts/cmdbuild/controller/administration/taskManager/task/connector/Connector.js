@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.administration.taskManager.task.connector.Connector', {
 		extend: 'CMDBuild.controller.administration.taskManager.task.Abstract',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Message',
 			'CMDBuild.proxy.administration.taskManager.task.Connector'

@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.administration.taskManager.task.common.NotificationForm', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.administration.taskManager.task.common.notificationForm.Account',
 			'CMDBuild.model.administration.taskManager.task.common.notificationForm.Template',

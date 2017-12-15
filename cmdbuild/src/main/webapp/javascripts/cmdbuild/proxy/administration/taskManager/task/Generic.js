@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.administration.taskManager.task.Generic', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json',
 			'CMDBuild.model.administration.taskManager.Grid'

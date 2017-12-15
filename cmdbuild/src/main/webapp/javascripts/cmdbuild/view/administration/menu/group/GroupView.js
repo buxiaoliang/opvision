@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.menu.group.GroupView', {
 		extend: 'Ext.panel.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Message',
 			'CMDBuild.model.menu.TreeStore'

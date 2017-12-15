@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.filter.groups.GroupsView', {
 		extend: 'Ext.panel.Panel',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.administration.filter.Groups}

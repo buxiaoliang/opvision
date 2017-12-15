@@ -10,7 +10,7 @@
 	Ext.define('CMDBuild.controller.common.panel.gridAndForm.panel.tree.Tree', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.common.panel.gridAndForm.GridAndForm}

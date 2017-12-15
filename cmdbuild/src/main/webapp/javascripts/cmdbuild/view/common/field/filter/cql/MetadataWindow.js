@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.common.field.filter.cql.MetadataWindow', {
 		extend: 'CMDBuild.core.window.AbstractModal',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.common.field.filter.cql.Metadata'
 		],

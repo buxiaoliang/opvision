@@ -3,7 +3,7 @@
 	Ext.define("CMDBuild.view.management.dashboard.CMChartPortletForm", {
 		extend: "Ext.form.Panel",
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		initComponent: function() {
 			this.callParent(arguments);

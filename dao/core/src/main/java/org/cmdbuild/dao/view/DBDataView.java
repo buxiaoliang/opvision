@@ -6,6 +6,7 @@ import static org.cmdbuild.dao.query.clause.where.TrueWhereClause.trueWhereClaus
 import java.util.Arrays;
 import java.util.Map.Entry;
 
+import org.cmdbuild.auth.acl.PrivilegeContext;
 import org.cmdbuild.dao.driver.DBDriver;
 import org.cmdbuild.dao.entry.CMCard;
 import org.cmdbuild.dao.entry.CMRelation;
@@ -519,6 +520,11 @@ public class DBDataView extends AbstractDataView {
 	@Override
 	public Iterable<? extends WhereClause> getAdditionalFiltersFor(final CMEntryType classToFilter) {
 		return TRUE_ONLY_WHERE_CLAUSES;
+	}
+
+	@Override
+	public CMDataView use(final PrivilegeContext value) {
+		throw new UnsupportedOperationException(); //FIXME this is bad, either implement this or move it to a different interface
 	}
 
 }

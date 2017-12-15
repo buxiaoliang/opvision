@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.management.widget.NavigationTree', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.management.widget.navigationTree.Node',
 			'CMDBuild.proxy.index.Json'

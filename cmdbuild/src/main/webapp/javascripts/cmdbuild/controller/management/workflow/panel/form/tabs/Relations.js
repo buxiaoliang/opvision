@@ -10,7 +10,7 @@
 	Ext.define('CMDBuild.controller.management.workflow.panel.form.tabs.Relations', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.management.workflow.panel.form.tabs.Relations'
 		],

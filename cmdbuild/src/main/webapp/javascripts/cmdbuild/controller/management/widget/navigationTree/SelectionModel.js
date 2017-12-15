@@ -5,7 +5,7 @@
 	 */
 	Ext.define('CMDBuild.controller.management.widget.navigationTree.SelectionModel', {
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @property {Array}

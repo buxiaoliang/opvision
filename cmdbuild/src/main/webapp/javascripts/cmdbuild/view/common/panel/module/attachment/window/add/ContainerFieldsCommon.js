@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.common.panel.module.attachment.window.add.ContainerFieldsCommon', {
 		extend: 'Ext.container.Container',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Utils',
@@ -23,6 +23,7 @@
 		border: false,
 		cls: 'cmdb-blue-panel',
 		frame: false,
+		width: 500,
 
 		/**
 		 * @returns {Void}
@@ -37,7 +38,7 @@
 						fieldLabel: CMDBuild.core.Utils.prependMandatoryLabel(CMDBuild.Translation.category),
 						labelWidth: CMDBuild.core.constants.FieldWidths.LABEL,
 						labelAlign: 'right',
-						maxWidth: CMDBuild.core.constants.FieldWidths.ADMINISTRATION_BIG,
+						width: CMDBuild.core.constants.FieldWidths.ADMINISTRATION_BIG,
 						displayField: CMDBuild.core.constants.Proxy.DESCRIPTION,
 						valueField: CMDBuild.core.constants.Proxy.DESCRIPTION,
 						allowBlank: false,
@@ -60,7 +61,7 @@
 						fieldLabel: CMDBuild.core.Utils.prependMandatoryLabel(CMDBuild.Translation.loadAttachment),
 						labelWidth: CMDBuild.core.constants.FieldWidths.LABEL,
 						labelAlign: 'right',
-						maxWidth: CMDBuild.core.constants.FieldWidths.STANDARD_BIG,
+						width: CMDBuild.core.constants.FieldWidths.STANDARD_BIG,
 						allowBlank: false
 					}),
 					Ext.create('Ext.form.field.TextArea', {
@@ -68,7 +69,7 @@
 						fieldLabel: CMDBuild.core.Utils.prependMandatoryLabel(CMDBuild.Translation.descriptionLabel),
 						labelWidth: CMDBuild.core.constants.FieldWidths.LABEL,
 						labelAlign: 'right',
-						maxWidth: CMDBuild.core.constants.FieldWidths.STANDARD_BIG,
+						width: CMDBuild.core.constants.FieldWidths.STANDARD_BIG,
 						allowBlank: false
 					}),
 					Ext.create('Ext.form.field.Checkbox', {

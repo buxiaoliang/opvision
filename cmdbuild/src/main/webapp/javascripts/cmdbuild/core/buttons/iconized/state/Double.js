@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.core.buttons.iconized.state.Double', {
 		extend: 'Ext.button.Cycle',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {String}

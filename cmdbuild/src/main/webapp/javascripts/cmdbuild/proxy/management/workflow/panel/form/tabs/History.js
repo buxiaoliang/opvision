@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.management.workflow.panel.form.tabs.History', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json',
 			'CMDBuild.model.management.workflow.panel.form.tabs.history.CardRecord'

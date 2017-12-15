@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.management.utility.exportCsv.FormPanel', {
 		extend: 'Ext.form.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.utility.ExportCsv'

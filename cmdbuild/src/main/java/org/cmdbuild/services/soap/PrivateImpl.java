@@ -26,6 +26,7 @@ import org.cmdbuild.dao.entrytype.attributetype.LookupAttributeType;
 import org.cmdbuild.dao.entrytype.attributetype.ReferenceAttributeType;
 import org.cmdbuild.dao.function.CMFunction;
 import org.cmdbuild.dao.function.CMFunction.CMFunctionParameter;
+import org.cmdbuild.dao.function.CMFunction.CMFunctionOutputParameter;
 import org.cmdbuild.dao.query.CMQueryResult;
 import org.cmdbuild.dao.query.CMQueryRow;
 import org.cmdbuild.dao.query.clause.alias.Alias;
@@ -390,7 +391,7 @@ public class PrivateImpl extends AbstractWebservice implements Private {
 	}
 
 	private Attribute[] convertFunctionOutput(final CMFunction function, final CMValueSet valueSet) {
-		final List<CMFunctionParameter> outputParams = function.getOutputParameters();
+		final List<CMFunctionOutputParameter> outputParams = function.getOutputParameters();
 		final Attribute[] output = new Attribute[outputParams.size()];
 		int i = 0;
 		for (final CMFunctionParameter p : outputParams) {
@@ -472,8 +473,17 @@ public class PrivateImpl extends AbstractWebservice implements Private {
 		final FunctionSchema functionSchema = new FunctionSchema();
 		functionSchema.setName(function.getIdentifier().getLocalName());
 		functionSchema.setInput(attributeSchemasFrom(function.getInputParameters()));
-		functionSchema.setOutput(attributeSchemasFrom(function.getOutputParameters()));
+		functionSchema.setOutput(attributeSchemasFromOutputParameters(function.getOutputParameters()));
 		return functionSchema;
+	}
+
+	private List<AttributeSchema> attributeSchemasFromOutputParameters(
+			List<CMFunctionOutputParameter> outputParameters) {
+		final List<AttributeSchema> attributeSchemas = new ArrayList<AttributeSchema>();
+		for (final CMFunction.CMFunctionOutputParameter parameter : outputParameters) {
+			attributeSchemas.add(AttributeSchemaSerializer.serialize(parameter));
+		}
+		return attributeSchemas;
 	}
 
 	private List<AttributeSchema> attributeSchemasFrom(final List<CMFunctionParameter> parameters) {
@@ -483,7 +493,7 @@ public class PrivateImpl extends AbstractWebservice implements Private {
 		}
 		return attributeSchemas;
 	}
-
+	
 	@Override
 	public String generateDigest(final String plainText, final String digestAlgorithm) throws NoSuchAlgorithmException {
 		if (digestAlgorithm == null) {

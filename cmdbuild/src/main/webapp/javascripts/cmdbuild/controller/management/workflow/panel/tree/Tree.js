@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.workflow.panel.tree.Tree', {
 		extend: 'CMDBuild.controller.common.panel.gridAndForm.panel.tree.Tree',
 
-		requires: [
+		uses: [
 			'CMDBuild.controller.management.workflow.Utils',
 			'CMDBuild.core.constants.Metadata',
 			'CMDBuild.core.constants.Proxy',
@@ -592,7 +592,7 @@
 			// Sync UI with parameter filter property value
 			if (!Ext.isString(filter) || Ext.isEmpty(filter)) {
 				this.controllerToolbarPaging.cmfg('workflowTreeToolbarPagingFilterBasicReset');
-				this.cmfg('workflowTreeFilterClear', { disableStoreLoad: true });
+				this.cmfg('workflowTreeFilterClear', { disableStoreLoad: true, type: "basic" });
 			}
 
 			// Sync UI with flowStatus returned value

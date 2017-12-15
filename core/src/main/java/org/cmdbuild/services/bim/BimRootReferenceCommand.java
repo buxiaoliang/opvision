@@ -2,12 +2,13 @@ package org.cmdbuild.services.bim;
 
 public class BimRootReferenceCommand extends BimDataModelCommand {
 
-	public BimRootReferenceCommand(BimPersistence bimDataPersistence, BimDataModelManager dataModelManager) {
+	public BimRootReferenceCommand(final BimPersistence bimDataPersistence,
+			final BimDataModelManager dataModelManager) {
 		super(bimDataPersistence, dataModelManager);
 	}
 
 	@Override
-	public void execute(String className, String value) {
+	public void execute(final String className, final String value) {
 		dataPersistence.saveRootReferenceName(className, value);
 
 	}

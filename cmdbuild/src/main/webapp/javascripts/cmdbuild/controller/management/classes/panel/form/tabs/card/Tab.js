@@ -9,7 +9,7 @@
 	Ext.define('CMDBuild.controller.management.classes.panel.form.tabs.card.Tab', {
 		extend: 'CMDBuild.controller.common.panel.module.form.Tab',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.ModuleIdentifiers',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Utils',
@@ -40,6 +40,7 @@
 			'classesFormTabCardSelectedItemWidgetsIsEmpty = panelGridAndFormSelectedItemWidgetsIsEmpty',
 			'classesFormTabCardSelectedPreviousItemGet = panelGridAndFormSelectedPreviousItemGet',
 			'classesFormTabCardSelectedPreviousItemIsEmpty = panelGridAndFormSelectedPreviousItemIsEmpty',
+			'classesFormTabCardSelectedItemIsWritable',
 			'classesFormTabCardUiUpdate = panelGridAndFormUiUpdate',
 			'onClassesFormTabCardPrintButtonClick',
 			'onClassesFormTabCardRemoveButtonClick',
@@ -523,7 +524,7 @@
 			var params = {};
 			params[CMDBuild.core.constants.Proxy.CARD_ID] = parameters.itemId;
 			params[CMDBuild.core.constants.Proxy.CLASS_NAME] = parameters.itemEntityName;
-
+			
 			this.readEntity(parameters.entityName, function () {
 				this.readItem(params, function () {
 					this.readItemWidgets(function () {
@@ -1019,6 +1020,27 @@
 				params[CMDBuild.core.constants.Proxy.ENTITY_NAME] = this.cmfg('classesFormTabCardSelectedEntityGet', CMDBuild.core.constants.Proxy.NAME);
 
 			this.cmfg('classesFormTabCardUiUpdate', params);
+		},
+
+		/**
+		 * @returns {Boolean}
+		 *
+		 * @private
+		 */
+		classesFormTabCardSelectedItemIsWritable: function() {
+			var isWritable = true;
+			if (Ext.isObject(this.selectedItem) && !Ext.isEmpty(this.selectedItem)) {
+				var selectedItem = this.selectedItem;
+				
+				if(Ext.isObject(selectedItem.data) && !Ext.isEmpty(selectedItem.data)) {
+					var data = selectedItem.data;
+					
+					if(Ext.isObject(data[CMDBuild.core.constants.Proxy.PERMISSIONS]) && !Ext.isEmpty(data[CMDBuild.core.constants.Proxy.PERMISSIONS])) {
+						isWritable = data[CMDBuild.core.constants.Proxy.PERMISSIONS][CMDBuild.core.constants.Proxy.WRITABLE] == 'true'
+					}
+				}
+			}
+			return isWritable;
 		}
 	});
 

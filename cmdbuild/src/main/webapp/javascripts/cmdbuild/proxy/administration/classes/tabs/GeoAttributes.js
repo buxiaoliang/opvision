@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.administration.classes.tabs.GeoAttributes', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.classes.tabs.geoAttributes.Grid',
 			'CMDBuild.model.classes.tabs.geoAttributes.Icon',

@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.core.Message', {
 
-		requires: ['Ext.ux.Notification'],
+		uses: ['Ext.ux.Notification'],
 
 		/**
 		 * @cfg {Array}

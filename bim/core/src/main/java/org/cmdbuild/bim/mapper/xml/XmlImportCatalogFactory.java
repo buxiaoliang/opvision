@@ -3,6 +3,7 @@ package org.cmdbuild.bim.mapper.xml;
 import java.io.File;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cmdbuild.bim.logging.LoggingSupport;
 import org.cmdbuild.bim.mapper.Parser;
 import org.cmdbuild.bim.model.AttributeDefinition;
@@ -24,11 +25,9 @@ public class XmlImportCatalogFactory implements CatalogFactory {
 	private static class XmlCatalog implements Catalog {
 
 		private final List<EntityDefinition> entities;
-		private final List<String> names;
 
 		public XmlCatalog(final List<EntityDefinition> entities, final List<String> names) {
 			this.entities = entities;
-			this.names = names;
 		}
 
 		@Override
@@ -38,9 +37,9 @@ public class XmlImportCatalogFactory implements CatalogFactory {
 
 		@Override
 		public String toString() {
-			String summary = "";
+			String summary = StringUtils.EMPTY;
 			for (final EntityDefinition entity : entities) {
-				summary = summary + "ENTITY " + entity.getTypeName().toUpperCase() + "\n";
+				summary = summary + "ENTITY " + entity.getIfcType().toUpperCase() + "\n";
 				final Iterable<AttributeDefinition> attributes = entity.getAttributes();
 				for (final AttributeDefinition attribute : attributes) {
 					summary = summary + attribute.toString() + "\n";
@@ -50,32 +49,10 @@ public class XmlImportCatalogFactory implements CatalogFactory {
 		}
 
 		@Override
-		public EntityDefinition getEntityDefinition(final int i) {
-			return entities.get(i);
-		}
-
-		@Override
 		public int getSize() {
 			return entities.size();
 		}
 
-		@Override
-		public boolean contains(final String entityDefintionName) {
-			return names.contains(entityDefintionName);
-		}
-
-		@Override
-		public List<Integer> getPositionsOf(final String entityDefintionName) {
-			final int maxsize = getSize();
-			final List<Integer> indices = Lists.newArrayList();
-			for (int i = 0; i < maxsize; i++) {
-				final String name = names.get(i);
-				if (name.equals(entityDefintionName)) {
-					indices.add(i);
-				}
-			}
-			return indices;
-		}
 	}
 
 	private static final Logger logger = LoggingSupport.logger;
@@ -103,10 +80,6 @@ public class XmlImportCatalogFactory implements CatalogFactory {
 		return new XmlCatalog(entities, names);
 	}
 
-	/**
-	 * This method populates the catalog according to the XML file of the the
-	 * parser
-	 * */
 	private void parseEntities() {
 		String path = XmlParser.ROOT;
 		try {
@@ -114,11 +87,11 @@ public class XmlImportCatalogFactory implements CatalogFactory {
 			logger.info(numberOfTypesToRead + " entries");
 			for (int i = 1; i <= numberOfTypesToRead; i++) {
 				path = XmlParser.ROOT + "/entity[" + i + "]";
-				final String name = parser.getEntityName(XmlParser.ROOT + "/entity[" + i + "]");
+				final String name = parser.getIfcType(XmlParser.ROOT + "/entity[" + i + "]");
 				final EntityDefinition entityDefinition = new ImportEntityDefinition(name);
-				final String label = parser.getEntityLabel(path);
+				final String label = parser.getCmClassName(path);
 				logger.info("{} - {}", name, label);
-				entityDefinition.setLabel(label);
+				entityDefinition.setCmClass(label);
 				readEntity(entityDefinition, path);
 				entities.add(entityDefinition);
 				names.add(name);
@@ -128,28 +101,17 @@ public class XmlImportCatalogFactory implements CatalogFactory {
 		}
 	}
 
-	/**
-	 * This method sets the attributes of entityDefinition according to the XML
-	 * file of the parser. If a nested entity is found the method is called
-	 * recursively.
-	 * 
-	 * @param entityDefinition
-	 *            : the entry of the catalog which has to be built
-	 * @param path
-	 *            : a string which the parser uses in order to read the right
-	 *            piece of the XML file
-	 * */
 	private void readEntity(final EntityDefinition entityDefinition, String path) {
 		for (int i = 1; i <= parser.getNumberOfAttributes(path); i++) {
-			final String type = parser.getAttributeType(path, i);
-			final String label = parser.getAttributeLabel(path, i);
-			final String value = parser.getAttributeValue(path, i);
-			final String attributeName = parser.getAttributeName(path, i);
-			final AttributeDefinitionFactory factory = new AttributeDefinitionFactory(type);
-			final AttributeDefinition attributeDefinition = factory.createAttribute(attributeName);
-			attributeDefinition.setLabel(label);
-			if (!value.equals("")) {
-				((SimpleAttributeDefinition) attributeDefinition).setValue(value);
+			final String ifcAttributeType = parser.getIfcAttributeType(path, i);
+			final String cmAttributeName = parser.getCmAttributeName(path, i);
+			final String attributeValue = parser.getIfcAttributeValue(path, i);
+			final String ifcAttributeName = parser.getIfcAttributeName(path, i);
+			final AttributeDefinitionFactory factory = new AttributeDefinitionFactory(ifcAttributeType);
+			final AttributeDefinition attributeDefinition = factory.createAttribute(ifcAttributeName);
+			attributeDefinition.setCmName(cmAttributeName);
+			if (!attributeValue.equals("")) {
+				((SimpleAttributeDefinition) attributeDefinition).setValue(attributeValue);
 			}
 			entityDefinition.getAttributes().add(attributeDefinition);
 			if (attributeDefinition instanceof ReferenceAttributeDefinition) {
@@ -175,13 +137,13 @@ public class XmlImportCatalogFactory implements CatalogFactory {
 						path = path + "/entity[" + j + "]";
 						final EntityDefinition referencedEntityDefinition = new ImportEntityDefinition("");
 						((ListAttributeDefinition) attributeDefinition).setReference(referencedEntityDefinition);
-						((ListAttributeDefinition) attributeDefinition).getAllReferences().add(
-								referencedEntityDefinition);
+						((ListAttributeDefinition) attributeDefinition).getAllReferences()
+								.add(referencedEntityDefinition);
 						readEntity(referencedEntityDefinition, path);
 						path = path0;
 					}
 				} else {
-					throw new BimError("error reading reference list " + attributeName);
+					throw new BimError("error reading reference list " + ifcAttributeName);
 				}
 				path = path_tmp;
 			}

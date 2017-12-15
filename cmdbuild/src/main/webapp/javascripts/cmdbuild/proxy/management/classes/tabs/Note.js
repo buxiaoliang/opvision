@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.management.classes.tabs.Note', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json'
 		],

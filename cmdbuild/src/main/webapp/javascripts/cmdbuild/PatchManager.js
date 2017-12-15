@@ -7,7 +7,7 @@
 	Ext.application({
 		extend: 'Ext.app.Application',
 
-		requires: [
+		uses: [
 			'Ext.tip.QuickTipManager' // Avoid core override
 		],
 

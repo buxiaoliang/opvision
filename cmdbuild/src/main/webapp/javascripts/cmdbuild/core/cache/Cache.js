@@ -7,7 +7,7 @@
 	 */
 	Ext.define('CMDBuild.core.cache.Cache', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.configurations.Timeout',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.interfaces.Ajax',
@@ -37,6 +37,8 @@
 			standard: {},
 			store: {}
 		},
+		
+		counter : 0,
 
 		/**
 		 * Enable/disable cache
@@ -123,6 +125,29 @@
 		 * @private
 		 */
 		executeRequest: function (parameters) {
+			var me = this;
+			var cb = parameters.callback;
+			
+			
+			/*
+			 * Below, only for MANAGEMENT module, during request it's
+			 * send message for lock Navigation and unlock once the request it's completed
+			 * 
+			 * */
+			if(!CMDBuild.Administration && CMDBuild.global.controller && CMDBuild.global.controller.MainViewport) {
+				if(me.counter === 0) {
+					CMDBuild.global.controller.MainViewport.cmfg('mainViewAccordionSetLock', true); // lock Accordion
+				}
+				me.counter += 1;
+				parameters.callback = function() {
+					me.counter += -1;
+					if(me.counter === 0) {
+						CMDBuild.global.controller.MainViewport.cmfg('mainViewAccordionSetLock', false); // unlock Accordion
+					}
+					Ext.callback(cb, parameters.scope);
+				}
+			}
+			
 			switch (parameters.mode) {
 				case 'ajax':
 					return CMDBuild.core.interfaces.Ajax.request(parameters);

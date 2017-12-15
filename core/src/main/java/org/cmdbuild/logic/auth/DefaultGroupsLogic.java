@@ -127,6 +127,7 @@ public class DefaultGroupsLogic implements GroupsLogic {
 		final CMRelationDefinition relationDefinition = dataView.createRelationFor(userRoleDomain);
 		relationDefinition.setCard1(fetchUserCardWithId(userId));
 		relationDefinition.setCard2(fetchRoleCardWithId(groupId));
+		relationDefinition.setUser(userStore.getUser().getAuthenticatedUser().getUsername());
 		relationDefinition.save();
 	}
 
@@ -192,6 +193,7 @@ public class DefaultGroupsLogic implements GroupsLogic {
 
 		final CMRelation relationToBeRemoved = row.getRelation(userRoleDomain).getRelation();
 		final CMRelationDefinition relationDefinition = dataView.update(relationToBeRemoved);
+		relationDefinition.setUser(userStore.getUser().getAuthenticatedUser().getUsername());
 		relationDefinition.delete();
 	}
 

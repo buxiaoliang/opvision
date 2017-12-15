@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.common.panel.module.attachment.WindowView', {
 		extend: 'CMDBuild.core.window.AbstractCustomModal',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.common.panel.module.attachment.Window}

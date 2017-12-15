@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.classes.panel.form.tabs.card.widget.panel.ButtonGroup', {
 		extend: 'CMDBuild.controller.common.panel.module.widget.panel.ButtonGroup',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.management.classes.panel.form.tabs.card.Tab}

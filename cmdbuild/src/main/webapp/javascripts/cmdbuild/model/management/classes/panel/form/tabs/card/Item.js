@@ -19,7 +19,8 @@
 			{ name: CMDBuild.core.constants.Proxy.REFERENCE_ATTRIBUTES, type: 'auto', defaultValue: {} }, // {Object} - Ex: { referenceName: { firstAttr: ..., secondAttr: ...  }, ...  }
 			{ name: CMDBuild.core.constants.Proxy.SOURCE_OBJECT, type: 'auto', defaultValue: {} },
 			{ name: CMDBuild.core.constants.Proxy.USER, type: 'string' },
-			{ name: CMDBuild.core.constants.Proxy.VALUES, type: 'auto', defaultValue: {} }
+			{ name: CMDBuild.core.constants.Proxy.PERMISSIONS, type: 'auto', defaultValue: {}},
+			{ name: CMDBuild.core.constants.Proxy.VALUES, type: 'auto', defaultValue: {}, }
 		],
 
 		/**
@@ -41,12 +42,13 @@
 			data[CMDBuild.core.constants.Proxy.ID] = data[CMDBuild.core.constants.Proxy.CARD]['Id'];
 			data[CMDBuild.core.constants.Proxy.USER] = data[CMDBuild.core.constants.Proxy.CARD][CMDBuild.core.constants.Proxy.USER];
 			data[CMDBuild.core.constants.Proxy.VALUES] = data[CMDBuild.core.constants.Proxy.CARD];
-
+			data[CMDBuild.core.constants.Proxy.PERMISSIONS] = data[CMDBuild.core.constants.Proxy.METADATA];
+			
 			this.callParent(arguments);
 		},
 
 		/**
-		 * Forward requests to value property
+		 * Forward requests to value property	
 		 *
 		 * @param {String} name
 		 *

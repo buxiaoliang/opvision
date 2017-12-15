@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.management.workflow.panel.tree.toolbar.TopView', {
 		extend: 'Ext.toolbar.Toolbar',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.constants.WorkflowStates',
 			'CMDBuild.proxy.management.workflow.panel.tree.Tree'

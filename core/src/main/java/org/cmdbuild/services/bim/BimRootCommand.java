@@ -6,16 +6,16 @@ import org.cmdbuild.model.bim.StorableLayer;
 
 public class BimRootCommand extends BimDataModelCommand {
 
-	public BimRootCommand(BimPersistence dataPersistence, BimDataModelManager dataModelManager) {
+	public BimRootCommand(final BimPersistence dataPersistence, final BimDataModelManager dataModelManager) {
 		super(dataPersistence, dataModelManager);
 	}
 
 	@Override
-	public void execute(String className, String value) {
+	public void execute(final String className, final String value) {
 		if (Boolean.parseBoolean(value)) {
-			BimActiveCommand activeCommand = new BimActiveCommand(dataPersistence, dataModelManager);
+			final BimActiveCommand activeCommand = new BimActiveCommand(dataPersistence, dataModelManager);
 			activeCommand.execute(className, value);
-			StorableLayer oldBimRoot = dataPersistence.findRoot();
+			final StorableLayer oldBimRoot = dataPersistence.findRoot();
 			if (oldBimRoot != null && !isEmpty(oldBimRoot.getClassName())
 					&& !oldBimRoot.getClassName().equals(className)) {
 				dataModelManager.deleteBimDomainIfExists(oldBimRoot.getClassName());
@@ -27,7 +27,7 @@ public class BimRootCommand extends BimDataModelCommand {
 				dataPersistence.saveRootFlag(className, true);
 			}
 		} else {
-			dataModelManager.deleteBimDomainIfExists(className); 
+			dataModelManager.deleteBimDomainIfExists(className);
 			dataPersistence.saveRootFlag(className, false);
 		}
 	}

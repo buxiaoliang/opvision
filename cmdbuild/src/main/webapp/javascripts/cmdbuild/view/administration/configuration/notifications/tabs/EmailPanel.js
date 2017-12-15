@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.configuration.notifications.tabs.EmailPanel', {
 		extend: 'Ext.form.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.administration.configuration.notifications.tabs.Email'

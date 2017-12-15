@@ -6,11 +6,10 @@ import org.joda.time.DateTime;
 public class DefaultPersistenceProject implements PersistenceProject {
 
 	private Long cmId;
-	private String name, description, importMapping, exportMapping, projectId;
-	private boolean sync, active;
+	private String name, description, importMapping, projectId;
+	private boolean active;
 	private DateTime lastCheckin;
 	private Iterable<String> cardBinding;
-	private String exportProjectId;
 
 	@Override
 	public String getName() {
@@ -33,19 +32,10 @@ public class DefaultPersistenceProject implements PersistenceProject {
 	}
 
 	@Override
-	public String getExportMapping() {
-		return exportMapping;
-	}
-
-	@Override
 	public String getDescription() {
 		return description;
 	}
 
-	@Override
-	public boolean isSynch() {
-		return sync;
-	}
 
 	@Override
 	public DateTime getLastCheckin() {
@@ -65,11 +55,6 @@ public class DefaultPersistenceProject implements PersistenceProject {
 	@Override
 	public void setLastCheckin(final DateTime lastCheckin) {
 		this.lastCheckin = lastCheckin;
-	}
-
-	@Override
-	public void setSynch(final boolean sync) {
-		this.sync = sync;
 	}
 
 	@Override
@@ -102,18 +87,4 @@ public class DefaultPersistenceProject implements PersistenceProject {
 		this.active = active;
 	}
 
-	@Override
-	public String getExportProjectId() {
-		return exportProjectId;
-	}
-
-	@Override
-	public String getShapeProjectId() {
-		throw new UnsupportedOperationException("to do");
-	}
-
-	@Override
-	public void setExportProjectId(final String projectId) {
-		this.exportProjectId = projectId;
-	}
 }

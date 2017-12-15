@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.administration.taskManager.Grid', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.configurations.Timeout',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.administration.taskManager.Grid',

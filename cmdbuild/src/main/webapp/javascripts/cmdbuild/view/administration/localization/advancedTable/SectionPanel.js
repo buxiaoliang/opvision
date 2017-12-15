@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.localization.advancedTable.SectionPanel', {
 		extend: 'Ext.panel.Panel',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {Mixed}

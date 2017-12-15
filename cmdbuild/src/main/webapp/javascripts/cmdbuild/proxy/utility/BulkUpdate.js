@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.utility.BulkUpdate', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Global',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.utility.bulkUpdate.ClassesTree',

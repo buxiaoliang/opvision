@@ -7,7 +7,7 @@
 	 */
 	Ext.define('CMDBuild.core.LoadMask', {
 
-		requires: ['CMDBuild.core.Splash'],
+		uses: ['CMDBuild.core.Splash'],
 
 		singleton: true,
 

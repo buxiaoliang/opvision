@@ -2,7 +2,7 @@ package org.cmdbuild.config;
 
 import org.cmdbuild.services.Settings;
 
-public class DatabaseProperties extends DefaultProperties implements DatabaseConfiguration {
+public final class DatabaseProperties extends DefaultProperties implements DatabaseConfiguration {
 
 	private static final long serialVersionUID = 1L;
 
@@ -13,8 +13,8 @@ public class DatabaseProperties extends DefaultProperties implements DatabaseCon
 	private static final String PASSWORD = "db.password";
 	private static final String BACKEND_CLASS = "db.backend";
 
-	public DatabaseProperties() {
-		super();
+	public DatabaseProperties(PropertyContainer propertyContainer) {
+		super(propertyContainer);
 		clearConfiguration();
 	}
 

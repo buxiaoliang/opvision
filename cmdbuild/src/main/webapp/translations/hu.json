@@ -1,6 +1,6 @@
 {
 	"description": "Hungarian",
-	"release": "2.4-dev",
+	"release": "2.5-dev",
 	"administration": {
 		"description": "Adminisztrációs modul",
 		"modClass": {
@@ -317,7 +317,13 @@
 		"tooltip": {
 			"editParameters": "Paraméterek szerkesztése",
 			"reload": "Újratöltés",
-			"showData": "Adat megjelenítése"
+			"showData": "Adat megjelenítése",
+			"showAll": "<em>Show all</em>",
+			"hideAll": "<em>Hide all</em>"
+		},
+		"button": {
+			"showAll": "<em>Show all</em>",
+			"hideAll": "<em>Hide all</em>"
 		},
 		"tree_names": {
 			"class": "Általános",
@@ -560,7 +566,13 @@
 				"geo_attributes": "Földrajzi attribútumok",
 				"gisNavigation": "GIS navigáció",
 				"position": "Pozíció",
-				"zoom": "Zoom"
+				"zoom": "Zoom",
+				"shape": "<em>Shape</em>",
+				"shapes": {
+					"circle": "<em>Circle</em>",
+					"rectangle": "<em>Rectangle</em>",
+					"star": "<em>Star</em>"
+				}
 			},
 			"maptoolbar": {
 				"add": "Hozzáadás",
@@ -922,6 +934,8 @@
 	"filterInputParameters": "<em>Filter input parameters</em>",
 	"filterParameters": "<em>Filter parameters</em>",
 	"filtersForGroups": "Szűrők csoportoknak",
+	"filterTypeExpression": "<em>Expression</em>",
+	"filterTypeNormal": "<em>Normal</em>",
 	"filterView": "Szűrőkből",
 	"find": "<em>Find</em>",
 	"finish": "Befejezés",
@@ -984,6 +998,7 @@
 	"initialLatitude": "Kezdeti szélesség",
 	"initialLongitude": "Kezdeti hosszúság",
 	"initialZoomLevel": "Kezdeti zoom szint",
+	"inputParameter": "Bemeneti paraméter",
 	"instance": "Eset",
 	"instanceName": "Szerver neve",
 	"inverseDescription": "<em>Inverse description</em>",
@@ -1237,7 +1252,6 @@
 	"set": "Beállítás",
 	"setAsDefault": "Beállítás alapértelmezettként",
 	"setFilter": "Szűrő beállítása",
-	"setLater": "Bemeneti paraméter",
 	"settleTimeMs": "<em>\"Settle time\" (ms)</em>",
 	"setup": "Beállítás",
 	"showDetails": "<em>Show details</em>",

@@ -6,7 +6,7 @@
 	Ext.define('CMDBuild.view.common.field.CMGroupSelectionList', {
 		extend: 'Ext.ux.form.MultiSelect',
 
-		requires: ['CMDBuild.proxy.common.field.multiselect.Group'],
+		uses: ['CMDBuild.proxy.common.field.multiselect.Group'],
 
 		considerAsFieldToDisable: true,
 

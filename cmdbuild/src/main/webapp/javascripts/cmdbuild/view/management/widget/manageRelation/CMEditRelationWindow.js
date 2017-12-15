@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.management.widget.manageRelation.CMEditRelationWindow', {
 		extend: 'CMDBuild.core.window.AbstractModal',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Global',
 			'CMDBuild.core.Message'
 		],

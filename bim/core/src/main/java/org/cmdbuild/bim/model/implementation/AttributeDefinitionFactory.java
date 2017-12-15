@@ -4,22 +4,22 @@ import org.cmdbuild.bim.model.AttributeDefinition;
 import org.cmdbuild.bim.service.BimError;
 
 public class AttributeDefinitionFactory {
-	
-	private String type; 
 
-	public AttributeDefinitionFactory(String type) {
+	private final String type;
+
+	public AttributeDefinitionFactory(final String type) {
 		this.type = type;
 	}
 
-	public AttributeDefinition createAttribute(String attributeName) {
-		if(type.equals("simple")){
+	public AttributeDefinition createAttribute(final String attributeName) {
+		if (type.equals("simple")) {
 			return new SimpleAttributeDefinition(attributeName);
-		}else if(type.equals("reference")){
+		} else if (type.equals("reference")) {
 			return new ReferenceAttributeDefinition(attributeName);
-		}else if(type.equals("multiple")){
+		} else if (type.equals("list")) {
 			return new ListAttributeDefinition(attributeName);
-		}else{
-			throw new BimError("Error in create attribute");
+		} else {
+			throw new BimError("Unsupported attribute type " + this.type);
 		}
 	}
 

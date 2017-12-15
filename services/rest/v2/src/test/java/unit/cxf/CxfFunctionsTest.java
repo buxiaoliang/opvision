@@ -31,6 +31,7 @@ import org.cmdbuild.service.rest.v2.model.Attribute;
 import org.cmdbuild.service.rest.v2.model.Function;
 import org.cmdbuild.service.rest.v2.model.ResponseMultiple;
 import org.cmdbuild.service.rest.v2.model.ResponseSingle;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -351,6 +352,7 @@ public class CxfFunctionsTest {
 		final ResponseMultiple<Attribute> response = underTest.readOutputParameters(2L, null, null);
 
 		// then
+		assertNotNull(response);
 		assertThat(response.getMetadata().getTotal(), equalTo(3L));
 		assertThat(response.getElements(), hasSize(3));
 		assertThat(get(response.getElements(), 0),
@@ -384,6 +386,7 @@ public class CxfFunctionsTest {
 		final ResponseMultiple<Attribute> response = underTest.readOutputParameters(2L, 1, 2);
 
 		// then
+		assertNotNull(response);
 		assertThat(response.getMetadata().getTotal(), equalTo(3L));
 		assertThat(response.getElements(), hasSize(1));
 		assertThat(get(response.getElements(), 0),

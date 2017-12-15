@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.administration.accordion.Configuration', {
 		extend: 'CMDBuild.controller.common.abstract.Accordion',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.common.MainViewport}

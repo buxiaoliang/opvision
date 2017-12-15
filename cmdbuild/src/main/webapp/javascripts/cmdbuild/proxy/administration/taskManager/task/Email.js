@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.administration.taskManager.task.Email', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.administration.taskManager.Grid',
 			'CMDBuild.model.administration.taskManager.task.email.Account',

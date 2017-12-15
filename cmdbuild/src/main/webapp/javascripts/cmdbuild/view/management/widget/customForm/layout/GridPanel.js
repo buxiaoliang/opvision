@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.management.widget.customForm.layout.GridPanel', {
 		extend: 'Ext.grid.Panel',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.management.widget.customForm.layout.Grid}

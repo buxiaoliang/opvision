@@ -6,7 +6,7 @@
 	Ext.define('CMDBuild.controller.management.classes.tabs.History', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Global',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.management.classes.tabs.History'
@@ -170,9 +170,12 @@
 		 * @returns {Void}
 		 */
 		clearStoreAdd: function (itemsToAdd) {
-			var oldStoreDatas = this.grid.getStore().getRange();
-
-			this.grid.getStore().loadData(Ext.Array.merge(oldStoreDatas, itemsToAdd));
+			var _store = this.grid.getStore(); 
+			var oldStoreDatas = _store.getRange();
+			
+			_store.removeAll()
+			_store.add(itemsToAdd)
+			_store.add(oldStoreDatas)
 		},
 
 		/**

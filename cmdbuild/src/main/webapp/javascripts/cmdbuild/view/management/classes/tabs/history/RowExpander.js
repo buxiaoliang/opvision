@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.management.classes.tabs.history.RowExpander', {
 		extend: 'Ext.grid.plugin.RowExpander',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Utils'
 		],

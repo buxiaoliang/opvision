@@ -7,15 +7,14 @@
 	 * @link CMDBuild.controller.common.panel.gridAndForm.panel.common.filter.advanced.filterEditor.relations.CMCardGridController
 	 */
 
-	Ext.require([
-		'CMDBuild.core.Message',
-		'CMDBuild.core.templateResolver.Utils',
-		'CMDBuild.proxy.Card',
-		'CMDBuild.core.Utils'
-	]);
 
 	Ext.define("CMDBuild.controller.management.workflow.panel.tree.filter.advanced.filterEditor.relations.CMCardGridController", {
-
+		uses: [
+			'CMDBuild.core.Message',
+			'CMDBuild.core.templateResolver.Utils',
+			'CMDBuild.proxy.Card',
+			'CMDBuild.core.Utils'
+		],
 		mixins: {
 			observable: "Ext.util.Observable",
 			filterWindow: "CMDBuild.view.management.common.filter.CMFilterWindowDelegate",

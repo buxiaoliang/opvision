@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.administration.classes.tabs.widgets.form.Workflow', {
 		extend: 'CMDBuild.controller.administration.classes.tabs.widgets.form.Abstract',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.administration.classes.tabs.widgets.Workflow',
 			'CMDBuild.model.administration.classes.tabs.widgets.workflow.Definition'

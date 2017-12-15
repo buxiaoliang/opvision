@@ -1,5 +1,6 @@
 package org.cmdbuild.auth.user;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -76,6 +77,26 @@ public class AnonymousUser implements AuthenticatedUser {
 	@Override
 	public boolean isPrivileged() {
 		return false;
+	}
+
+	@Override
+	public boolean isPasswordExpired() {
+		return false;
+	}
+
+	@Override
+	public LocalDateTime getPasswordExpirationTimestamp() {
+		return null;
+	}
+
+	@Override
+	public LocalDateTime getLastPasswordChangeTimestamp() {
+		return null;
+	}
+
+	@Override
+	public LocalDateTime getLastExpiringNotificationTimestamp() {
+		return null;
 	}
 
 }

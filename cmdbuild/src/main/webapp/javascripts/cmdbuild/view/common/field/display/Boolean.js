@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.common.field.display.Boolean', {
 		extend: 'Ext.form.field.Display',
 
-		requires: ['CMDBuild.core.Utils'],
+		uses: ['CMDBuild.core.Utils'],
 
 		/**
 		 * @param {String} value

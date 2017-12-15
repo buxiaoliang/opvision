@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.workflow.panel.tree.toolbar.Top', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Global',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.constants.WorkflowStates',

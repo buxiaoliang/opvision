@@ -18,11 +18,13 @@ import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
 
 import com.google.common.collect.Maps;
+import org.slf4j.LoggerFactory;
 
 public class ProcessSynchronizer {
 
-	private static final Marker marker = MarkerFactory.getMarker(ProcessSynchronizer.class.getName());
-	private static final Logger logger = Log.WORKFLOW;
+	private final Marker legacyLoggerMarker = MarkerFactory.getMarker(ProcessSynchronizer.class.getName());
+	private final Logger legacyLogger = Log.WORKFLOW;
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	public static ProcessSynchronizer of(final CMWorkflowService service, final WorkflowPersistence persistence,
 			final WorkflowTypesConverter typesConverter) {
@@ -33,39 +35,38 @@ public class ProcessSynchronizer {
 	private final WorkflowPersistence persistence;
 	private final WorkflowTypesConverter typesConverter;
 
-	private ProcessSynchronizer(final CMWorkflowService service, final WorkflowPersistence persistence,
-			final WorkflowTypesConverter typesConverter) {
+	private ProcessSynchronizer(final CMWorkflowService service, final WorkflowPersistence persistence, final WorkflowTypesConverter typesConverter) {
 		this.workflowService = service;
 		this.persistence = persistence;
 		this.typesConverter = typesConverter;
 	}
 
-	public UserProcessInstance syncProcessStateActivitiesAndVariables(final CMProcessInstance processInstance,
-			final WSProcessInstInfo processInstanceInfo) throws CMWorkflowException {
+	public UserProcessInstance syncProcessStateActivitiesAndVariables(final CMProcessInstance processInstance, final WSProcessInstInfo processInstanceInfo) throws CMWorkflowException {
 		return syncProcessStateActivitiesAndMaybeVariables(processInstance, processInstanceInfo, true);
 	}
 
-	public UserProcessInstance syncProcessStateAndActivities(final CMProcessInstance processInstance,
-			final WSProcessInstInfo processInstanceInfo) throws CMWorkflowException {
+	public UserProcessInstance syncProcessStateAndActivities(final CMProcessInstance processInstance, final WSProcessInstInfo processInstanceInfo) throws CMWorkflowException {
 		return syncProcessStateActivitiesAndMaybeVariables(processInstance, processInstanceInfo, false);
 	}
 
-	private UserProcessInstance syncProcessStateActivitiesAndMaybeVariables(final CMProcessInstance processInstance,
-			final WSProcessInstInfo processInstanceInfo, final boolean syncVariables) throws CMWorkflowException {
-		logger.info(marker, "synchronizing process state, activities and (maybe) variables");
+	private UserProcessInstance syncProcessStateActivitiesAndMaybeVariables(final CMProcessInstance processInstance, final WSProcessInstInfo processInstanceInfo, final boolean syncVariables) throws CMWorkflowException {
+		legacyLogger.info(legacyLoggerMarker, "synchronizing process state, activities and (maybe) variables");
+		logger.info("synchronizing process state, activities and (maybe) variables");
 
 		final Map<String, Object> values = Maps.newHashMap();
 		if (syncVariables) {
-			logger.info(marker, "synchronizing variables");
-			final Map<String, Object> workflowValues = workflowService.getProcessInstanceVariables(processInstance
-					.getProcessInstanceId());
+			legacyLogger.info(legacyLoggerMarker, "synchronizing variables");
+			logger.info("synchronizing variables");
+			final Map<String, Object> workflowValues = workflowService.getProcessInstanceVariables(processInstance.getProcessInstanceId());
 			final Map<String, Object> nativeValues = fromWorkflowValues(workflowValues);
 			for (final CMAttribute a : processInstance.getType().getAttributes()) {
 				final String attributeName = a.getName();
 				final Object newValue = nativeValues.get(attributeName);
-				logger.debug(marker, format("synchronizing variable '%s' with value '%s'", attributeName, newValue));
+				legacyLogger.debug(legacyLoggerMarker, format("synchronizing variable '%s' with value '%s'", attributeName, newValue));
 				values.put(attributeName, newValue);
 			}
+		} else {
+			logger.info("variables syncronization not required, skipping");
 		}
 
 		final WSProcessInstanceState state;
@@ -74,8 +75,8 @@ public class ProcessSynchronizer {
 		final WSProcessInstInfo uniqueProcessDefinition;
 
 		if (processInstanceInfo == null) {
-			logger.warn(marker,
-					"process instance info is null, setting process as completed (should never happen, but who knows...");
+			legacyLogger.warn(legacyLoggerMarker, "process instance info is null, setting process as completed (should never happen, but who knows...");
+			logger.warn("process instance info is null, setting process as completed (this should not happen)");
 			state = WSProcessInstanceState.COMPLETED;
 			addActivities = new WSActivityInstInfo[0];
 			activities = ProcessData.NO_ACTIVITIES;
@@ -86,8 +87,11 @@ public class ProcessSynchronizer {
 			activities = workflowService.findOpenActivitiesForProcessInstance(processInstance.getProcessInstanceId());
 			state = processInstanceInfo.getStatus();
 			if (state == WSProcessInstanceState.COMPLETED) {
-				logger.info(marker, "process is completed, delete if from workflow service");
+				legacyLogger.info(legacyLoggerMarker, "process is completed, delete if from workflow service");
+				logger.info("process state = COMPLETED, delete if from workflow service");
 				workflowService.deleteProcessInstance(processInstanceInfo.getProcessInstanceId());
+			} else {
+				logger.info("process state = {}, nothing to do", state);
 			}
 		}
 
@@ -121,7 +125,7 @@ public class ProcessSynchronizer {
 		});
 	}
 
-	private final Map<String, Object> fromWorkflowValues(final Map<String, Object> workflowValues) {
+	private Map<String, Object> fromWorkflowValues(final Map<String, Object> workflowValues) {
 		return fromWorkflowValues(workflowValues, typesConverter);
 	}
 
@@ -130,7 +134,7 @@ public class ProcessSynchronizer {
 	 */
 	public static final Map<String, Object> fromWorkflowValues(final Map<String, Object> workflowValues,
 			final WorkflowTypesConverter workflowVariableConverter) {
-		final Map<String, Object> nativeValues = new HashMap<String, Object>();
+		final Map<String, Object> nativeValues = new HashMap<>();
 		for (final Map.Entry<String, Object> wv : workflowValues.entrySet()) {
 			nativeValues.put(wv.getKey(), workflowVariableConverter.fromWorkflowType(wv.getValue()));
 		}

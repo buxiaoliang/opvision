@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.administration.classes.tabs.widgets.form.CreateModifyCard', {
 		extend: 'CMDBuild.controller.administration.classes.tabs.widgets.form.Abstract',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Message',
 			'CMDBuild.model.administration.classes.tabs.widgets.createModifyCard.Definition'

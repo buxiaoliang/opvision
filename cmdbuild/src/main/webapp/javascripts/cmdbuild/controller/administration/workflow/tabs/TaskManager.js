@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.administration.workflow.tabs.TaskManager', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Global',
 			'CMDBuild.core.constants.ModuleIdentifiers',
 			'CMDBuild.core.constants.Proxy',

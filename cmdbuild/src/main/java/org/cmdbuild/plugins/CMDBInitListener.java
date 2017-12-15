@@ -8,6 +8,7 @@ import javax.servlet.ServletContextListener;
 
 import org.cmdbuild.logger.Log;
 import org.cmdbuild.logic.scheduler.SchedulerLogic;
+import org.cmdbuild.services.Settings;
 import org.cmdbuild.services.startup.StartupLogic;
 import org.slf4j.Logger;
 
@@ -26,6 +27,7 @@ public class CMDBInitListener implements ServletContextListener {
 
 	@Override
 	public void contextInitialized(final ServletContextEvent evt) {
+		Settings.getInstance().setClusterNotifierService(applicationContext().getBean(Settings.DefaultSettingsClusterNotifierService.class));
 		loadPlugins(evt);
 		applicationContext().getBean(StartupLogic.class).earlyStart();
 	}
@@ -39,8 +41,7 @@ public class CMDBInitListener implements ServletContextListener {
 				logger.debug("Initialize plugin: " + loader);
 				((CmdbuildModuleLoader) Class.forName(basepack + loader).newInstance()).init(evt.getServletContext());
 			} catch (final Exception e) {
-				logger.error("Failed to load '" + loader + "' module!");
-				e.printStackTrace();
+				logger.error("Failed to load '" + loader + "' module!", e);
 			}
 		}
 	}

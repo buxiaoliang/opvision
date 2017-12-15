@@ -1,6 +1,7 @@
 package org.cmdbuild.logic.auth;
 
 import static org.cmdbuild.auth.UserStores.inMemory;
+import static org.cmdbuild.auth.context.PrivilegeContexts.nullPrivilegeContext;
 import static org.cmdbuild.auth.user.AuthenticatedUserImpl.ANONYMOUS_USER;
 
 import java.util.NoSuchElementException;
@@ -14,7 +15,6 @@ import org.cmdbuild.auth.ForwardingUserStore;
 import org.cmdbuild.auth.TokenGenerator;
 import org.cmdbuild.auth.UserStore;
 import org.cmdbuild.auth.acl.NullGroup;
-import org.cmdbuild.auth.context.NullPrivilegeContext;
 import org.cmdbuild.auth.user.OperationUser;
 import org.cmdbuild.data.store.session.Session;
 import org.cmdbuild.data.store.session.SessionStore;
@@ -121,8 +121,8 @@ public class DefaultSessionLogic extends ForwardingAuthenticationLogic implement
 
 	}
 
-	private static final OperationUser ANONYMOUS =
-			new OperationUser(ANONYMOUS_USER, new NullPrivilegeContext(), new NullGroup());
+	private static final OperationUser ANONYMOUS = new OperationUser(ANONYMOUS_USER, nullPrivilegeContext(),
+			new NullGroup());
 
 	private final AuthenticationLogic delegate;
 	private final CurrentSessionStore currentSessionStore;

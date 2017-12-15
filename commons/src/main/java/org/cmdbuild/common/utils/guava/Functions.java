@@ -34,7 +34,7 @@ public final class Functions {
 	private static class ToKeyFunction<K, V> implements Function<Entry<? extends K, ? extends V>, K> {
 
 		public static <K, V> ToKeyFunction<K, V> newInstance() {
-			return new ToKeyFunction<K, V>();
+			return new ToKeyFunction<>();
 		}
 
 		private ToKeyFunction() {
@@ -51,7 +51,7 @@ public final class Functions {
 	private static class ToValueFunction<K, V> implements Function<Entry<? extends K, ? extends V>, V> {
 
 		public static <K, V> ToValueFunction<K, V> newInstance() {
-			return new ToValueFunction<K, V>();
+			return new ToValueFunction<>();
 		}
 
 		private ToValueFunction() {
@@ -68,7 +68,7 @@ public final class Functions {
 	private static class BuildFunction<T> implements Function<Builder<? extends T>, T> {
 
 		public static <T> BuildFunction<T> newInstance() {
-			return new BuildFunction<T>();
+			return new BuildFunction<>();
 		}
 
 		private BuildFunction() {

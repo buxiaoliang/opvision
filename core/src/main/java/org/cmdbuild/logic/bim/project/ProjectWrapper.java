@@ -35,18 +35,8 @@ class ProjectWrapper implements Project {
 	}
 
 	@Override
-	public boolean isSynch() {
-		return delegate.isSynch();
-	}
-
-	@Override
 	public String getImportMapping() {
 		return delegate.getImportMapping();
-	}
-
-	@Override
-	public String getExportMapping() {
-		return delegate.getExportMapping();
 	}
 
 	@Override
@@ -61,6 +51,11 @@ class ProjectWrapper implements Project {
 
 	@Override
 	public File getFile() {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public String getIfcVersion() {
 		throw new UnsupportedOperationException();
 	}
 

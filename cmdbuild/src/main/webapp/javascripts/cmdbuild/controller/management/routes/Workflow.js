@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.routes.Workflow', {
 		extend: 'CMDBuild.controller.common.abstract.Routes',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.ModuleIdentifiers',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Message',

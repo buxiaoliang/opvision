@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.core.fieldManager.builders.Time', {
 		extend: 'CMDBuild.core.fieldManager.builders.Abstract',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.configurations.DataFormat',
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy'

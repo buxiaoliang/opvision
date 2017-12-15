@@ -1,8 +1,7 @@
 (function() {
 
-	Ext.require(['CMDBuild.proxy.Card']);
-
 	Ext.define('CMDBuild.state.CMCardModuleStateDelegate', {
+		uses: ['CMDBuild.proxy.Card'],
 		/**
 		 * @param {CMDBuild.state.CMCardModuleState} state The state that calls the delegate
 		 * @param {CMDBuild.cache.CMEntryTypeModel} entryType The new entryType
@@ -19,7 +18,7 @@
 	});
 
 	Ext.define('CMDBuild.state.CMCardModuleState', {
-
+		uses: ['CMDBuild.proxy.Card'],
 		mixins: {
 			delegable: 'CMDBuild.core.CMDelegable'
 		},

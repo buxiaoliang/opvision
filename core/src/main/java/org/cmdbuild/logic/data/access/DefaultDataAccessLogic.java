@@ -1,17 +1,22 @@
 package org.cmdbuild.logic.data.access;
 
+import static com.google.common.base.Functions.compose;
+import static com.google.common.base.Functions.identity;
 import static com.google.common.base.Predicates.alwaysTrue;
 import static com.google.common.base.Predicates.and;
 import static com.google.common.base.Predicates.equalTo;
 import static com.google.common.base.Predicates.not;
+import static com.google.common.base.Predicates.or;
 import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.Iterables.filter;
+import static com.google.common.collect.Iterables.isEmpty;
 import static com.google.common.collect.Iterables.size;
-import static com.google.common.collect.Iterables.toArray;
 import static com.google.common.collect.Maps.newHashMap;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.emptyMap;
+import static java.util.stream.Collectors.toMap;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -21,20 +26,18 @@ import static org.cmdbuild.dao.constants.Cardinality.CARDINALITY_N1;
 import static org.cmdbuild.dao.entrytype.Deactivable.IsActivePredicate.activeOnes;
 import static org.cmdbuild.dao.entrytype.Functions.active;
 import static org.cmdbuild.dao.entrytype.Functions.anchestorOf;
+import static org.cmdbuild.dao.entrytype.Functions.cardinality;
 import static org.cmdbuild.dao.entrytype.Functions.class1;
 import static org.cmdbuild.dao.entrytype.Functions.class2;
 import static org.cmdbuild.dao.entrytype.Functions.disabled1;
 import static org.cmdbuild.dao.entrytype.Functions.disabled2;
-import static org.cmdbuild.dao.entrytype.Predicates.allDomains;
 import static org.cmdbuild.dao.entrytype.Predicates.attributeTypeInstanceOf;
 import static org.cmdbuild.dao.entrytype.Predicates.clazz;
 import static org.cmdbuild.dao.entrytype.Predicates.contains;
-import static org.cmdbuild.dao.entrytype.Predicates.disabledClass;
 import static org.cmdbuild.dao.entrytype.Predicates.domain;
 import static org.cmdbuild.dao.entrytype.Predicates.domainFor;
 import static org.cmdbuild.dao.entrytype.Predicates.hasAnchestor;
 import static org.cmdbuild.dao.entrytype.Predicates.isSystem;
-import static org.cmdbuild.dao.entrytype.Predicates.usableForReferences;
 import static org.cmdbuild.dao.guava.Functions.toValueSet;
 import static org.cmdbuild.dao.query.clause.AnyAttribute.anyAttribute;
 import static org.cmdbuild.dao.query.clause.AnyClass.anyClass;
@@ -49,12 +52,19 @@ import static org.cmdbuild.dao.query.clause.where.AndWhereClause.and;
 import static org.cmdbuild.dao.query.clause.where.EqualsOperatorAndValue.eq;
 import static org.cmdbuild.dao.query.clause.where.SimpleWhereClause.condition;
 import static org.cmdbuild.data.store.Storables.storableOf;
+import static org.cmdbuild.exception.AuthException.AuthExceptionType.AUTH_NOT_AUTHORIZED;
+import static org.cmdbuild.exception.ConsistencyException.ConsistencyExceptionType.ORM_CANT_DELETE_CARD_WITH_RELATION;
+import static org.cmdbuild.exception.NotFoundException.NotFoundExceptionType.CARD_NOTFOUND;
+import static org.cmdbuild.exception.NotFoundException.NotFoundExceptionType.CLASS_NOTFOUND;
+import static org.cmdbuild.exception.NotFoundException.NotFoundExceptionType.DOMAIN_NOTFOUND;
+import static org.cmdbuild.exception.NotFoundException.NotFoundExceptionType.NOTFOUND_FUNCTION;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -62,9 +72,10 @@ import java.util.NoSuchElementException;
 
 import javax.activation.DataHandler;
 
+import org.cmdbuild.auth.acl.NullGroup;
+import org.cmdbuild.auth.context.DefaultPrivilegeContextFactory;
 import org.cmdbuild.auth.user.OperationUser;
 import org.cmdbuild.common.Constants;
-import org.cmdbuild.common.collect.ChainablePutMap;
 import org.cmdbuild.common.utils.PagedElements;
 import org.cmdbuild.dao.entry.CMCard;
 import org.cmdbuild.dao.entry.CMRelation;
@@ -88,10 +99,9 @@ import org.cmdbuild.data.store.Storable;
 import org.cmdbuild.data.store.Store;
 import org.cmdbuild.data.store.dao.DataViewStore;
 import org.cmdbuild.data.store.lookup.LookupStore;
-import org.cmdbuild.exception.ConsistencyException.ConsistencyExceptionType;
-import org.cmdbuild.exception.NotFoundException.NotFoundExceptionType;
 import org.cmdbuild.exception.ORMException.ORMExceptionType;
 import org.cmdbuild.logger.Log;
+import org.cmdbuild.logic.auth.SessionLogic;
 import org.cmdbuild.logic.commands.AbstractGetRelation.RelationInfo;
 import org.cmdbuild.logic.commands.GetCardHistory;
 import org.cmdbuild.logic.commands.GetRelationHistory;
@@ -123,6 +133,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
+import com.google.common.base.Supplier;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -130,16 +141,20 @@ import com.google.common.collect.Ordering;
 
 public class DefaultDataAccessLogic implements DataAccessLogic {
 
+	private static final String BEGIN_DATE = "BeginDate";
+
 	private static final String ID_ATTRIBUTE = org.cmdbuild.dao.driver.postgres.Const.ID_ATTRIBUTE;
 
 	private static final Alias DOM_ALIAS = name("DOM");
 	private static final Alias DST_ALIAS = name("DST");
 
 	private static final Function<CMCard, Card> CMCARD_TO_CARD = new Function<CMCard, Card>() {
+
 		@Override
 		public Card apply(final CMCard input) {
 			return CardStorableConverter.of(input).convert(input);
 		}
+
 	};
 
 	private static final Comparator<CMAttribute> NAME_ASC = new Comparator<CMAttribute>() {
@@ -156,24 +171,54 @@ public class DefaultDataAccessLogic implements DataAccessLogic {
 	public static final String USER = "__user__";
 	public static final String ROLE = "__role__";
 
+	private static <T extends CMDomain> Predicate<T> allDomains() {
+		return alwaysTrue();
+	}
+
+	private static <T extends CMDomain> Predicate<T> usableForReferences(final CMClass target) {
+		return or(
+				and(domain(cardinality(), equalTo(CARDINALITY_1N.value())),
+						domain(class2(), clazz(anchestorOf(target), equalTo(true)))),
+				and(domain(cardinality(), equalTo(CARDINALITY_N1.value())),
+						domain(class1(), clazz(anchestorOf(target), equalTo(true)))));
+	}
+
+	private static <T extends CMDomain> Predicate<T> disabledClass(final CMClass target) {
+		return or(domain(disabled1(), contains(target.getName())), domain(disabled2(), contains(target.getName())));
+	}
+
+	private final Function<Card, CardWithMetadata> CARD_TO_CARD_WITH_METADATA = new Function<Card, CardWithMetadata>() {
+
+		@Override
+		public CardWithMetadata apply(final Card input) {
+			final Map<String, String> metadata = new HashMap<>();
+			metadata.put("writable", Boolean.toString(canWrite(input.getType(), input)));
+			return new CardWithMetadata(input, metadata);
+		}
+
+	};
+
 	private final CMDataView systemDataView;
 	private final LookupStore lookupStore;
 	private final CMDataView dataView;
 	private final OperationUser operationUser;
 	private final LockLogic lockLogic;
+	private final SessionLogic sessionLogic;
 
 	public DefaultDataAccessLogic( //
 			final CMDataView systemDataView, //
 			final LookupStore lookupStore, //
 			final CMDataView dataView, //
 			final OperationUser operationUser, //
-			final LockLogic lockLogic //
+			final LockLogic lockLogic, //
+			final SessionLogic sessionLogic //
 	) {
 		this.systemDataView = systemDataView;
 		this.dataView = dataView;
 		this.lookupStore = lookupStore;
 		this.operationUser = operationUser;
 		this.lockLogic = lockLogic;
+		this.sessionLogic = sessionLogic;
 	}
 
 	@Override
@@ -250,10 +295,10 @@ public class DefaultDataAccessLogic implements DataAccessLogic {
 	@Override
 	public Card fetchHistoricCard(final String className, final Long cardId) {
 		final CMClass entryType = dataView.findClass(className);
-		return from(asList(fetchCMCard(history(entryType), cardId))) //
-				.transform(CMCARD_TO_CARD) //
-				.first() //
-				.get();
+		if (entryType == null) {
+			throw CLASS_NOTFOUND.createException(className);
+		}
+		return fetchCard(history(entryType), cardId, emptyList(), CMCARD_TO_CARD);
 	}
 
 	@Override
@@ -346,8 +391,8 @@ public class DefaultDataAccessLogic implements DataAccessLogic {
 	public Iterable<? extends CMClass> findClasses(final boolean activeOnly) {
 		final Iterable<? extends CMClass> fetchedClasses = activeOnly ? findActiveClasses() : findAllClasses();
 		final Iterable<? extends CMClass> nonProcessClasses = filter(fetchedClasses, nonProcessClasses());
-		final Iterable<? extends CMClass> classesToBeReturned =
-				activeOnly ? filter(nonProcessClasses, nonSystemButUsable()) : nonProcessClasses;
+		final Iterable<? extends CMClass> classesToBeReturned = activeOnly
+				? filter(nonProcessClasses, nonSystemButUsable()) : nonProcessClasses;
 		return classesToBeReturned;
 	}
 
@@ -381,8 +426,8 @@ public class DefaultDataAccessLogic implements DataAccessLogic {
 	public PagedElements<CMAttribute> getAttributes(final String className, final boolean onlyActive,
 			final AttributesQuery attributesQuery) {
 		final CMClass target = findClass(className);
-		final Iterable<? extends CMAttribute> elements =
-				onlyActive ? target.getActiveAttributes() : target.getAttributes();
+		final Iterable<? extends CMAttribute> elements = onlyActive ? target.getActiveAttributes()
+				: target.getAttributes();
 		final Iterable<? extends CMAttribute> ordered = Ordering.from(NAME_ASC).sortedCopy(elements);
 		final Integer offset = attributesQuery.offset();
 		final Integer limit = attributesQuery.limit();
@@ -397,8 +442,8 @@ public class DefaultDataAccessLogic implements DataAccessLogic {
 	public PagedElements<CMAttribute> getDomainAttributes(final String className, final boolean onlyActive,
 			final AttributesQuery attributesQuery) {
 		final CMDomain target = findDomain(className);
-		final Iterable<? extends CMAttribute> elements =
-				onlyActive ? target.getActiveAttributes() : target.getAttributes();
+		final Iterable<? extends CMAttribute> elements = onlyActive ? target.getActiveAttributes()
+				: target.getAttributes();
 		final Iterable<? extends CMAttribute> ordered = Ordering.from(NAME_ASC).sortedCopy(elements);
 		final Integer offset = attributesQuery.offset();
 		final Integer limit = attributesQuery.limit();
@@ -421,74 +466,57 @@ public class DefaultDataAccessLogic implements DataAccessLogic {
 	 * @return the card with the specified Id.
 	 */
 	@Override
-	public Card fetchCard(final String className, final Long cardId) {
-		return from(asList(fetchCMCard(className, cardId))) //
-				.transform(CMCARD_TO_CARD) //
-				.first() //
-				.get();
+	public CardWithMetadata fetchCard(final String className, final Long cardId) {
+		final CMClass entryType = dataView.findClass(className);
+		if (entryType == null) {
+			throw CLASS_NOTFOUND.createException(className);
+		}
+		return fetchCard(entryType, cardId, emptyList(), compose(CARD_TO_CARD_WITH_METADATA, CMCARD_TO_CARD));
 	}
 
 	@Override
 	public CMCard fetchCMCard(final String className, final Long cardId) {
 		final CMClass entryType = dataView.findClass(className);
-		return fetchCMCard(entryType, cardId);
+		if (entryType == null) {
+			throw CLASS_NOTFOUND.createException(className);
+		}
+		return fetchCard(entryType, cardId, emptyList(), identity());
 	}
 
-	private CMCard fetchCMCard(final CMClass entryType, final Long cardId) {
-		try {
-			final CMQueryRow row = dataView.select(anyAttribute(entryType)) //
-					.from(entryType) //
-					.where(condition(attribute(entryType, ID_ATTRIBUTE), eq(cardId))) //
-					.limit(1) //
-					.skipDefaultOrdering() //
-					.run() //
-					.getOnlyRow();
-			/**
-			 * FIXME: delete it when ForeignReferenceResolver will be unused.
-			 */
-			final Iterable<CMCard> cards = ForeignReferenceResolver.<CMCard> newInstance() //
-					.withEntries(asList(row.getCard(entryType))) //
-					.withEntryFiller(CardEntryFiller.newInstance() //
-							.build()) //
-					.withSerializer(new CardSerializer<CMCard>()) //
-					.build() //
-					.resolve();
+	private <T> T fetchCard(final CMClass entryType, final Long cardId, final Iterable<String> attributes,
+			final Function<CMCard, T> function) {
+		final QueryAttribute[] _attributes = (attributes == null || isEmpty(attributes))
+				? new QueryAttribute[] { anyAttribute(entryType) }
+				: from(attributes) //
+						.transform(input -> attribute(entryType, input)) //
+						.toArray(QueryAliasAttribute.class);
+		return from(dataView.select(_attributes) //
+				.from(entryType) //
+				.where(condition(attribute(entryType, ID_ATTRIBUTE), eq(cardId))) //
+				.limit(1) //
+				.skipDefaultOrdering() //
+				.run()) //
+						.transform(input -> input.getCard(entryType)) //
+						.transform(input -> resolveCardReferences(entryType, input)) //
+						.transform(function) //
+						.first() //
+						.or(new Supplier<T>() {
 
-			return from(cards) //
-					.first() //
-					.get();
-		} catch (final NoSuchElementException ex) {
-			throw NotFoundExceptionType.CARD_NOTFOUND.createException(entryType.getName());
-		}
+							@Override
+							public T get() {
+								throw CARD_NOTFOUND.createException(entryType.getName());
+							}
+
+						});
 	}
 
 	@Override
 	public Card fetchCardShort(final String className, final Long cardId, final QueryOptions queryOptions) {
 		final CMClass entryType = dataView.findClass(className);
-		final List<QueryAliasAttribute> attributesToDisplay = Lists.newArrayList();
-
-		for (final String attribute : queryOptions.getAttributes()) {
-			final QueryAliasAttribute queryAttribute = attribute(entryType, attribute);
-			attributesToDisplay.add(queryAttribute);
+		if (entryType == null) {
+			throw CLASS_NOTFOUND.createException(className);
 		}
-
-		try {
-			final CMQueryRow row = dataView.select(toArray(attributesToDisplay, QueryAttribute.class)) //
-					.from(entryType) //
-					.where(condition(attribute(entryType, ID_ATTRIBUTE), eq(cardId))) //
-					.limit(1) //
-					.skipDefaultOrdering() //
-					.run() //
-					.getOnlyRow();
-
-			final CMCard card = row.getCard(entryType);
-			final CMCard cardWithResolvedReference = resolveCardReferences(entryType, card);
-
-			return CMCARD_TO_CARD.apply(cardWithResolvedReference);
-
-		} catch (final NoSuchElementException ex) {
-			throw NotFoundExceptionType.CARD_NOTFOUND.createException();
-		}
+		return fetchCard(entryType, cardId, queryOptions.getAttributes(), CMCARD_TO_CARD);
 	}
 
 	/**
@@ -497,18 +525,16 @@ public class DefaultDataAccessLogic implements DataAccessLogic {
 	 * @return
 	 */
 	@Override
-	public CMCard resolveCardReferences( //
-			final CMClass entryType, final CMCard card //
-	) {
-		final Iterable<CMCard> cardWithResolvedReference = ForeignReferenceResolver.<CMCard> newInstance() //
+	public CMCard resolveCardReferences(final CMClass entryType, final CMCard card) {
+		return ForeignReferenceResolver.<CMCard> newInstance() //
 				.withEntries(asList(card)) //
 				.withEntryFiller(CardEntryFiller.newInstance() //
-						.build()) // /
+						.build()) //
 				.withSerializer(new CardSerializer<CMCard>()) //
 				.build() //
-				.resolve();
-
-		return cardWithResolvedReference.iterator().next();
+				.resolve() //
+				.iterator() //
+				.next();
 	}
 
 	@Override
@@ -611,13 +637,16 @@ public class DefaultDataAccessLogic implements DataAccessLogic {
 	public PagedElements<Card> fetchSQLCards(final String functionName, final QueryOptions queryOptions) {
 		final CMFunction fetchedFunction = dataView.findFunctionByName(functionName);
 		if (fetchedFunction == null) {
-			throw NotFoundExceptionType.NOTFOUND_FUNCTION.createException(functionName);
+			throw NOTFOUND_FUNCTION.createException(functionName);
 
 		}
-		final Map<String, Object> parameters =
-				ChainablePutMap.of(newHashMap(defaultIfNull(queryOptions.getParameters(), NO_PARAMETERS))) //
-						.chainablePut(USER, operationUser.getAuthenticatedUser().getId()) //
-						.chainablePut(ROLE, operationUser.getPreferredGroup().getId());
+		final Map<String, Object> parameters = newHashMap(defaultIfNull(queryOptions.getParameters(), NO_PARAMETERS));
+		if (!operationUser.getAuthenticatedUser().isAnonymous()) {
+			parameters.put(USER, operationUser.getAuthenticatedUser().getId());
+		}
+		if (!(operationUser.getPreferredGroup() instanceof NullGroup)) {
+			parameters.put(ROLE, operationUser.getPreferredGroup().getId());
+		}
 		final Alias functionAlias = name("f");
 		final CMQueryResult queryResult = new DataViewCardFetcher.SqlQuerySpecsBuilderBuilder() //
 				.withDataView(dataView) //
@@ -682,8 +711,8 @@ public class DefaultDataAccessLogic implements DataAccessLogic {
 							@Override
 							public CMCardWithPosition apply(final CMQueryRow input) {
 								final CMCard card = input.getCard(fetchedClass);
-								final Card _card =
-										from(resolveCardForeignReferences(fetchedClass, asList(card))).get(0);
+								final Card _card = from(resolveCardForeignReferences(fetchedClass, asList(card)))
+										.get(0);
 								return new CMCardWithPosition(_card, input.getNumber() - 1);
 							}
 
@@ -732,7 +761,7 @@ public class DefaultDataAccessLogic implements DataAccessLogic {
 		final Card userGivenCard = value.card();
 		final CMClass entryType = dataView.findClass(userGivenCard.getClassName());
 		if (entryType == null) {
-			throw NotFoundExceptionType.CLASS_NOTFOUND.createException(userGivenCard.getClassName());
+			throw CLASS_NOTFOUND.createException(userGivenCard.getClassName());
 		}
 
 		final Card _userGivenCard = Card.newInstance() //
@@ -765,7 +794,15 @@ public class DefaultDataAccessLogic implements DataAccessLogic {
 	private Card updateCard0(final Card userGivenCard) {
 		final CMClass entryType = dataView.findClass(userGivenCard.getClassName());
 		if (entryType == null) {
-			throw NotFoundExceptionType.CLASS_NOTFOUND.createException(userGivenCard.getClassName());
+			throw CLASS_NOTFOUND.createException(userGivenCard.getClassName());
+		}
+
+		if (!operationUser.hasWriteAccess(entryType)) {
+			throw AUTH_NOT_AUTHORIZED.createException();
+		}
+		final boolean canWrite = canWrite(entryType, userGivenCard);
+		if (!canWrite) {
+			throw AUTH_NOT_AUTHORIZED.createException();
 		}
 
 		final Card _userGivenCard = Card.newInstance() //
@@ -789,6 +826,28 @@ public class DefaultDataAccessLogic implements DataAccessLogic {
 
 		updateRelationAttributesFromReference(updatedCard.getId(), fetchedCard, _userGivenCard, entryType);
 		return _userGivenCard;
+	}
+
+	private boolean canWrite(final CMClass entryType, final Card card) {
+		//FIXME this is a little ugly; anyway it does work, and it's called only when we open a card, so performance is acceptable;
+		// would be better to load 'can write' attribute eager with the rest of the data....
+		return operationUser.getAuthenticatedUser().getGroupNames() //
+				.stream() //
+				.map(input -> sessionLogic.getGroupWithName(input)) //
+				.collect(toMap(input -> input.getName(),
+						input -> new DefaultPrivilegeContextFactory().buildPrivilegeContext(input))) //
+				.entrySet() //
+				.stream() //
+				.filter(input -> input.getValue().hasWriteAccess(entryType)) //
+				.anyMatch(input -> dataView.use(input.getValue()) //
+						.select(entryType.isSimple()? attribute(entryType, BEGIN_DATE) : attribute(entryType, entryType.getDescriptionAttributeName())) //
+						.from(entryType) //
+						.where(condition(attribute(entryType, ID_ATTRIBUTE), eq(card.getId()))) //
+						.limit(1) //
+						.skipDefaultOrdering() //
+						.run() //
+						.iterator() //
+						.hasNext());
 	}
 
 	private void updateRelationAttributesFromReference( //
@@ -832,8 +891,8 @@ public class DefaultDataAccessLogic implements DataAccessLogic {
 				final CMDomain domain = dataView.findDomain(domainName);
 				final Map<String, Object> relationAttributes = Maps.newHashMap();
 				for (final CMAttribute domainAttribute : domain.getAttributes()) {
-					final String domainAttributeName =
-							format("_%s_%s", referenceAttributeName, domainAttribute.getName());
+					final String domainAttributeName = format("_%s_%s", referenceAttributeName,
+							domainAttribute.getName());
 					final Object domainAttributeValue = userGivenCardAttributes.get(domainAttributeName);
 					relationAttributes.put(domainAttribute.getName(), domainAttributeValue);
 				}
@@ -871,8 +930,8 @@ public class DefaultDataAccessLogic implements DataAccessLogic {
 				final CMCard fetchedDestinationCard = row.getCard(DST);
 				final CMRelation relation = row.getRelation(DOM).getRelation();
 
-				final boolean updateRelationNeeded =
-						areRelationAttributesModified(relation.getValues(), relationAttributes, domain);
+				final boolean updateRelationNeeded = areRelationAttributesModified(relation.getValues(),
+						relationAttributes, domain);
 
 				if (updateRelationNeeded) {
 					final CMRelationDefinition mutableRelation = dataView.update(relation) //
@@ -980,7 +1039,7 @@ public class DefaultDataAccessLogic implements DataAccessLogic {
 					.withAllAttributes(attributes) //
 					.withUser(operationUser.getAuthenticatedUser().getUsername()) //
 					.build();
-			storeOf(updatedCard).update(updatedCard);
+			updateCard0(updatedCard);
 		}
 	}
 
@@ -1002,7 +1061,7 @@ public class DefaultDataAccessLogic implements DataAccessLogic {
 			final String message = e.getMessage();
 			final RuntimeException _e;
 			if (message != null && message.contains("ERROR: CM_RESTRICT_VIOLATION")) {
-				_e = ConsistencyExceptionType.ORM_CANT_DELETE_CARD_WITH_RELATION.createException();
+				_e = ORM_CANT_DELETE_CARD_WITH_RELATION.createException();
 			} else {
 				_e = new RuntimeException("error deleting card", e);
 			}
@@ -1015,7 +1074,7 @@ public class DefaultDataAccessLogic implements DataAccessLogic {
 	public Iterable<CMDomain> findDomainsForClass(final String className, final boolean skipDisabledClasses) {
 		final CMClass fetchedClass = dataView.findClass(className);
 		if (fetchedClass == null) {
-			throw NotFoundExceptionType.CLASS_NOTFOUND.createException(className);
+			throw CLASS_NOTFOUND.createException(className);
 		}
 		return from(dataView.findDomains()) //
 				.filter(domainFor(fetchedClass)) //
@@ -1028,22 +1087,22 @@ public class DefaultDataAccessLogic implements DataAccessLogic {
 			final boolean activeOnly, final boolean excludeProcesses) {
 		final CMClass _source = source.isPresent() ? dataView.findClass(source.get()) : null;
 		if (source.isPresent() && _source == null) {
-			throw NotFoundExceptionType.CLASS_NOTFOUND.createException(source.get());
+			throw CLASS_NOTFOUND.createException(source.get());
 		}
 		final CMClass _destination = destination.isPresent() ? dataView.findClass(destination.get()) : null;
 		if (destination.isPresent() && _destination == null) {
-			throw NotFoundExceptionType.CLASS_NOTFOUND.createException(destination.get());
+			throw CLASS_NOTFOUND.createException(destination.get());
 		}
 
-		final Predicate<CMDomain> class1Contained =
-				source.isPresent() ? domain(class1(), clazz(anchestorOf(_source), equalTo(true))) : alwaysTrue();
+		final Predicate<CMDomain> class1Contained = source.isPresent()
+				? domain(class1(), clazz(anchestorOf(_source), equalTo(true))) : alwaysTrue();
 		final Predicate<CMDomain> class2Contained = destination.isPresent()
 				? domain(class2(), clazz(anchestorOf(_destination), equalTo(true))) : alwaysTrue();
 
-		final Predicate<CMDomain> class1NotDisabled =
-				source.isPresent() ? domain(disabled1(), not(contains(source.get()))) : alwaysTrue();
-		final Predicate<CMDomain> class2NotDisabled =
-				destination.isPresent() ? domain(disabled2(), not(contains(destination.get()))) : alwaysTrue();
+		final Predicate<CMDomain> class1NotDisabled = source.isPresent()
+				? domain(disabled1(), not(contains(source.get()))) : alwaysTrue();
+		final Predicate<CMDomain> class2NotDisabled = destination.isPresent()
+				? domain(disabled2(), not(contains(destination.get()))) : alwaysTrue();
 
 		return from(dataView.findDomains()) //
 				.filter(and(class1Contained, class2Contained)) //
@@ -1078,7 +1137,7 @@ public class DefaultDataAccessLogic implements DataAccessLogic {
 	public Iterable<Long> createRelations(final RelationDTO relationDTO) {
 		final CMDomain domain = dataView.findDomain(relationDTO.domainName);
 		if (domain == null) {
-			throw NotFoundExceptionType.DOMAIN_NOTFOUND.createException(relationDTO.domainName);
+			throw DOMAIN_NOTFOUND.createException(relationDTO.domainName);
 		}
 		final CMCard parentCard = retrieveParentCard(relationDTO);
 		final List<CMCard> childCards = retrieveChildCards(relationDTO);
@@ -1087,10 +1146,10 @@ public class DefaultDataAccessLogic implements DataAccessLogic {
 		if (relationDTO.master.equals("_1")) {
 			for (final CMCard dstCard : childCards) {
 				if (from(domain.getDisabled1()).contains(parentCard)) {
-					throw NotFoundExceptionType.DOMAIN_NOTFOUND.createException(relationDTO.domainName);
+					throw DOMAIN_NOTFOUND.createException(relationDTO.domainName);
 				}
 				if (from(domain.getDisabled2()).contains(dstCard)) {
-					throw NotFoundExceptionType.DOMAIN_NOTFOUND.createException(relationDTO.domainName);
+					throw DOMAIN_NOTFOUND.createException(relationDTO.domainName);
 				}
 				final Long id = saveRelation(domain, parentCard, dstCard, relationDTO.relationAttributeToValue);
 				ids.add(id);
@@ -1098,10 +1157,10 @@ public class DefaultDataAccessLogic implements DataAccessLogic {
 		} else {
 			for (final CMCard srcCard : childCards) {
 				if (from(domain.getDisabled1()).contains(srcCard)) {
-					throw NotFoundExceptionType.DOMAIN_NOTFOUND.createException(relationDTO.domainName);
+					throw DOMAIN_NOTFOUND.createException(relationDTO.domainName);
 				}
 				if (from(domain.getDisabled2()).contains(parentCard)) {
-					throw NotFoundExceptionType.DOMAIN_NOTFOUND.createException(relationDTO.domainName);
+					throw DOMAIN_NOTFOUND.createException(relationDTO.domainName);
 				}
 				final Long id = saveRelation(domain, srcCard, parentCard, relationDTO.relationAttributeToValue);
 				ids.add(id);
@@ -1161,7 +1220,7 @@ public class DefaultDataAccessLogic implements DataAccessLogic {
 	public void updateRelation(final RelationDTO relationDTO) {
 		final CMDomain domain = dataView.findDomain(relationDTO.domainName);
 		if (domain == null) {
-			throw NotFoundExceptionType.DOMAIN_NOTFOUND.createException(relationDTO.domainName);
+			throw DOMAIN_NOTFOUND.createException(relationDTO.domainName);
 		}
 
 		final Entry<Long, String> srcCard = relationDTO.getUniqueEntryForSourceCard();
@@ -1232,7 +1291,7 @@ public class DefaultDataAccessLogic implements DataAccessLogic {
 	public void deleteRelation(final String domainName, final Long relationId) {
 		final CMDomain domain = dataView.findDomain(domainName);
 		if (domain == null) {
-			throw NotFoundExceptionType.DOMAIN_NOTFOUND.createException(domainName);
+			throw DOMAIN_NOTFOUND.createException(domainName);
 		}
 
 		dataView.delete(new IdentifiedRelation(domain, relationId));
@@ -1280,7 +1339,7 @@ public class DefaultDataAccessLogic implements DataAccessLogic {
 	public void deleteDetail(final Card master, final Card detail, final String domainName) {
 		final CMDomain domain = dataView.findDomain(domainName);
 		if (domain == null) {
-			throw NotFoundExceptionType.DOMAIN_NOTFOUND.createException(domainName);
+			throw DOMAIN_NOTFOUND.createException(domainName);
 		}
 
 		String sourceClassName, destinationClassName;
@@ -1350,7 +1409,7 @@ public class DefaultDataAccessLogic implements DataAccessLogic {
 					.run() //
 					.getOnlyRow();
 		} catch (final NoSuchElementException ex) {
-			throw NotFoundExceptionType.CARD_NOTFOUND.createException();
+			throw CARD_NOTFOUND.createException();
 		}
 		final CMCard card = row.getCard(entryType);
 		return card;

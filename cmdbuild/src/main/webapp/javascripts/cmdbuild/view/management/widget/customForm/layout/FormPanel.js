@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.management.widget.customForm.layout.FormPanel', {
 		extend: 'Ext.form.Panel',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		mixins: ['CMDBuild.view.common.PanelFunctions'],
 

@@ -57,7 +57,7 @@
 		// class
 		// name
 		extend : "Ext.panel.Panel",
-		requires : [ 'CMDBuild.controller.management.classes.map.CardGrid',
+		uses : [ 'CMDBuild.controller.management.classes.map.CardGrid',
 				'CMDBuild.controller.management.classes.map.LayerTree',
 				'CMDBuild.view.management.classes.map.navigationTree.ViewTree',
 				'CMDBuild.controller.management.classes.map.thematism.ThematismMainWindow',

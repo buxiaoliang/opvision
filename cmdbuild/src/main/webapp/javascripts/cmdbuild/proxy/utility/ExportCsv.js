@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.utility.ExportCsv', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Global',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.interfaces.FormSubmit',

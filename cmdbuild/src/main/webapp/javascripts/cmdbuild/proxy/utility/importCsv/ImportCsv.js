@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.utility.importCsv.ImportCsv', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.configurations.Timeout',
 			'CMDBuild.core.constants.Global',
 			'CMDBuild.core.constants.Proxy',

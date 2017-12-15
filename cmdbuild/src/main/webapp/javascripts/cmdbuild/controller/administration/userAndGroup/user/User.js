@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.administration.userAndGroup.user.User', {
 		extend: 'CMDBuild.controller.common.panel.gridAndForm.GridAndForm',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Utils',
 			'CMDBuild.proxy.administration.userAndGroup.user.User'

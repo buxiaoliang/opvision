@@ -25,6 +25,7 @@ import org.cmdbuild.dao.entrytype.attributetype.ForwardingAttributeTypeVisitor;
 import org.cmdbuild.dao.entrytype.attributetype.TimeAttributeType;
 import org.cmdbuild.dao.function.CMFunction;
 import org.cmdbuild.dao.function.CMFunction.CMFunctionParameter;
+import org.cmdbuild.dao.function.CMFunction.CMFunctionOutputParameter;
 import org.cmdbuild.dao.query.CMQueryResult;
 import org.cmdbuild.dao.query.clause.alias.Alias;
 import org.cmdbuild.dao.view.CMDataView;
@@ -67,7 +68,7 @@ public class FunctionDataBuilder implements DataBuilder {
 				.transform(toValueSet(f)) //
 				.transform(new Function<CMValueSet, Map<String, Object>>() {
 
-					private final List<CMFunctionParameter> outputParameters = function.getOutputParameters();
+					private final List<CMFunctionOutputParameter> outputParameters = function.getOutputParameters();
 
 					@Override
 					public Map<String, Object> apply(final CMValueSet input) {

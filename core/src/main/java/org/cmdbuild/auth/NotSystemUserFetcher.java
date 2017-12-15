@@ -11,6 +11,12 @@ import static org.cmdbuild.dao.query.clause.where.SimpleWhereClause.condition;
 import static org.cmdbuild.dao.query.clause.where.TrueWhereClause.trueWhereClause;
 
 import org.cmdbuild.auth.user.CMUser;
+import org.cmdbuild.common.cache.CacheEvictionPolicy;
+import org.cmdbuild.common.cache.ClusterEvent;
+import org.cmdbuild.common.cache.ClusterMessage;
+import org.cmdbuild.common.cache.ClusterMessageReceiver;
+import org.cmdbuild.common.cache.ClusterMessageSender;
+import org.cmdbuild.common.cache.ClusterTarget;
 import org.cmdbuild.dao.driver.postgres.Const;
 import org.cmdbuild.dao.entry.CMCard;
 import org.cmdbuild.dao.entrytype.CMClass;
@@ -21,9 +27,9 @@ import org.cmdbuild.dao.query.clause.alias.Alias;
 import org.cmdbuild.dao.query.clause.where.WhereClause;
 import org.cmdbuild.dao.view.CMDataView;
 import org.cmdbuild.services.auth.UserType;
-import org.cmdbuild.services.cache.CachingService.Cacheable;
+import org.cmdbuild.services.cache.CachingService.ClusterAwareCacheable;;
 
-public class NotSystemUserFetcher extends DBUserFetcher implements Cacheable {
+public class NotSystemUserFetcher extends DBUserFetcher implements ClusterAwareCacheable {
 
 	public static interface Configuration extends DBUserFetcher.Configuration {
 
@@ -37,6 +43,7 @@ public class NotSystemUserFetcher extends DBUserFetcher implements Cacheable {
 	private final Configuration configuration;
 	private final CMDataView view;
 	private final AuthenticationStore userTypeStore;
+	private ClusterMessageSender clusterMessageSender;
 
 	private boolean initialized = false;
 	private String table;
@@ -62,9 +69,13 @@ public class NotSystemUserFetcher extends DBUserFetcher implements Cacheable {
 	}
 
 	@Override
-	public void clearCache() {
+	public void clearCache(CacheEvictionPolicy policy) {
 		synchronized (this) {
 			initialized = false;
+		}
+		if (policy.clusterPropagation()) {
+			ClusterMessage msg = new ClusterMessage(ClusterTarget.NotSystemUserFetcher.getTargetId(), ClusterEvent.CACHE_EVICT_CACHE);
+			clusterMessageSender.safeSend(msg);
 		}
 	}
 
@@ -177,6 +188,37 @@ public class NotSystemUserFetcher extends DBUserFetcher implements Cacheable {
 	@Override
 	protected boolean extendedInformation() {
 		return false;
+	}
+	
+	@Override
+	public void update(ClusterMessage msg) {
+		if (ClusterEvent.CACHE_EVICT_CACHE.equals(msg.getEvent()))
+			clearCache(CacheEvictionPolicy.NON_PROPAGATING);
+	}
+
+	@Override
+	public void register(ClusterMessageReceiver receiver) {
+		receiver.register(this, ClusterTarget.NotSystemUserFetcher.getTargetId());
+	}
+
+	@Override
+	public void setClusterMessageSender(ClusterMessageSender sender) {
+		clusterMessageSender = sender;
+	}
+
+	@Override
+	protected String userPasswordExpirationTimestampAttribute() {
+		return "PasswordExpiration";
+	}
+	
+	@Override
+	protected String userLastPasswordChangeTimestampAttribute() {
+		return "LastPasswordChange";
+	}
+	
+	@Override
+	protected String userLastExpiringNotification() {
+		return "LastExpiringNotification";
 	}
 
 }

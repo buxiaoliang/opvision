@@ -444,6 +444,13 @@ em { font-style: oblique !important; }
 	height: 100%;
 	width: 100%;
 }
+/* musk custom style for Navigation locked */
+.cmdb-lock-panel .x-mask {
+	opacity: 0;
+}
+.cmdb-lock-panel .x-mask:hover {
+	cursor: wait;
+}
 
 /* Overrides */
 	.x-panel-header { padding: 2px 2px 2px 4px !important; }

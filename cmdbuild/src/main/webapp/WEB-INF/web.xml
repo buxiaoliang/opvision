@@ -6,7 +6,7 @@
 
 	<context-param>
 		<param-name>modules</param-name>
-		<param-value>database,cmdbuild,dms,workflow,graph,gis,auth,bim,cmdbf,email,notification</param-value>
+		<param-value>database,cmdbuild,dms,workflow,graph,gis,auth,bim,cmdbf,email,notification,scheduler,password</param-value>
 	</context-param>
 
 	<context-param>

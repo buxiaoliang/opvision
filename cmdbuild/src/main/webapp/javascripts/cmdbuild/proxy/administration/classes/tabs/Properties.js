@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.administration.classes.tabs.Properties', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Global',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.classes.tabs.properties.Parent',

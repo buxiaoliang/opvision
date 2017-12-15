@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.email.template.ValuesWindow', {
 		extend: 'CMDBuild.core.window.AbstractModal',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.email.template.Variable'
 		],

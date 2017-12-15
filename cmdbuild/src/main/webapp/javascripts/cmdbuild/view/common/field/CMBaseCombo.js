@@ -8,7 +8,7 @@
 		extend: 'Ext.form.field.ComboBox',
 		alias: 'cmbasecombo',
 
-		requires: ['CMDBuild.core.constants.FieldWidths'],
+		uses: ['CMDBuild.core.constants.FieldWidths'],
 
 		cmGreatestItem: '',
 

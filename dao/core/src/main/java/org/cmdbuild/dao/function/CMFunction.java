@@ -29,10 +29,16 @@ public interface CMFunction extends CMTypeObject {
 
 		CMAttributeType<?> getType();
 	}
+	
+	interface CMFunctionOutputParameter extends CMFunctionParameter {
+		
+		Boolean getBasedsp();
+		
+	}
 
 	List<CMFunctionParameter> getInputParameters();
 
-	List<CMFunctionParameter> getOutputParameters();
+	List<CMFunctionOutputParameter> getOutputParameters();
 
 	boolean returnsSet();
 

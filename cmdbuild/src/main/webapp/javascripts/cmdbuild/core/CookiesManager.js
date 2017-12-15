@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.core.CookiesManager', {
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		singleton: true,
 

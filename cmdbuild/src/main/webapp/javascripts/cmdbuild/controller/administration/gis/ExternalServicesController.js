@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.administration.gis.ExternalServicesController', {
 		extend: 'CMDBuild.controller.CMBasePanelController',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.Message',
 			'CMDBuild.proxy.gis.Gis'
 		],

@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.override.form.field.Display', {
 		override: 'Ext.form.field.Display',
 
-		requires: ['CMDBuild.core.Utils'],
+		uses: ['CMDBuild.core.Utils'],
 
 		/**
 		 * Avoids Display fields to strip \n on contents

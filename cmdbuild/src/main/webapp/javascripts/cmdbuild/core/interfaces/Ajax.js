@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.core.interfaces.Ajax', {
 		extend: 'Ext.data.Connection',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.CookiesManager',
 			'CMDBuild.core.interfaces.messages.Error',
 			'CMDBuild.core.interfaces.messages.Warning',

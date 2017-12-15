@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.management.routes.Instance', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json'
 		],

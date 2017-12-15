@@ -7,7 +7,7 @@
 	 */
 	Ext.define('CMDBuild.proxy.administration.classes.tabs.Icons', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.interfaces.FormSubmit',
 			'CMDBuild.core.interfaces.Rest',

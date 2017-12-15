@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.accordion.DataView', {
 		extend: 'CMDBuild.controller.common.abstract.Accordion',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.dataView.DataView'
 		],

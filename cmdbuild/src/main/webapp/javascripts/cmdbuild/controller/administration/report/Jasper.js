@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.administration.report.Jasper', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Message',

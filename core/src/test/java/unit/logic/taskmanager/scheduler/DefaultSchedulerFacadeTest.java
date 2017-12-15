@@ -17,6 +17,7 @@ import org.cmdbuild.logic.taskmanager.scheduler.LogicAndSchedulerConverter.Logic
 import org.cmdbuild.logic.taskmanager.scheduler.SchedulerFacade.Callback;
 import org.cmdbuild.logic.taskmanager.task.email.ReadEmailTask;
 import org.cmdbuild.scheduler.Job;
+import org.cmdbuild.scheduler.JobWithTask;
 import org.cmdbuild.scheduler.RecurringTrigger;
 import org.cmdbuild.scheduler.SchedulerService;
 import org.cmdbuild.scheduler.Trigger;
@@ -62,7 +63,7 @@ public class DefaultSchedulerFacadeTest {
 				.withActiveStatus(true) //
 				.withCronExpression("cron expression") //
 				.build();
-		final Job job = mock(Job.class);
+		final JobWithTask job = mock(JobWithTask.class);
 		final LogicAsSourceConverter logicAsSourceConverter = mock(LogicAsSourceConverter.class);
 		when(logicAsSourceConverter.toJob()) //
 				.thenReturn(job);
@@ -91,7 +92,7 @@ public class DefaultSchedulerFacadeTest {
 				.withActiveStatus(true) //
 				.withCronExpression("<actual cron expression>") //
 				.build();
-		final Job job = mock(Job.class);
+		final JobWithTask job = mock(JobWithTask.class);
 		final LogicAsSourceConverter logicAsSourceConverter = mock(LogicAsSourceConverter.class);
 		when(logicAsSourceConverter.toJob()) //
 				.thenReturn(job);
@@ -135,7 +136,7 @@ public class DefaultSchedulerFacadeTest {
 		final ScheduledTask task = ReadEmailTask.newInstance() //
 				.withActiveStatus(false) //
 				.build();
-		final Job job = mock(Job.class);
+		final JobWithTask job = mock(JobWithTask.class);
 		final LogicAsSourceConverter logicAsSourceConverterWithNoExecution = mock(LogicAsSourceConverter.class);
 		when(logicAsSourceConverterWithNoExecution.toJob()) //
 				.thenReturn(job);
@@ -162,7 +163,7 @@ public class DefaultSchedulerFacadeTest {
 				.withActiveStatus(true) //
 				.withCronExpression("cron expression") //
 				.build();
-		final Job job = mock(Job.class);
+		final JobWithTask job = mock(JobWithTask.class);
 		final LogicAsSourceConverter logicAsSourceConverter = mock(LogicAsSourceConverter.class);
 		when(logicAsSourceConverter.toJob()) //
 				.thenReturn(job);
@@ -201,7 +202,7 @@ public class DefaultSchedulerFacadeTest {
 				.withCronExpression("cron expression") //
 				.build();
 		final Throwable EXCEPTION = new RuntimeException();
-		final Job job = mock(Job.class);
+		final JobWithTask job = mock(JobWithTask.class);
 		doThrow(EXCEPTION).when(job).execute();
 		final LogicAsSourceConverter logicAsSourceConverter = mock(LogicAsSourceConverter.class);
 		when(logicAsSourceConverter.toJob()) //
@@ -242,7 +243,7 @@ public class DefaultSchedulerFacadeTest {
 		// given
 		final ScheduledTask task = ReadEmailTask.newInstance() //
 				.build();
-		final Job job = mock(Job.class);
+		final JobWithTask job = mock(JobWithTask.class);
 		when(job.getName()) //
 				.thenReturn("foo");
 		final LogicAsSourceConverter toJobConverter = mock(LogicAsSourceConverter.class);

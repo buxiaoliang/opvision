@@ -1,13 +1,13 @@
 (function() {
 
-	Ext.require('CMDBuild.proxy.Card');
-
 	/**
 	 * @deprecated (CMDBuild.view.common.field.comboBox.Searchable)
 	 */
 	Ext.define("CMDBuild.view.common.field.SearchableCombo", {
 		extend: "CMDBuild.view.common.field.CMBaseCombo",
 
+		uses: ['CMDBuild.proxy.Card'],
+		
 		trigger1Cls: Ext.baseCSSPrefix + 'form-arrow-trigger',
 		trigger2Cls: Ext.baseCSSPrefix + 'form-clear-trigger',
 		trigger3Cls: Ext.baseCSSPrefix + 'form-search-trigger',

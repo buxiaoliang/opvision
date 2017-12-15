@@ -1,10 +1,12 @@
 package org.cmdbuild.auth;
 
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
 import org.cmdbuild.common.digest.Base64Digester;
 import org.cmdbuild.common.digest.Digester;
 import org.cmdbuild.dao.entry.CMCard;
+import org.joda.time.DateTime;
 
 public abstract class DatabaseAuthenticator extends LegacyDBUserFetcher implements PasswordAuthenticator {
 
@@ -66,17 +68,33 @@ public abstract class DatabaseAuthenticator extends LegacyDBUserFetcher implemen
 	}
 
 	private boolean changePassword(final Login login, final String oldPassword, final String newPassword) {
-		if (checkPassword(login, oldPassword)) {
+		if (checkPassword(login, oldPassword) && PasswordManagementService.isValidPassword(newPassword, login.getValue(), newPassword, oldPassword)) {
 			try {
 				final String newEncryptedPassword = DIGESTER.encrypt(newPassword);
 				final CMCard userCard = fetchUserCard(login);
-				view().update(userCard).set(userPasswordAttribute(), newEncryptedPassword).save();
+				if (PasswordManagementService.isPasswordManagementEnabled()) {
+					view().update(userCard)
+						.set(userPasswordAttribute(), newEncryptedPassword)
+						.set(userPasswordExpirationTimestampAttribute(), javaTms2Joda(PasswordManagementService.getPasswordExpiration()))
+						.set(userLastPasswordChangeTimestampAttribute(), javaTms2Joda(LocalDateTime.now()))
+						.save();
+				} else {
+					view().update(userCard).set(userPasswordAttribute(), newEncryptedPassword)
+					.set(userLastPasswordChangeTimestampAttribute(), javaTms2Joda(LocalDateTime.now()))
+					.save();
+				}
 				return true;
 			} catch (final NoSuchElementException e) {
 				// let it return false
 			}
 		}
 		return false;
+	}
+	
+	private static DateTime javaTms2Joda (LocalDateTime ldt) {
+		if (ldt == null)
+			return null;
+		return new DateTime(ldt.getYear(), ldt.getMonthValue(), ldt.getDayOfMonth(), ldt.getHour(), ldt.getMinute(), ldt.getSecond());
 	}
 
 }

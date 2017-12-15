@@ -8,7 +8,7 @@
 	Ext.define('CMDBuild.controller.common.field.filter.advanced.window.Window', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.Message',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.filter.User'
@@ -390,7 +390,7 @@
 			this.setViewTitle(this.cmfg('fieldFilterAdvancedSelectedClassGet', CMDBuild.core.constants.Proxy.TEXT)); // TODO: waiting for refactor (description)
 
 			// On window show rebuild all tab configuration (sorted)
-			CMDBuild.clearComponent(this.tabPanel)
+			this.tabPanel.removeAll(true);
 
 			this.controllerTabAttributes.cmfg('onFieldFilterAdvancedWindowAttributesTabBuild');
 			this.controllerTabColumnPrivileges.cmfg('onFieldFilterAdvancedWindowColumnPrivilegesTabBuild');

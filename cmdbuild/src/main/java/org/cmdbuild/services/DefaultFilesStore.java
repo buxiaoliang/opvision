@@ -16,8 +16,13 @@ import org.apache.commons.fileupload.FileItem;
 import org.cmdbuild.exception.ORMException.ORMExceptionType;
 
 import com.google.common.base.Function;
+import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DefaultFilesStore implements FilesStore {
+	
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	private static Function<File, String> FILE_NAME = new Function<File, String>() {
 
@@ -35,10 +40,14 @@ public class DefaultFilesStore implements FilesStore {
 	private static final String[] ALLOWED_IMAGE_TYPES = {
 			"image/png", "image/gif", "image/jpeg", "image/pjpeg", "image/x-png" };
 
-	public DefaultFilesStore(final String root, final String pathFromRoot) {
-		this.relativeRootDirectory = pathFromRoot + separator;
-		this.absoluteRootDirectory = root + separator + relativeRootDirectory;
-		this.root = new File(absoluteRootDirectory);
+	public DefaultFilesStore(final String rootPath, final String pathFromRoot) {
+		try {
+			this.relativeRootDirectory = FilenameUtils.normalize(pathFromRoot + separator);
+			this.root = new File(rootPath + separator + relativeRootDirectory).getAbsoluteFile().getCanonicalFile();
+			this.absoluteRootDirectory = this.root.getPath() + separator;
+		} catch (IOException ex) {
+			throw new RuntimeException(ex);
+		}
 	}
 
 	@Override

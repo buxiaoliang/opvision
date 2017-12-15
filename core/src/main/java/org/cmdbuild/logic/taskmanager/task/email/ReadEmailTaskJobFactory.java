@@ -48,6 +48,7 @@ import org.cmdbuild.dao.entrytype.attributetype.CMAttributeType;
 import org.cmdbuild.dao.entrytype.attributetype.TextAttributeType;
 import org.cmdbuild.dao.function.CMFunction;
 import org.cmdbuild.dao.function.CMFunction.CMFunctionParameter;
+import org.cmdbuild.dao.function.CMFunction.CMFunctionOutputParameter;
 import org.cmdbuild.dao.query.CMQueryResult;
 import org.cmdbuild.dao.query.clause.alias.Alias;
 import org.cmdbuild.dao.query.clause.alias.Aliases;
@@ -558,7 +559,7 @@ public class ReadEmailTaskJobFactory extends AbstractJobFactory<ReadEmailTask> {
 			checkArgument(type instanceof TextAttributeType, "invalid type '%s' for input parameter '%s' ", type,
 					element);
 		}
-		final Iterable<CMFunctionParameter> outputParameters = function.getOutputParameters();
+		final Iterable<CMFunctionOutputParameter> outputParameters = function.getOutputParameters();
 		checkArgument(size(outputParameters) == 1, "output parameter must be one");
 		final CMFunctionParameter outputParameter = get(outputParameters, 0);
 		checkArgument(outputParameter.getType() instanceof BooleanAttributeType, "output parameter must be boolean");

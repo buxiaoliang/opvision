@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.controller.administration.taskManager.task.common.WorkflowForm', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.administration.taskManager.task.common.WorkflowForm'
 		],

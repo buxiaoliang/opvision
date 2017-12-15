@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.userAndGroup.user.FormPanel', {
 		extend: 'CMDBuild.view.common.panel.gridAndForm.panel.form.FormPanel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.administration.userAndGroup.user.User'

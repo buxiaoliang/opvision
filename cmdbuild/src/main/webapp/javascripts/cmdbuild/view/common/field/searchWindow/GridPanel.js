@@ -1,11 +1,11 @@
 (function () {
 
-	Ext.require('CMDBuild.proxy.index.Json');
 
 	/**
 	 * @link CMDBuild.view.management.common.CMCardGridDelegate
 	 */
 	Ext.define("CMDBuild.view.common.field.searchWindow.GridPanelDelegate", {
+		uses: ['CMDBuild.proxy.index.Json'],
 		/**
 		 *
 		 * @param {CMDBuild.view.management.common.CMCardGrid} grid
@@ -51,7 +51,7 @@
 	 */
 	Ext.define("CMDBuild.view.common.field.searchWindow.GridPanelPagingBar", {
 		extend: "Ext.toolbar.Paging",
-
+		uses: ['CMDBuild.proxy.index.Json'],
 		// configuration
 		grid: undefined,
 		// configuration
@@ -74,7 +74,10 @@
 	Ext.define('CMDBuild.view.common.field.searchWindow.GridPanel', {
 		extend: 'Ext.grid.Panel',
 
-		requires: ['CMDBuild.core.constants.Global'],
+		uses: [
+			'CMDBuild.proxy.index.Json',
+			'CMDBuild.core.constants.Global'
+		],
 
 		mixins: {
 			delegable: "CMDBuild.core.CMDelegable"

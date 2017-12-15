@@ -9,7 +9,7 @@
 
 	Ext.define('CMDBuild.controller.administration.domain.tabs.CMAttributes', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Message',
 			'CMDBuild.proxy.common.tabs.attribute.Attribute',

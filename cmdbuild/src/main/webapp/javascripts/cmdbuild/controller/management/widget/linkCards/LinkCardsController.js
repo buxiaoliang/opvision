@@ -7,7 +7,7 @@
 	Ext.define('CMDBuild.controller.management.widget.linkCards.LinkCardsController', {
 		extend: 'CMDBuild.controller.management.common.widgets.CMWidgetController',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Message',
 			'CMDBuild.core.Utils',

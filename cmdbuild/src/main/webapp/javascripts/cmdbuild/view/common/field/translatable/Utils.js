@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.view.common.field.translatable.Utils', {
 
-		requires: [
+		uses: [
 			'CMDBuild.proxy.localization.Localization',
 			'CMDBuild.view.common.field.translatable.Base'
 		],

@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.userAndGroup.group.tabs.privileges.tabs.CustomPage', {
 		extend: 'Ext.grid.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.administration.userAndGroup.group.tabs.privileges.CustomPage'
 		],

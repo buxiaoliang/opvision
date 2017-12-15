@@ -6,12 +6,16 @@ import static com.google.common.collect.Maps.transformValues;
 import static java.lang.Integer.MAX_VALUE;
 import static java.util.Collections.emptyList;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
+import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
+import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
 import static org.cmdbuild.logic.mapping.json.Constants.Filters.CQL_KEY;
 
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.builder.Builder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.cmdbuild.logger.Log;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -175,6 +179,50 @@ public class QueryOptions {
 
 	public Map<String, Object> getParameters() {
 		return parameters;
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		if (obj == this) {
+			return true;
+		}
+		if (!(obj instanceof QueryOptions)) {
+			return false;
+		}
+		final QueryOptions other = QueryOptions.class.cast(obj);
+		return new EqualsBuilder() //
+				.append(this.limit, other.limit) //
+				.append(this.offset, other.offset) //
+				/*
+				 * toString() needed because different objects with same content
+				 * are not equal
+				 */
+				.append(this.filter.toString(), other.filter.toString()) //
+				/*
+				 * toString() needed because different objects with same content
+				 * are not equal
+				 */
+				.append(this.sorters.toString(), other.sorters.toString()) //
+				.append(this.attributes, other.attributes) //
+				.append(this.parameters, other.parameters) //
+				.isEquals();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder() //
+				.append(limit) //
+				.append(offset) //
+				.append(filter) //
+				.append(sorters) //
+				.append(attributes) //
+				.append(parameters) //
+				.toHashCode();
+	}
+
+	@Override
+	public String toString() {
+		return reflectionToString(this, SHORT_PREFIX_STYLE);
 	}
 
 }

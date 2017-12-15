@@ -89,35 +89,6 @@ public class BimLogicLayerCrudTest {
 	}
 
 	@Test
-	public void setContainersetExportLayer() throws Exception {
-		// given
-		ATTRIBUTE_NAME = "container";
-		ATTRIBUTE_VALUE = "true";
-
-		// when
-		bimLogic.updateBimLayer(CLASSNAME, ATTRIBUTE_NAME, ATTRIBUTE_VALUE);
-
-		ATTRIBUTE_NAME = "export";
-		bimLogic.updateBimLayer(CLASSNAME, ATTRIBUTE_NAME, ATTRIBUTE_VALUE);
-
-		// then
-		InOrder inOrder = inOrder(dataPersistence, dataModelManager);
-		inOrder.verify(dataModelManager).createBimTableIfNeeded(CLASSNAME);
-		inOrder.verify(dataPersistence).saveActiveFlag(CLASSNAME, "true");
-		inOrder.verify(dataPersistence).saveExportFlag(CLASSNAME, "false");
-		inOrder.verify(dataModelManager).addPerimeterAndHeightFieldsIfNeeded(CLASSNAME);
-		inOrder.verify(dataPersistence).saveContainerFlag(CLASSNAME, "true");
-
-		inOrder.verify(dataModelManager).createBimTableIfNeeded(CLASSNAME);
-		inOrder.verify(dataPersistence).saveActiveFlag(CLASSNAME, "true");
-		inOrder.verify(dataPersistence).saveContainerFlag(CLASSNAME, "false");
-		inOrder.verify(dataModelManager).addPositionFieldIfNeeded(CLASSNAME);
-		inOrder.verify(dataPersistence).saveExportFlag(CLASSNAME, "true");
-
-		verifyNoMoreInteractions(dataPersistence, dataModelManager);
-	}
-
-	@Test
 	public void updateLayerBimRootAttributeWithTrueValueWithNullOldBimRoot() throws Exception {
 		// given
 		ATTRIBUTE_NAME = "root";
@@ -180,25 +151,6 @@ public class BimLogicLayerCrudTest {
 	}
 
 	@Test
-	public void updateLayerExportAttributeWithTrueValue() throws Exception {
-		// given
-		ATTRIBUTE_NAME = "export";
-		ATTRIBUTE_VALUE = "true";
-
-		// when
-		bimLogic.updateBimLayer(CLASSNAME, ATTRIBUTE_NAME, ATTRIBUTE_VALUE);
-
-		// then
-		InOrder inOrder = inOrder(dataPersistence, dataModelManager);
-		inOrder.verify(dataModelManager).createBimTableIfNeeded(CLASSNAME);
-		inOrder.verify(dataPersistence).saveActiveFlag(CLASSNAME, ATTRIBUTE_VALUE);
-		inOrder.verify(dataPersistence).saveContainerFlag(CLASSNAME, "false");
-		inOrder.verify(dataModelManager).addPositionFieldIfNeeded(CLASSNAME);
-		inOrder.verify(dataPersistence).saveExportFlag(CLASSNAME, ATTRIBUTE_VALUE);
-		verifyNoMoreInteractions(dataPersistence, dataModelManager);
-	}
-
-	@Test
 	public void updateLayerExportAttributeWithFalseValue() throws Exception {
 		// given
 		ATTRIBUTE_NAME = "export";
@@ -209,41 +161,6 @@ public class BimLogicLayerCrudTest {
 
 		// then
 		InOrder inOrder = inOrder(dataPersistence, dataModelManager);
-		inOrder.verify(dataPersistence).saveExportFlag(CLASSNAME, ATTRIBUTE_VALUE);
-		verifyNoMoreInteractions(dataPersistence, dataModelManager);
-	}
-
-	@Test
-	public void updateLayerContainerAttributeWithTrueValue() throws Exception {
-		// given
-		ATTRIBUTE_NAME = "container";
-		ATTRIBUTE_VALUE = "true";
-
-		// when
-		bimLogic.updateBimLayer(CLASSNAME, ATTRIBUTE_NAME, ATTRIBUTE_VALUE);
-
-		// then
-		InOrder inOrder = inOrder(dataPersistence, dataModelManager);
-		inOrder.verify(dataModelManager).createBimTableIfNeeded(CLASSNAME);
-		inOrder.verify(dataPersistence).saveActiveFlag(CLASSNAME, ATTRIBUTE_VALUE);
-		inOrder.verify(dataPersistence).saveExportFlag(CLASSNAME, "false");
-		inOrder.verify(dataModelManager).addPerimeterAndHeightFieldsIfNeeded(CLASSNAME);
-		inOrder.verify(dataPersistence).saveContainerFlag(CLASSNAME, ATTRIBUTE_VALUE);
-		verifyNoMoreInteractions(dataPersistence, dataModelManager);
-	}
-
-	@Test
-	public void updateLayerContainerAttributeWithFalseValue() throws Exception {
-		// given
-		ATTRIBUTE_NAME = "container";
-		ATTRIBUTE_VALUE = "false";
-
-		// when
-		bimLogic.updateBimLayer(CLASSNAME, ATTRIBUTE_NAME, ATTRIBUTE_VALUE);
-
-		// then
-		InOrder inOrder = inOrder(dataPersistence, dataModelManager);
-		inOrder.verify(dataPersistence).saveContainerFlag(CLASSNAME, ATTRIBUTE_VALUE);
 		verifyNoMoreInteractions(dataPersistence, dataModelManager);
 	}
 

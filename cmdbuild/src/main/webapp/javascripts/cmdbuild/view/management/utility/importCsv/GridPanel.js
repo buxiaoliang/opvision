@@ -1,11 +1,10 @@
 (function () {
 
-	Ext.require([
-		'CMDBuild.proxy.common.tabs.attribute.Attribute',
-		'CMDBuild.proxy.index.Json'
-	]);
-
 	Ext.define("CMDBuild.view.management.utility.importCsv.CMCardGridDelegate", {
+		uses: [
+			'CMDBuild.proxy.common.tabs.attribute.Attribute',
+			'CMDBuild.proxy.index.Json'
+		],
 		/**
 		 *
 		 * @param {CMDBuild.view.management.common.CMCardGrid} grid
@@ -49,6 +48,11 @@
 	Ext.define("CMDBuild.view.management.utility.importCsv.CMCardGridPagingBar", {
 		extend: "Ext.toolbar.Paging",
 
+		uses: [
+			'CMDBuild.proxy.common.tabs.attribute.Attribute',
+			'CMDBuild.proxy.index.Json'
+		],
+
 		// configuration
 		grid: undefined,
 		// configuration
@@ -71,7 +75,11 @@
 	Ext.define('CMDBuild.view.management.utility.importCsv.GridPanel', {
 		extend: "Ext.grid.Panel",
 
-		requires: ['CMDBuild.core.constants.Global'],
+		uses: [
+			'CMDBuild.proxy.common.tabs.attribute.Attribute',
+			'CMDBuild.proxy.index.Json',
+			'CMDBuild.core.constants.Global'
+		],
 
 		mixins: {
 			delegable: "CMDBuild.core.CMDelegable"

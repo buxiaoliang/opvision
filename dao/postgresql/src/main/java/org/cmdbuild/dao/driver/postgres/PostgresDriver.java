@@ -2,7 +2,8 @@ package org.cmdbuild.dao.driver.postgres;
 
 import javax.sql.DataSource;
 
-import org.cmdbuild.dao.TypeObjectCache;
+import org.cmdbuild.dao.ClusterAwareTypeObjectCache;
+//import org.cmdbuild.dao.TypeObjectCache; 
 import org.cmdbuild.dao.driver.AbstractDBDriver;
 import org.cmdbuild.dao.driver.postgres.quote.EntryTypeQuoter;
 import org.cmdbuild.dao.entry.CMEntry;
@@ -29,7 +30,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
  * "If all you have is SQL, everything looks like a trigger" A. Maslow
  * (readapted)
  */
-public class PostgresDriver extends AbstractDBDriver {
+public class PostgresDriver extends AbstractDBDriver  {
 
 	private static final Marker marker = MarkerFactory.getMarker(PostgresDriver.class.getName());
 
@@ -37,7 +38,7 @@ public class PostgresDriver extends AbstractDBDriver {
 
 	private final JdbcTemplate jdbcTemplate;
 
-	public PostgresDriver(final DataSource datasource, final TypeObjectCache typeObjectCache) {
+	public PostgresDriver(final DataSource datasource, final ClusterAwareTypeObjectCache typeObjectCache) {
 		super(typeObjectCache);
 		this.jdbcTemplate = new JdbcTemplate(datasource);
 	}

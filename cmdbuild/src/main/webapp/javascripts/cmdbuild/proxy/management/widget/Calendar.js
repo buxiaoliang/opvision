@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.management.widget.Calendar', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json'
 		],

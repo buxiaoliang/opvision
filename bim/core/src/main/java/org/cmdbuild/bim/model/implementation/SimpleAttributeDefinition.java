@@ -4,10 +4,10 @@ import org.cmdbuild.bim.model.EntityDefinition;
 
 public class SimpleAttributeDefinition extends DefaultAttributeDefinition {
 
-	public SimpleAttributeDefinition(String attributeName) {
+	public SimpleAttributeDefinition(final String attributeName) {
 		super(attributeName);
 	}
-	
+
 	private String value = "";
 
 	@Override
@@ -15,16 +15,17 @@ public class SimpleAttributeDefinition extends DefaultAttributeDefinition {
 		return EntityDefinition.NULL_ENTITYDEFINITION;
 	}
 
-	public void setValue(String value) {
+	public void setValue(final String value) {
 		this.value = value;
 	}
 
 	public String getValue() {
 		return value;
 	}
-	
-	public String toString(){
-		return this.getName();
+
+	@Override
+	public String toString() {
+		return this.getIfcName();
 	}
 
 }

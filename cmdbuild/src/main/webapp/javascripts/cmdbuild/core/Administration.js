@@ -5,7 +5,7 @@
 	 */
 	Ext.define('CMDBuild.core.Administration', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.configurations.Timeout',
 			'CMDBuild.core.constants.ModuleIdentifiers',
 			'CMDBuild.core.constants.Proxy',

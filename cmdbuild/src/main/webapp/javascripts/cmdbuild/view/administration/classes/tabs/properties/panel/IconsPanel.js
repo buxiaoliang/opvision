@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.classes.tabs.properties.panel.IconsPanel', {
 		extend: 'Ext.form.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy'
 		],

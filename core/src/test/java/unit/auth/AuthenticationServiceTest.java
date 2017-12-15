@@ -1,6 +1,7 @@
 package unit.auth;
 
 import static com.google.common.base.Suppliers.ofInstance;
+import static org.cmdbuild.auth.context.PrivilegeContexts.systemPrivilegeContext;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
@@ -27,7 +28,6 @@ import org.cmdbuild.auth.Login;
 import org.cmdbuild.auth.PasswordAuthenticator;
 import org.cmdbuild.auth.UserFetcher;
 import org.cmdbuild.auth.acl.NullGroup;
-import org.cmdbuild.auth.context.SystemPrivilegeContext;
 import org.cmdbuild.auth.user.AnonymousUser;
 import org.cmdbuild.auth.user.AuthenticatedUser;
 import org.cmdbuild.auth.user.CMUser;
@@ -327,8 +327,8 @@ public class AuthenticationServiceTest {
 	@Test
 	public void configurationFiltersPasswordAuthenticators() {
 		// given
-		final PasswordAuthenticator namedAuthenticatorMock =
-				mock(PasswordAuthenticator.class, withSettings().name("b"));
+		final PasswordAuthenticator namedAuthenticatorMock = mock(PasswordAuthenticator.class,
+				withSettings().name("b"));
 		when(namedAuthenticatorMock.getName()).thenReturn("a");
 		final Configuration conf = mock(Configuration.class);
 		when(conf.getActiveAuthenticators()).thenReturn(Sets.newHashSet("a"));
@@ -346,8 +346,8 @@ public class AuthenticationServiceTest {
 	@Test
 	public void configurationFiltersPasswordCallbackAuthenticators() {
 		// given
-		final PasswordAuthenticator namedAuthenticatorMock =
-				mock(PasswordAuthenticator.class, withSettings().name("b"));
+		final PasswordAuthenticator namedAuthenticatorMock = mock(PasswordAuthenticator.class,
+				withSettings().name("b"));
 		when(namedAuthenticatorMock.getName()).thenReturn("a");
 		final Configuration conf = mock(Configuration.class);
 		when(conf.getActiveAuthenticators()).thenReturn(Sets.newHashSet("a"));
@@ -406,7 +406,7 @@ public class AuthenticationServiceTest {
 	}
 
 	private OperationUser operationAnonymousUser() {
-		return new OperationUser(anonymousUser(), new SystemPrivilegeContext(), new NullGroup());
+		return new OperationUser(anonymousUser(), systemPrivilegeContext(), new NullGroup());
 	}
 
 	private DefaultAuthenticationService authenticationService() {

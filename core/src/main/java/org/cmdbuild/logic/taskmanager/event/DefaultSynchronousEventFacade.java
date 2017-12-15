@@ -63,9 +63,7 @@ public class DefaultSynchronousEventFacade implements SynchronousEventFacade {
 	@Override
 	public void delete(final SynchronousEventTask task) {
 		Validate.notNull(task.getId(), "missing id");
-		if (task.isActive()) {
-			observerCollector.remove(new DefaultIdentifiableObserver(task, ALL_UNSUPPORTED));
-		}
+		observerCollector.remove(new DefaultIdentifiableObserver(task, ALL_UNSUPPORTED));
 	}
 
 }

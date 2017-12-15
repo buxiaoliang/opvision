@@ -2,9 +2,8 @@
 	var DOM_NODE = "_domNode";
 	var NODE_TYPE = "_nodeType";
 
-	Ext.require(['CMDBuild.proxy.widget.WebService']);
-
 	Ext.define("CMDBuild.controller.management.common.widgets.CMWebServiceController", {
+		uses: ['CMDBuild.proxy.widget.WebService'],
 		mixins: {
 			observable: "Ext.util.Observable",
 			widgetcontroller: "CMDBuild.controller.management.common.widgets.CMWidgetController",

@@ -14,6 +14,7 @@ import org.cmdbuild.services.event.Observer;
 import org.cmdbuild.services.event.ObserverCollector;
 import org.cmdbuild.services.event.ObserverCollector.IdentifiableObserver;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
@@ -92,7 +93,7 @@ public class DefaultSynchronousEventFacadeTest {
 	}
 
 	@Test
-	public void taskDeletedOnlyIfTaskIsActive() throws Exception {
+	public void taskDeletedEventIfTaskIsNotActive() throws Exception { // we want the task to be deleted even if it is not active! 
 		// given
 		final SynchronousEventTask task = SynchronousEventTask.newInstance().withId(42L).build();
 
@@ -100,7 +101,9 @@ public class DefaultSynchronousEventFacadeTest {
 		synchronousEventFacade.delete(task);
 
 		// then
+		final ArgumentCaptor<IdentifiableObserver> captor = ArgumentCaptor.forClass(IdentifiableObserver.class);
 		final InOrder inOrder = inOrder(observerCollector, converter);
+		inOrder.verify(observerCollector).remove(captor.capture()); 
 		inOrder.verifyNoMoreInteractions();
 	}
 

@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.configure.step.Step1', {
 		extend: 'Ext.form.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy'
 		],

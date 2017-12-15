@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.core.configurations.builder.UserInterface', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json'
 		],

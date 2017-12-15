@@ -10,11 +10,18 @@ public interface CMAttribute extends Deactivable {
 	 * How the attribute is showed (or not) in the form.
 	 */
 	enum Mode {
-		WRITE, //
-		READ, //
-		HIDDEN, //
+		WRITE(2), //
+		READ(1), //
+		HIDDEN(0) //this means, like, 'no permission'
 		;
 
+		/**
+		 * 
+		 * @param value
+		 * @return
+		 * @deprecated use default enum valueOf
+		 */
+		@Deprecated
 		public static Mode of(final String value) {
 			for (final Mode element : values()) {
 				if (element.name().equalsIgnoreCase(value)) {
@@ -22,6 +29,22 @@ public interface CMAttribute extends Deactivable {
 				}
 			}
 			return null;
+		}
+		
+		private final int precedence;
+		
+		Mode(int precedence) {
+			this.precedence = precedence;
+		}
+		
+		/**
+		 * this works in a similar way as the privilege framework; useful for 'merging' modes<br>
+		 * one important difference with privileges is that (mode_a does not imply mode_b) implies (mode_b impy mode_a).
+		 * @param otherMode
+		 * @return true if this mode implies the other, false otherwise; for example, WRITE imply READ
+		 */
+		public boolean implies(Mode otherMode){
+			return this.precedence >= otherMode.precedence;
 		}
 
 	}

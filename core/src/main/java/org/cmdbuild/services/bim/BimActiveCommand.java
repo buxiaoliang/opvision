@@ -1,14 +1,13 @@
 package org.cmdbuild.services.bim;
 
-
 public class BimActiveCommand extends BimDataModelCommand {
 
-	public BimActiveCommand(BimPersistence bimDataPersistence, BimDataModelManager dataModelManager) {
+	public BimActiveCommand(final BimPersistence bimDataPersistence, final BimDataModelManager dataModelManager) {
 		super(bimDataPersistence, dataModelManager);
 	}
 
 	@Override
-	public void execute(String className, String value) {
+	public void execute(final String className, final String value) {
 
 		if (Boolean.parseBoolean(value)) {
 			dataModelManager.createBimTableIfNeeded(className);

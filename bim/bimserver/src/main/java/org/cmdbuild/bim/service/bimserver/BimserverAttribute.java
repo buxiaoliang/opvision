@@ -1,26 +1,24 @@
 package org.cmdbuild.bim.service.bimserver;
 
-import org.apache.commons.lang3.StringUtils;
-import org.bimserver.interfaces.objects.SDataValue;
-import org.bimserver.interfaces.objects.SReferenceDataValue;
-import org.bimserver.interfaces.objects.SSimpleDataValue;
 import org.cmdbuild.bim.model.Attribute;
 
 public abstract class BimserverAttribute implements Attribute {
 
-	private final SDataValue datavalue;
+	private final Object datavalue;
+	protected final String name;
 
-	public BimserverAttribute(final SDataValue datavalue) {
+	public BimserverAttribute(final String name, final Object datavalue) {
+		this.name = name;
 		this.datavalue = datavalue;
 	}
 
-	protected SDataValue getDatavalue() {
+	protected Object getDatavalue() {
 		return datavalue;
 	}
 
 	@Override
 	public String getName() {
-		return datavalue.getFieldName();
+		return name;
 	}
 
 	@Override
@@ -30,19 +28,11 @@ public abstract class BimserverAttribute implements Attribute {
 
 	@Override
 	public String getValue() {
-		String value = StringUtils.EMPTY;
-		if (datavalue instanceof SSimpleDataValue) {
-			value = ((SSimpleDataValue) datavalue).getStringValue();
-		} else if (datavalue instanceof SReferenceDataValue) {
-			value = SReferenceDataValue.class.cast(datavalue).getGuid();
-		} else {
-			throw new UnsupportedOperationException("Not supported");
-		}
-		return value;
+		return datavalue.toString();
 	}
 
 	@Override
-	public void setValue(String value) {
-		throw new UnsupportedOperationException("Not supported");
+	public void setValue(final String value) {
+		throw new UnsupportedOperationException();
 	}
 }

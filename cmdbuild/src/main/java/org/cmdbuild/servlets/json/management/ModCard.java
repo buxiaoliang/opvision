@@ -83,6 +83,7 @@ import org.cmdbuild.logic.commands.GetRelationList.GetRelationListResponse;
 import org.cmdbuild.logic.data.QueryOptions;
 import org.cmdbuild.logic.data.QueryOptions.QueryOptionsBuilder;
 import org.cmdbuild.logic.data.access.CMCardWithPosition;
+import org.cmdbuild.logic.data.access.CardWithMetadata;
 import org.cmdbuild.logic.data.access.DataAccessLogic;
 import org.cmdbuild.logic.data.access.RelationDTO;
 import org.cmdbuild.model.data.Card;
@@ -345,15 +346,14 @@ public class ModCard extends JSONBaseWithSpringContext {
 
 	}
 
-	private static Function<RelationInfo, JsonRelationSimple> RELATION_INFO_TO_JSON_RELATION =
-			new Function<RelationInfo, JsonRelationSimple>() {
+	private static Function<RelationInfo, JsonRelationSimple> RELATION_INFO_TO_JSON_RELATION = new Function<RelationInfo, JsonRelationSimple>() {
 
-				@Override
-				public JsonRelationSimple apply(final RelationInfo input) {
-					return new JsonRelationSimple(input);
-				}
+		@Override
+		public JsonRelationSimple apply(final RelationInfo input) {
+			return new JsonRelationSimple(input);
+		}
 
-			};
+	};
 
 	private static class JsonElements<T> {
 
@@ -484,7 +484,7 @@ public class ModCard extends JSONBaseWithSpringContext {
 			@Parameter(value = CLASS_NAME) final String className, //
 			@Parameter(value = CARD_ID) final Long cardId //
 	) throws JSONException {
-		final Card fetchedCard = userDataAccessLogic().fetchCard(className, cardId);
+		final CardWithMetadata fetchedCard = userDataAccessLogic().fetchCard(className, cardId);
 		return cardSerializer().toClient(fetchedCard, CARD);
 	}
 

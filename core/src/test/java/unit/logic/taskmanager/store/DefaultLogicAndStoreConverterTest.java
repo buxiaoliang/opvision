@@ -97,6 +97,12 @@ public class DefaultLogicAndStoreConverterTest {
 				.withNotificationStatus(true) //
 				.withNotificationAccount("account") //
 				.withNotificationErrorTemplate("error template") //
+				.withReportActive(true) //
+				.withReportName("the report name") //
+				.withReportExtension("the report extension") //
+				.withReportParameters(ChainablePutMap.<String, String> of(new HashMap<>()) //
+						.chainablePut("foo", "bar") //
+						.chainablePut("bar", "baz")) //
 		);
 
 		// when
@@ -116,6 +122,11 @@ public class DefaultLogicAndStoreConverterTest {
 		assertThat(parameters, hasEntry(AsynchronousEvent.EMAIL_ACTIVE, "true"));
 		assertThat(parameters, hasEntry(AsynchronousEvent.EMAIL_ACCOUNT, "account"));
 		assertThat(parameters, hasEntry(AsynchronousEvent.EMAIL_TEMPLATE, "error template"));
+		assertThat(parameters, hasEntry(AsynchronousEvent.REPORT_ACTIVE, "true"));
+		assertThat(parameters, hasEntry(AsynchronousEvent.REPORT_NAME, "the report name"));
+		assertThat(parameters, hasEntry(AsynchronousEvent.REPORT_EXTENSION, "the report extension"));
+		assertThat(parameters, hasEntry(AsynchronousEvent.REPORT_PARAMETERS_PREFIX + "foo", "bar"));
+		assertThat(parameters, hasEntry(AsynchronousEvent.REPORT_PARAMETERS_PREFIX + "bar", "baz"));
 	}
 
 	@Test
@@ -133,6 +144,11 @@ public class DefaultLogicAndStoreConverterTest {
 						.withParameter(AsynchronousEvent.EMAIL_ACTIVE, "true") //
 						.withParameter(AsynchronousEvent.EMAIL_ACCOUNT, "account") //
 						.withParameter(AsynchronousEvent.EMAIL_TEMPLATE, "error template") //
+						.withParameter(AsynchronousEvent.REPORT_ACTIVE, "true") //
+						.withParameter(AsynchronousEvent.REPORT_NAME, "the report name") //
+						.withParameter(AsynchronousEvent.REPORT_EXTENSION, "the report extension") //
+						.withParameter(AsynchronousEvent.REPORT_PARAMETERS_PREFIX + "foo", "bar") //
+						.withParameter(AsynchronousEvent.REPORT_PARAMETERS_PREFIX + "bar", "baz") //
 		);
 
 		// when
@@ -151,6 +167,25 @@ public class DefaultLogicAndStoreConverterTest {
 		assertThat(converted.isNotificationActive(), equalTo(true));
 		assertThat(converted.getNotificationAccount(), equalTo("account"));
 		assertThat(converted.getNotificationTemplate(), equalTo("error template"));
+		assertThat(converted,
+				equalTo(a(AsynchronousEventTask.newInstance() //
+						.withId(42L) //
+						.withDescription("description") //
+						.withActiveStatus(true) //
+						.withCronExpression("cron expression") //
+						.withLastExecution(NOW) //
+						.withTargetClass("classname") //
+						.withFilter("filter") //
+						.withNotificationStatus(true) //
+						.withNotificationAccount("account") //
+						.withNotificationErrorTemplate("error template") //
+						.withReportActive(true) //
+						.withReportName("the report name") //
+						.withReportExtension("the report extension") //
+						.withReportParameters(ChainablePutMap.<String, String> of(new HashMap<>()) //
+								.chainablePut("foo", "bar") //
+								.chainablePut("bar", "baz")) //
+				)));
 	}
 
 	@Test
@@ -171,21 +206,21 @@ public class DefaultLogicAndStoreConverterTest {
 						.withCreateStatus(true) //
 						.withUpdateStatus(true) //
 						.withDeleteStatus(false) //
-		)) //
+				)) //
 				.withClassMapping(a(ClassMapping.newInstance() //
 						.withSourceType("sourceTypeB") //
 						.withTargetType("targetTypeB") //
 						.withCreateStatus(false) //
 						.withUpdateStatus(false) //
 						.withDeleteStatus(true) //
-		)) //
+				)) //
 				.withAttributeMapping(a(AttributeMapping.newInstance() //
 						.withSourceType("sourceTypeA") //
 						.withSourceAttribute("sourceAttributeA") //
 						.withTargetType("targetTypeA") //
 						.withTargetAttribute("targetAttributeA") //
 						.withKeyStatus(true) //
-		)) //
+				)) //
 				.withAttributeMapping(a(AttributeMapping.newInstance() //
 						.withSourceType("sourceTypeB") //
 						.withSourceAttribute("sourceAttributeB") //
@@ -215,13 +250,13 @@ public class DefaultLogicAndStoreConverterTest {
 						"" //
 								+ "sourceTypeA,targetTypeA,true,true,false" + SPECIAL_SEPARATOR //
 								+ "sourceTypeB,targetTypeB,false,false,true" //
-		));
+				));
 		assertThat(parameters,
 				hasEntry(Connector.MAPPING_ATTRIBUTES,
 						"" //
 								+ "sourceTypeA,sourceAttributeA,targetTypeA,targetAttributeA,true" + SPECIAL_SEPARATOR //
 								+ "sourceTypeB,sourceAttributeB,targetTypeB,targetAttributeB,false" //
-		));
+				));
 	}
 
 	@Test
@@ -379,11 +414,11 @@ public class DefaultLogicAndStoreConverterTest {
 								"" //
 										+ "sourceTypeA,targetTypeA,true,true,false" + SPECIAL_SEPARATOR //
 										+ "sourceTypeB,targetTypeB,false,false,true" //
-		) //
+						) //
 						.withParameter(Connector.MAPPING_ATTRIBUTES, "" //
 								+ "sourceTypeA,sourceAttributeA,targetTypeA,targetAttributeA,true" + SPECIAL_SEPARATOR //
 								+ "sourceTypeB,sourceAttributeB,targetTypeB,targetAttributeB,false" //
-		) //
+				) //
 		);
 
 		// when
@@ -474,7 +509,7 @@ public class DefaultLogicAndStoreConverterTest {
 						.withUsername("user") //
 						.withPassword("pwd") //
 						.withFilter("filter") //
-		)) //
+				)) //
 		);
 	}
 
@@ -661,7 +696,7 @@ public class DefaultLogicAndStoreConverterTest {
 						.withParameter(Generic.REPORT_PARAMETERS_PREFIX + "foo", "oof") //
 						.withParameter(Generic.REPORT_PARAMETERS_PREFIX + "bar", "rab") //
 						.withParameter(Generic.REPORT_PARAMETERS_PREFIX + "baz", "zab") //
-		)));
+				)));
 	}
 
 	@Test
@@ -710,17 +745,17 @@ public class DefaultLogicAndStoreConverterTest {
 										ChainablePutMap.of(new HashMap<String, String>()) //
 												.chainablePut("b", "a") //
 												.chainablePut("r", "!"))) //
-				.withEmailActive(true) //
-				.withEmailTemplate("email template") //
-				.withEmailAccount("email account") //
-				.withReportActive(true) //
-				.withReportName("report name") //
-				.withReportExtension("report extension") //
-				.withReportParameters(ChainablePutMap.of(new HashMap<String, String>()) //
-						.chainablePut("foo", "oof") //
-						.chainablePut("bar", "rab") //
-						.chainablePut("baz", "zab")) //
-		)));
+						.withEmailActive(true) //
+						.withEmailTemplate("email template") //
+						.withEmailAccount("email account") //
+						.withReportActive(true) //
+						.withReportName("report name") //
+						.withReportExtension("report extension") //
+						.withReportParameters(ChainablePutMap.of(new HashMap<String, String>()) //
+								.chainablePut("foo", "oof") //
+								.chainablePut("bar", "rab") //
+								.chainablePut("baz", "zab")) //
+				)));
 	}
 
 	@Test

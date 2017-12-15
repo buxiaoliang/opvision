@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.common.panel.module.attachment.Versions', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.common.panel.module.attachment.Attachment',
 			'CMDBuild.proxy.index.Json'

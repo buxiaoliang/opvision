@@ -1,7 +1,7 @@
 (function() {
 
 	Ext.define("CMDBuild.view.management.classes.map.thematism.ThematicStrategiesManager", {
-		requires : [ "CMDBuild.view.management.classes.map.proxy.Functions" ],
+		uses : [ "CMDBuild.view.management.classes.map.proxy.Functions" ],
 
 		/**
 		 * loaded function strategies; can be used only after a call of

@@ -11,7 +11,7 @@ import org.cmdbuild.services.Settings;
 
 import com.google.common.collect.Sets;
 
-public class AuthProperties extends DefaultProperties implements HeaderAuthenticator.Configuration,
+public final class AuthProperties extends DefaultProperties implements HeaderAuthenticator.Configuration,
 		CasAuthenticator.Configuration, LdapAuthenticator.Configuration, DefaultAuthenticationService.Configuration {
 
 	private static final long serialVersionUID = 1L;
@@ -34,8 +34,8 @@ public class AuthProperties extends DefaultProperties implements HeaderAuthentic
 	private static final String AUTH_METHODS = "auth.methods";
 	private static final String AUTH_CASE_INSENSITIVE = "auth.case.insensitive";
 
-	public AuthProperties() {
-		super();
+	public AuthProperties(PropertyContainer propertyContainer) {
+		super(propertyContainer);
 		setProperty(FORCE_WS_PASSWORD_DIGEST, String.valueOf(true));
 		setProperty(AUTH_METHODS, "DBAuthenticator");
 		setProperty(HEADER_ATTRIBUTE_NAME, "username");

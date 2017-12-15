@@ -11,6 +11,7 @@ import org.cmdbuild.dao.query.CMQueryResult;
 import org.cmdbuild.data.store.dao.DataViewStore;
 import org.cmdbuild.data.store.lookup.DataViewLookupStore;
 import org.cmdbuild.data.store.lookup.LookupStorableConverter;
+import org.cmdbuild.logic.auth.SessionLogic;
 import org.cmdbuild.logic.data.DummyLockLogic;
 import org.cmdbuild.logic.data.QueryOptions;
 import org.cmdbuild.logic.data.access.DataAccessLogic;
@@ -20,6 +21,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import utils.IntegrationTestBase;
 
@@ -37,13 +41,22 @@ public class QueryStressTest extends IntegrationTestBase {
 
 	@Before
 	public void createDataDefinitionLogic() throws Exception {
+		final SessionLogic sessionLogic = Mockito.mock(SessionLogic.class, new Answer<SessionLogic>() {
+
+			@Override
+			public SessionLogic answer(final InvocationOnMock invocation) throws Throwable {
+				throw new UnsupportedOperationException();
+			}
+
+		});
 		dataAccessLogic = new DefaultDataAccessLogic( //
 				dbDataView(), //
 				new DataViewLookupStore( //
 						DataViewStore.newInstance(dbDataView(), new LookupStorableConverter())), //
 				dbDataView(), //
 				operationUser(), //
-				new DummyLockLogic());
+				new DummyLockLogic(), //
+				sessionLogic);
 		final DBDriver pgDriver = dbDriver();
 		stressTestClass = pgDriver.findClass(CLASS_NAME);
 		if (stressTestClass == null) {
@@ -69,8 +82,8 @@ public class QueryStressTest extends IntegrationTestBase {
 		// given
 		final JSONArray sortersArray = new JSONArray();
 		sortersArray.put(new JSONObject("{property: Code, direction: ASC}"));
-		final JSONObject filter =
-				new JSONObject("{attribute: {simple: {attribute: Code, operator: equal, value: ['100']}}}");
+		final JSONObject filter = new JSONObject(
+				"{attribute: {simple: {attribute: Code, operator: equal, value: ['100']}}}");
 		final QueryOptions queryOptions = createQueryOptions(150, 0, sortersArray, filter);
 
 		// when

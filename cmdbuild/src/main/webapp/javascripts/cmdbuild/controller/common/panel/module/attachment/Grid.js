@@ -13,7 +13,7 @@
 	Ext.define('CMDBuild.controller.common.panel.module.attachment.Grid', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Global',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.LoadMask',

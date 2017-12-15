@@ -10,12 +10,8 @@ public interface LayerLogic extends Logic {
 
 		boolean isRoot();
 
-		boolean isContainer();
-
 		String getRootReference();
-		
-		boolean isExport();
-		
+
 		boolean isActive();
 
 		String getDescription();

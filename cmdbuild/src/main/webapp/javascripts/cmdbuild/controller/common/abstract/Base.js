@@ -1,11 +1,5 @@
 (function () {
 
-	// External implementation to avoid overrides
-	Ext.require([
-		'CMDBuild.core.constants.Global',
-		'CMDBuild.core.Message'
-	]);
-
 	/**
 	 * Class to be extended in controllers witch implements new CMDBuild pattern where controller creates view
 	 *
@@ -21,7 +15,10 @@
 	 * @abstract
 	 */
 	Ext.define('CMDBuild.controller.common.abstract.Base', {
-
+		uses: [
+			'CMDBuild.core.constants.Global',
+			'CMDBuild.core.Message'
+		],
 		/**
 		 * @cfg {Object}
 		 */

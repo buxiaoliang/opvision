@@ -4,6 +4,7 @@ import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 import org.apache.commons.lang3.Validate;
@@ -24,6 +25,10 @@ public class UserImpl implements CMUser {
 		private final Collection<String> groupNames = newHashSet();
 		private final Collection<String> groupDescriptions = newArrayList();
 		private String defaultGroupName;
+		
+		private LocalDateTime passwordExpirationTimestamp;
+		private LocalDateTime lastPasswordChange;
+		private LocalDateTime lastExpiringNotification;
 
 		private UserImplBuilder() {
 			// use factory method
@@ -83,6 +88,23 @@ public class UserImpl implements CMUser {
 			this.defaultGroupName = defaultGroupName;
 			return this;
 		}
+		
+		public UserImplBuilder withpasswordExpirationTimestamp(final LocalDateTime passwordExpirationTimestamp) {
+			this.passwordExpirationTimestamp = passwordExpirationTimestamp;
+			return this;
+		}
+		
+		public UserImplBuilder withLastPasswordChange(final LocalDateTime lastPasswordChange) {
+			this.lastPasswordChange = lastPasswordChange;
+			return this;
+		}
+		
+		public UserImplBuilder withLastExpiringNotification(final LocalDateTime lastExpiringNotification) {
+			this.lastExpiringNotification = lastExpiringNotification;
+			return this;
+		}
+		
+		
 
 		@Override
 		public UserImpl build() {
@@ -116,6 +138,10 @@ public class UserImpl implements CMUser {
 	private final Collection<String> groupNames;
 	private final Collection<String> groupDescriptions;
 	private final String defaultGroupName;
+	private final LocalDateTime passwordExpirationTimestamp;
+	private final LocalDateTime lastPasswordChange;
+	private final LocalDateTime lastExpiringNotification;
+	
 
 	private UserImpl(final UserImplBuilder builder) {
 		this.id = builder.id;
@@ -128,6 +154,9 @@ public class UserImpl implements CMUser {
 		this.groupNames = builder.groupNames;
 		this.defaultGroupName = builder.defaultGroupName;
 		this.groupDescriptions = builder.groupDescriptions;
+		this.passwordExpirationTimestamp = builder.passwordExpirationTimestamp;
+		this.lastPasswordChange = builder.lastPasswordChange;
+		this.lastExpiringNotification = builder.lastExpiringNotification;
 	}
 
 	@Override
@@ -199,6 +228,29 @@ public class UserImpl implements CMUser {
 	@Override
 	public int hashCode() {
 		return username.hashCode();
+	}
+
+	@Override
+	public boolean isPasswordExpired() {
+		if (passwordExpirationTimestamp != null && LocalDateTime.now().isAfter(passwordExpirationTimestamp)) 
+			return true;
+		return false;
+			
+	}
+
+	@Override
+	public LocalDateTime getPasswordExpirationTimestamp() {
+		return passwordExpirationTimestamp;
+	}
+
+	@Override
+	public LocalDateTime getLastPasswordChangeTimestamp() {
+		return lastPasswordChange;
+	}
+
+	@Override
+	public LocalDateTime getLastExpiringNotificationTimestamp() {
+		return lastExpiringNotification;
 	}
 
 }

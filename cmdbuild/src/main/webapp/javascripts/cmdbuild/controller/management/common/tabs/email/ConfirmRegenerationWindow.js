@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.common.tabs.email.ConfirmRegenerationWindow', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.controller.management.common.tabs.email.Email',
 			'CMDBuild.controller.management.common.widgets.CMWidgetController',
 			'CMDBuild.core.constants.Proxy',

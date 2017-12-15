@@ -1,11 +1,5 @@
 (function() {
 
-	Ext.require([
-		'CMDBuild.core.constants.Global',
-		'CMDBuild.core.Message',
-		'CMDBuild.controller.management.classes.StaticsController'
-	]);
-
 	Ext.define("CMDBuild.controller.management.classes.CMBaseCardPanelController", {
 		extend: "CMDBuild.controller.management.classes.CMModCardSubController",
 
@@ -13,7 +7,10 @@
 			observable : "Ext.util.Observable"
 		},
 
-		requires: [
+		uses: [
+			'CMDBuild.core.constants.Global',
+			'CMDBuild.core.Message',
+			'CMDBuild.controller.management.classes.StaticsController',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.Card'
 		],

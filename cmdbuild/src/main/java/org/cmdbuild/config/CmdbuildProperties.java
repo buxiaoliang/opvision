@@ -10,7 +10,7 @@ import java.util.Locale;
 
 import org.cmdbuild.services.Settings;
 
-public class CmdbuildProperties extends DefaultProperties implements CmdbuildConfiguration {
+public final class CmdbuildProperties extends DefaultProperties implements CmdbuildConfiguration {
 
 	private static final long serialVersionUID = 1L;
 
@@ -34,6 +34,7 @@ public class CmdbuildProperties extends DefaultProperties implements CmdbuildCon
 	private static final String ENABLED_LANGUAGES = "enabled_languages";
 	private static final String LOGOUT_REDIRECT = "logout.redirect";
 	private static final String IMPORT_CSV_ONE_BY_ONE = "import_csv.one_by_one";
+	private static final String CLUSTERED = "org.cmdbuild.clustered";
 
 	private static final String DEMO_MODE_ADMIN = "demomode";
 
@@ -41,8 +42,8 @@ public class CmdbuildProperties extends DefaultProperties implements CmdbuildCon
 
 	private final Collection<ChangeListener> changeListeners;
 
-	public CmdbuildProperties() {
-		super();
+	public CmdbuildProperties(PropertyContainer propertyContainer) {
+		super(propertyContainer);
 		changeListeners = new HashSet<>();
 		setProperty(REFERENCE_COMBO_LIMIT, "500");
 		setProperty(STARTING_CLASS, EMPTY);
@@ -62,6 +63,9 @@ public class CmdbuildProperties extends DefaultProperties implements CmdbuildCon
 		setProperty(ENABLED_LANGUAGES, EMPTY);
 		setProperty(LOGOUT_REDIRECT, EMPTY);
 		setProperty(IMPORT_CSV_ONE_BY_ONE, String.valueOf(false));
+		
+		setProperty(CLUSTERED, String.valueOf(false));
+//		setProperty(CLUSTERED, String.valueOf(true));
 	}
 
 	public static CmdbuildProperties getInstance() {
@@ -213,6 +217,18 @@ public class CmdbuildProperties extends DefaultProperties implements CmdbuildCon
 	@Override
 	public void setImportCsvOneByOne(final boolean value) {
 		setProperty(IMPORT_CSV_ONE_BY_ONE, String.valueOf(value));
+	}
+
+	@Override
+	public boolean isClustered() {
+		return Boolean.valueOf(getProperty(CLUSTERED));
+		
+	}
+
+	@Override
+	public void setClustered(boolean clustered) {
+		setProperty(CLUSTERED, String.valueOf(clustered));
+		
 	}
 
 }

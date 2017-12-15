@@ -20,7 +20,7 @@ public interface Attribute {
 		}
 
 		@Override
-		public void setValue(String value) {
+		public void setValue(final String value) {
 		}
 
 	};

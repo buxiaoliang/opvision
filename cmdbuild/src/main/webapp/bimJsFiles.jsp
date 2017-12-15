@@ -2,57 +2,31 @@
 ##############################################################################
 	JS FRAMEWORK
 ##############################################################################
--->
 
-<!--
-	BIM-Server API
-	added here to control the version
+<script src="javascripts/cmdbuild/bim/surfer/bimsurfer/lib/scenejs/scenejs.js"></script>
 -->
-<script type="text/javascript" src='javascripts/surfer/api/bimserverapi.js'></script>
+    <script>
+    Global = {};
+    </script>
+   <script src="javascripts/cmdbuild/bim/surfer/lib/scenejs.js"></script> 
+    <script src="javascripts/cmdbuild/bim/surfer/lib/bimviews.js"></script>
 
-<!--
-	JQuery
--->
-<script type="text/javascript" src='javascripts/surfer/lib/jquery/jquery-1.8.2.min.js'></script>
-<script type="text/javascript" src='javascripts/surfer/lib/jquery/jquery-ui-1.9.1.custom.min.js'></script>
-<script type="text/javascript" src='javascripts/surfer/lib/jquery/jquery.cookie.js'></script>
-<script type="text/javascript" src='javascripts/surfer/lib/jquery/sha256.js'></script>
+    <script src="javascripts/cmdbuild/bim/surfer/JQuery/jquery-2.1.4.min.js"></script>
+    <script src="javascripts/cmdbuild/bim/surfer/JQuery/jquery.cookie.min.js"></script>
+    <script src="javascripts/cmdbuild/bim/surfer/lib/bimserverapi.js"></script>
+    <script src="javascripts/cmdbuild/bim/surfer/lib/bimsurfer.js"></script>
+    <script src="javascripts/cmdbuild/bim/surfer/CMClasses/PreloadQuery.js"></script>
+    <script src="javascripts/cmdbuild/bim/surfer/CMClasses/SceneTree.js"></script>
+    <script src="javascripts/cmdbuild/bim/surfer/CMClasses/IfcTree.js"></script>
+    <script src="javascripts/cmdbuild/bim/surfer/CMClasses/ProjectLoader.js"></script>
+    <script src="javascripts/cmdbuild/bim/surfer/Viewer.js"></script>
 
-<!--
-	SceneJS
--->
-<script type="text/javascript" src='javascripts/surfer/lib/scenejs-2.0.0.0/scenejs.js'></script>
-<script type="text/javascript" src='javascripts/surfer/lib/scenejs-2.0.0.0/scenejs.math.js'></script>
-<script type="text/javascript" src='javascripts/surfer/lib/scenejs-2.0.0.0/scenejs.math.extra.js'></script>
 
-<!--
+<!-- -
 ##############################################################################
-	JS APPLICATION LOGIC
+	CMDBUILD UI
 ##############################################################################
--->
-
-<!--
-	SUPPROT
--->
-<!-- TODO Is used? I have not understand what it does-->
-<script type="text/javascript" src='javascripts/surfer/surfer/TweenSpline.js'></script>
-
-<!--
-	BIM-Surfer Utlis
--->
-<script type="text/javascript" src='javascripts/surfer/lib/utils.js'></script>
-
-<!--
-	UI
--->
-<script type="text/javascript" src='javascripts/surfer/surfer/BIMViewportEventListener.js'></script>
-
-<!--
-	CMDBUILD
--->
-<script type="text/javascript" src='javascripts/surfer/surfer/BIMProjectLoader.js'></script>
-<script type="text/javascript" src='javascripts/surfer/surfer/BIMLoginProxy.js'></script>
-<script type="text/javascript" src='javascripts/surfer/surfer/BIMSceneManager.js'></script>
+ -->
 
 <script type="text/javascript" src="javascripts/cmdbuild/bim/management/view/CMBimControlPanel.js"></script>
 <script type="text/javascript" src="javascripts/cmdbuild/bim/management/view/CMBimPlayerLayers.js"></script>

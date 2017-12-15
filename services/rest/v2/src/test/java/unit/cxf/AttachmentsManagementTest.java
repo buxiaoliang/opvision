@@ -1,6 +1,7 @@
 package unit.cxf;
 
 import static java.util.Collections.emptyList;
+import static org.cmdbuild.auth.context.PrivilegeContexts.nullPrivilegeContext;
 import static org.cmdbuild.service.rest.v2.model.Models.newAttachment;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -22,7 +23,6 @@ import javax.activation.DataSource;
 import org.apache.commons.io.input.NullInputStream;
 import org.cmdbuild.auth.UserStore;
 import org.cmdbuild.auth.acl.NullGroup;
-import org.cmdbuild.auth.context.NullPrivilegeContext;
 import org.cmdbuild.auth.user.AuthenticatedUser;
 import org.cmdbuild.auth.user.OperationUser;
 import org.cmdbuild.dms.DocumentTypeDefinition;
@@ -66,7 +66,7 @@ public class AttachmentsManagementTest {
 		final AuthenticatedUser authUser = mock(AuthenticatedUser.class);
 		doReturn("dummy user") //
 				.when(authUser).getUsername();
-		final OperationUser operationUser = new OperationUser(authUser, new NullPrivilegeContext(), new NullGroup());
+		final OperationUser operationUser = new OperationUser(authUser, nullPrivilegeContext(), new NullGroup());
 		doReturn(operationUser) //
 				.when(userStore).getUser();
 	}

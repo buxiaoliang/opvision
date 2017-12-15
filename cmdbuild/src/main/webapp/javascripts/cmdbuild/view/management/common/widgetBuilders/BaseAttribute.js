@@ -1,4 +1,7 @@
 (function() {
+	var FIXED_VALUE = 'fixed';
+	var RUNTIME_VALUE = 'runtime';
+
 	/**
 	 * @Class CMDBuild.WidgetBuilders.BaseAttribute
 	 * Abstract class to define the interface of the CMDBuild attributes
@@ -152,7 +155,7 @@
 		 *
 		 * @return {CMDBuild.view.management.common.filter.CMFilterAttributeConditionPanel}
 		 */
-		getFieldSetForFilter: function(attribute) {
+		getFieldSetForFilter: function(attribute, taskManager) {
 			var attributeCopy = Ext.apply({}, {
 				fieldmode: 'write', // Change the fieldmode because in the filter must write on this field
 				name: attribute.name
@@ -161,7 +164,7 @@
 			var field = this.buildField(attributeCopy, true);
 			var conditionCombo = this.getQueryCombo(attributeCopy);
 
-			return this.buildFieldsetForFilter(field, conditionCombo, attributeCopy);
+			return this.buildFieldsetForFilter(field, conditionCombo, attributeCopy, taskManager);
 		},
 
 		/**
@@ -173,8 +176,8 @@
 		 *
 		 * @return {CMDBuild.view.management.common.filter.CMFilterAttributeConditionPanel}
 		 */
-		buildFieldsetForFilter: function(field, query, attribute) {
-			return this.genericBuildFieldsetForFilter([field], query, attribute);
+		buildFieldsetForFilter: function(field, query, attribute, taskManager) {
+			return this.genericBuildFieldsetForFilter([field], query, attribute, taskManager);
 		},
 
 		/**
@@ -186,12 +189,13 @@
 		 *
 		 * @protected
 		 */
-		genericBuildFieldsetForFilter: function(fields, query, attribute) {
+		genericBuildFieldsetForFilter: function(fields, query, attribute, taskManager) {
 			return Ext.create('CMDBuild.view.management.common.filter.CMFilterAttributeConditionPanel', {
-				selectAtRuntimeCheckDisabled: attribute.selectAtRuntimeCheckDisabled,
+				//selectAtRuntimeCheckDisabled: this.typeFilter !== "runtime",
 				attributeName: attribute.name,
 				conditionCombo: query,
-				valueFields: fields
+				valueFields: fields, 
+				taskManager: taskManager
 			});
 		}
 	};
@@ -211,10 +215,13 @@
 		mixins: {
 			delegable: 'CMDBuild.core.CMDelegable'
 		},
+		taskManager: false, // if filter is for task manager (administration) it works in a different way
 
 		defaults: {
 			margins:'0 5 0 0'
 		},
+
+		filterType : "fixed",
 
 		layout: {
 			type: 'hbox',
@@ -248,44 +255,51 @@
 				}
 			});
 
-			this.selectAtRuntimeCheck = Ext.create('Ext.form.field.Checkbox', {
-				boxLabel: CMDBuild.Translation.setLater,
-				handler: function(checkbox, setValueAtRuntime) {
-					// If the user choose to set the value at runtime, disable the valueFilds to say back to the user that the value fields are not considered
-					for (var i = 0; i <  me.valueFields.length; ++i) {
-						var field = me.valueFields[i];
+			this.fieldInputParameter = Ext.create('Ext.form.field.Checkbox', {
+				boxLabel: CMDBuild.Translation.inputParameter,
 
-						if (field) {
-							if (setValueAtRuntime) {
-								field.disable();
-							} else { // Set the value of the condition combo to enable only the value fields that are needed for the current operator
-								me.conditionCombo.setValue(me.conditionCombo.getValue());
-							}
+				listeners: {
+					scope: this,
+					change: function(field, newValue, oldValue, eOpts) {
+						me.filterType = newValue ? RUNTIME_VALUE : FIXED_VALUE;
+						if (me.filterType === FIXED_VALUE) {
+							me.valueFieldsContainer.show();
+						} else {
+							me.valueFieldsContainer.hide();
 						}
 					}
 				}
 			});
 
 			Ext.apply(this, {
-				items: [
-					this.removeFieldButton,
-					this.conditionCombo
-				]
+				items: [{
+					xtype: 'container',
+					items: [this.removeFieldButton]
+				}, {
+					xtype: 'container',
+					items: [this.conditionCombo]
+				}]
 			});
 
 			this.callParent(arguments);
 
-			this.add(this.valueFields);
+			// generate fields
+			this.onConditionComboSelectStrategy = this.buildOnConditionComboSelectStrategy();
+			this.valueFieldsContainer = Ext.create("Ext.container.Container", {
+				items: this.valueFields
+			});
+			this.add(this.valueFieldsContainer);
 
-			if (!this.selectAtRuntimeCheckDisabled)
-				this.add(this.selectAtRuntimeCheck);
-
-			this.onConditionComboSelectStrategy = buildOnConditionComboSelectStrategy(this.valueFields);
+			// add input parameter field if not in task manager
+			if (!this.taskManager) {
+				this.add({
+					xtype: 'container',
+					items: [this.fieldInputParameter]
+				});
+			}
 
 			this.conditionCombo.setValue = Ext.Function.createSequence(this.conditionCombo.setValue, function(value) {
-				// If the user wanna select at runtime the values, the fields are disabled, so do nothing
-				if (!me.selectAtRuntimeCheck.getValue())
-					me.onConditionComboSelectStrategy.run(this.getValue());
+				me.onConditionComboSelectStrategy.run(this.getValue());
 			}, this.conditionCombo);
 		},
 
@@ -308,11 +322,28 @@
 			var USE_MY_GROUP = -1;
 
 			var value = [];
-			for (var i = 0; i < this.valueFields.length; ++i) {
-				var field = this.valueFields[i];
+			var fields;
 
-				if (!field.isDisabled())
+			// get visible fields
+			if (this.isDateInTaskManager()) {
+				this.filterType = this.valueFields.items.items[0].getValue();
+				// custom value generator for dates in task manager
+				if (this.filterType === "expression") {
+					fields = this.valueFields.items.items[2].items.items;
+				} else {
+					fields = this.valueFields.items.items[1].items.items;
+				}
+			} else {
+				fields = this.valueFields;
+			}
+
+			// get values from fields
+			for (var i = 0; i < fields.length; ++i) {
+				var field = fields[i];
+
+				if (!field.isDisabled()) {
 					value.push(field.getValue());
+				}
 			}
 
 			var out = {
@@ -322,12 +353,7 @@
 					value: value
 				}
 			};
-
-			if (this.selectAtRuntimeCheck.getValue()) {
-				out.simple.parameterType = 'runtime';
-			} else {
-				out.simple.parameterType = 'fixed';
-			}
+			out.simple.parameterType = this.filterType;
 
 			// Manage 'calculated values' for My User and My Group
 			var field = this.valueFields[0];
@@ -355,8 +381,29 @@
 			if (!Ext.isEmpty(data)) {
 				this.conditionCombo.setValue(data.operator);
 
-				for (var i = 0; i < this.valueFields.length; ++i) {
-					var field = this.valueFields[i];
+				this.fieldInputParameter.setValue(data.parameterType === RUNTIME_VALUE);
+
+				var fields;
+				// get visible fields
+				if (this.isDateInTaskManager()) {
+					this.valueFields.items.items[0].setValue(data.parameterType);
+					// custom value generator for dates in task manager
+					if (data.parameterType === "expression") {
+						fields = this.valueFields.items.items[2].items.items;
+					} else {
+						fields = this.valueFields.items.items[1].items.items;
+						var date_values = [];
+						Ext.Array.each(data.value, function(v) {
+							date_values.push(new Date(v));
+						});
+						data.value = date_values;
+					}
+				} else {
+					fields = this.valueFields;
+				}
+
+				for (var i = 0; i < data.value.length; ++i) {
+					var field = fields[i];
 
 					try {
 						field.setValue(data.value[i]);
@@ -364,26 +411,36 @@
 						// Length of the value array on data is less than the number of fields
 					}
 				}
-
-				if (data.parameterType == 'runtime')
-					this.selectAtRuntimeCheck.setValue(true);
 			}
+		},
+
+		/**
+		 * Create combo select strategy
+		 */
+		buildOnConditionComboSelectStrategy: function() {
+			if (this.valueFields.length == 1) {
+				return new CMDBuild.view.management.common.filter.CMFilterAttributeConditionPanel.SingleStrategy(this.valueFields);
+			} else if (this.valueFields.length == 2) {
+				return new CMDBuild.view.management.common.filter.CMFilterAttributeConditionPanel.DoubleStrategy(this.valueFields);
+			} else if (this.isDateInTaskManager()){
+				return new CMDBuild.view.management.common.filter.CMFilterAttributeConditionPanel.TaskDateStrategy(this.valueFields);
+			} else {
+				_debug("There is no Strategy for this value fields", this.valueFields);
+				return new CMDBuild.view.management.common.filter.CMFilterAttributeConditionPanel.Strategy();
+			}
+		},
+
+		/**
+		 * Check if this is a date field within task manager
+		 */
+		isDateInTaskManager: function() {
+			return this.taskManager && Ext.ClassManager.getName(this.valueFields) === "Ext.container.Container";
 		}
 	});
 
-	function buildOnConditionComboSelectStrategy(valueFields) {
-		if (valueFields.length == 1) {
-			return new CMDBuild.view.management.common.filter.CMFilterAttributeConditionPanel.SingleStrategy(valueFields);
-		} else if (valueFields.length == 2) {
-			return new CMDBuild.view.management.common.filter.CMFilterAttributeConditionPanel.DoubleStrategy(valueFields);
-		} else {
-			_debug("There is no Strategy for this value fields", valueFields);
-			return new CMDBuild.view.management.common.filter.CMFilterAttributeConditionPanel.Strategy();
-		}
-	}
 
 	Ext.define("CMDBuild.view.management.common.filter.CMFilterAttributeConditionPanel.Strategy", {
-		constructor: function(valueFields) {
+		constructor: function(valueFields, filterType) {
 			this.valueFields = valueFields;
 		},
 
@@ -394,11 +451,18 @@
 		extend: "CMDBuild.view.management.common.filter.CMFilterAttributeConditionPanel.Strategy",
 
 		run: function(operator) {
-			var disableValueFields = needsFieldToSetAValue(operator);
+			var disableValueFields = this.needsFieldToSetAValue(operator);
 			for (var i=0, l=this.valueFields.length; i<l; ++i) {
 				var f = this.valueFields[i];
 				f.setDisabled(disableValueFields);
 			}
+		},
+		
+		needsFieldToSetAValue: function(operator) {
+			var needIt = (operator == CMDBuild.WidgetBuilders.BaseAttribute.FilterOperator.NULL)
+				|| (operator == CMDBuild.WidgetBuilders.BaseAttribute.FilterOperator.NOT_NULL);
+
+			return needIt;
 		}
 	});
 
@@ -417,10 +481,20 @@
 		}
 	});
 
-	function needsFieldToSetAValue(operator) {
-		var needIt = (operator == CMDBuild.WidgetBuilders.BaseAttribute.FilterOperator.NULL)
-			|| (operator == CMDBuild.WidgetBuilders.BaseAttribute.FilterOperator.NOT_NULL);
+	
+	function disableValueFields(component, disable) {
+		for (var i = 0; i <  component.valueFields.length; ++i) {
+			var field = component.valueFields[i];
 
-		return needIt;
+			if (field) {
+				if (disable) {
+					field.disable();
+				} else { // Set the value of the condition combo to enable only the value fields that are needed for the current operator
+				    field.enable();
+				    component.conditionCombo.setValue(component.conditionCombo.getValue());
+				}
+			}
+		}
+	    
 	}
 })();

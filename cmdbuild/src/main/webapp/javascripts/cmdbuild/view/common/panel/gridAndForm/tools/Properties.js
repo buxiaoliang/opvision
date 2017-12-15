@@ -15,11 +15,23 @@
 			margin: '0 5px 0 0'
 		},
 
-		menu: Ext.create('Ext.menu.Menu',{
-			items: [
-				CMDBuild.global.navigation.Chronology.cmfg('navigationChronologyItemConfigurationGet')
-			]
-		})
+
+		/**
+		 * @returns {Void}
+		 *
+		 * @override
+		 */
+		initComponent: function () {
+			Ext.apply(this, {
+				menu: Ext.create('Ext.menu.Menu',{
+					items: [
+						CMDBuild.global.navigation.Chronology.cmfg('navigationChronologyItemConfigurationGet')
+					]
+				})
+			});
+
+			this.callParent(arguments);
+		}
 	});
 
 })();

@@ -7,7 +7,7 @@
 	Ext.define('CMDBuild.core.fieldManager.builders.text.Text', {
 		extend: 'CMDBuild.core.fieldManager.builders.Abstract',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.core.fieldManager.FieldManager}

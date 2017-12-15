@@ -18,7 +18,7 @@
 	Ext.define("CMDBuild.view.management.widget.linkCards.map.CMMapEditingToolsWindow", {
 		extend: "Ext.Window",
 
-		requires: ['CMDBuild.view.management.widget.linkCards.map.CMMapEditingToolsWindowDelegate'],
+		uses: ['CMDBuild.view.management.widget.linkCards.map.CMMapEditingToolsWindowDelegate'],
 
 		mixins: {
 			delegable: "CMDBuild.core.CMDelegable"

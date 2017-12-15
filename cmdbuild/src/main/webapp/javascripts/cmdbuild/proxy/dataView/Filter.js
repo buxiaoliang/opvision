@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.dataView.Filter', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Global',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.dataView.filter.GridStore',

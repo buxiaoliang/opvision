@@ -64,6 +64,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
+import com.google.common.collect.Iterables;
 
 public class DefaultPatchManager implements PatchManager {
 
@@ -270,7 +271,9 @@ public class DefaultPatchManager implements PatchManager {
 	public void reset() {
 		synchronized (this) {
 			for (final Repository repository : repositories) {
-				reset(repository.getCategory(), repository.getFiles(PATCH_PATTERN));
+				Iterable<File> files = repository.getFiles(PATCH_PATTERN);
+				logger.info("processing patch files from repository {} ({} found)", repository, Iterables.size(files));
+				reset(repository.getCategory(), files);
 			}
 		}
 	}

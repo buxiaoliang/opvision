@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.administration.configuration.notifications.tabs.Email', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.administration.configuration.notifications.Account',
 			'CMDBuild.model.administration.configuration.notifications.Template',

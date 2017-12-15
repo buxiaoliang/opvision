@@ -9,7 +9,16 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.cmdbuild.common.cache.CacheEvictionPolicy;
+import org.cmdbuild.common.cache.ClusterEvent;
+import org.cmdbuild.common.cache.ClusterMessage;
+import org.cmdbuild.common.cache.ClusterMessageConsumer;
+import org.cmdbuild.common.cache.ClusterMessageProducer;
+import org.cmdbuild.common.cache.ClusterMessageReceiver;
+import org.cmdbuild.common.cache.ClusterMessageSender;
+import org.cmdbuild.common.cache.ClusterTarget;
 import org.cmdbuild.dao.CMTypeObject;
+import org.cmdbuild.dao.ClusterAwareTypeObjectCache;
 import org.cmdbuild.dao.TypeObjectCache;
 import org.cmdbuild.dao.entrytype.CMIdentifier;
 import org.cmdbuild.dao.entrytype.DBClass;
@@ -22,7 +31,7 @@ import org.slf4j.MarkerFactory;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-public abstract class AbstractDBDriver implements DBDriver, LoggingSupport {
+public abstract class AbstractDBDriver implements DBDriver, LoggingSupport  {
 
 	private static final Marker marker = MarkerFactory.getMarker(AbstractDBDriver.class.getName());
 
@@ -83,10 +92,12 @@ public abstract class AbstractDBDriver implements DBDriver, LoggingSupport {
 
 	}
 
-	public static class DefaultTypeObjectCache implements TypeObjectCache {
+	public static class DefaultTypeObjectCache implements ClusterAwareTypeObjectCache /*TypeObjectCache , ClusterMessageProducer , ClusterMessageConsumer*/ {
 
 		private final Map<Class<? extends CMTypeObject>, Map<Long, CMTypeObject>> storeById;
 		private final Map<Class<? extends CMTypeObject>, Map<Identifier, CMTypeObject>> storeByIdentifier;
+		
+		private ClusterMessageSender clusterMessageSender;
 
 		public DefaultTypeObjectCache() {
 			storeById = Maps.newHashMap();
@@ -121,6 +132,7 @@ public abstract class AbstractDBDriver implements DBDriver, LoggingSupport {
 				storeById.get(classOf(typeObject)).put(idOf(typeObject), typeObject);
 				storeByIdentifier.get(classOf(typeObject)).put(identifierOf(typeObject), typeObject);
 			}
+			notifyEvictToCluster("Add" , typeObject);
 		}
 
 		@Override
@@ -129,6 +141,7 @@ public abstract class AbstractDBDriver implements DBDriver, LoggingSupport {
 				storeById.get(classOf(typeObject)).remove(idOf(typeObject));
 				storeByIdentifier.get(classOf(typeObject)).remove(identifierOf(typeObject));
 			}
+			notifyEvictToCluster("Remove",typeObject);
 		}
 
 		@Override
@@ -148,6 +161,7 @@ public abstract class AbstractDBDriver implements DBDriver, LoggingSupport {
 				clearDomains();
 				clearFunctions();
 			}
+			notifyEvictToCluster("ClearAll" , null);
 		}
 
 		private void clearClasses() {
@@ -180,11 +194,59 @@ public abstract class AbstractDBDriver implements DBDriver, LoggingSupport {
 			return Identifier.from(typeObject);
 		}
 
+		private void notifyEvictToCluster(String action, CMTypeObject typeObject) {
+			if (clusterMessageSender != null) { //TODO: this check may perhaps be removed (before ClusterMessageSender was injected Lazily)
+				ClusterMessage msg = new ClusterMessage(ClusterTarget.TypeObjectCache.getTargetId(), ClusterEvent.CACHE_EVICT_CACHE , action,
+						(typeObject==null)?null:typeObject.getIdentifier().getLocalName() );
+				clusterMessageSender.safeSend(msg);
+			} else {
+				logger.info("ClusterMessageSender not available in  TypeObjectCache! If this occurs during initialization it is not a problem...");
+			}
+		}
+		
+		@Override
+		public void update(ClusterMessage msg) {
+			
+			if (ClusterEvent.CACHE_EVICT_CACHE.equals(msg.getEvent())) {
+				clearWithoutClusterPropagation();
+			}
+		}
+
+		@Override
+		public void register(ClusterMessageReceiver receiver) {
+			receiver.register(this, ClusterTarget.TypeObjectCache.getTargetId());
+		}
+
+		@Override
+		public void setClusterMessageSender(ClusterMessageSender sender) {
+			clusterMessageSender = sender;
+		}
+
+		@Override
+		public void clear(CacheEvictionPolicy policy) {
+			
+			if (CacheEvictionPolicy.NON_PROPAGATING.equals(policy)) {
+				clearWithoutClusterPropagation();
+			} else {
+				clear();
+			}
+			
+		}
+		
+		private void clearWithoutClusterPropagation() {
+			synchronized (this) {
+				logger.info(marker, "clearing all cache (CLUSTER GENERATED EVICT - No propagation)");
+				clearClasses();
+				clearDomains();
+				clearFunctions();
+			}
+		}
+
 	}
 
-	protected TypeObjectCache cache;
+	protected ClusterAwareTypeObjectCache cache;
 
-	protected AbstractDBDriver(final TypeObjectCache cache) {
+	protected AbstractDBDriver(final ClusterAwareTypeObjectCache cache) {
 		Validate.notNull(cache, "The driver cache cannot be null");
 		this.cache = cache;
 	}
@@ -261,8 +323,17 @@ public abstract class AbstractDBDriver implements DBDriver, LoggingSupport {
 		return null;
 	}
 
-	public void clearCache() {
-		cache.clear();
+	public void clearCache(CacheEvictionPolicy policy) {
+		cache.clear(policy);
 	}
+	
+	public void setClusterMessageSender(ClusterMessageSender sender) {
+		cache.setClusterMessageSender(sender);
+	}
+
+	public void setClusterMessageReceiver(ClusterMessageReceiver clusterMessageReceiver) {
+		cache.register(clusterMessageReceiver);
+		
+	};
 
 }

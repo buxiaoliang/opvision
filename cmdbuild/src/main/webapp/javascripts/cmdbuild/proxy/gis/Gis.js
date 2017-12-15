@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.gis.Gis', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.configurations.Timeout',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json'
@@ -63,9 +63,10 @@
 		 */
 		getFeature: function (parameters) {
 			parameters = Ext.isEmpty(parameters) ? {} : parameters;
-
+			if(parameters.params.cardId == null || parameters.params.className == null) {
+				return
+			}
 			Ext.apply(parameters, { url: CMDBuild.proxy.index.Json.gis.getFeatures });
-
 			CMDBuild.global.Cache.request(CMDBuild.core.constants.Proxy.GIS, parameters);
 		}
 	});

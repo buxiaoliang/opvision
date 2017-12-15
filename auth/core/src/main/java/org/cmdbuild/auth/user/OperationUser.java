@@ -32,6 +32,15 @@ public class OperationUser {
 	}
 
 	/**
+	 * useful to use a different privilege context
+	 * @param operationUser
+	 * @param privilegeContext 
+	 */
+	public OperationUser(OperationUser operationUser, PrivilegeContext privilegeContext) {
+		this(operationUser.getAuthenticatedUser(), privilegeContext, operationUser.getPreferredGroup());
+	}
+
+	/**
 	 * An authenticated user is valid if it has a preferred group selected. The
 	 * preferred group is the group that the user chose at the login. If the
 	 * user belongs to one group or if it belongs to multiple groups but it has
@@ -122,6 +131,13 @@ public class OperationUser {
 	@Deprecated
 	public boolean hasPrivilege(final CMPrivilege requested, final CMPrivilegedObject privilegedObject) {
 		return privilegeCtx.hasPrivilege(requested, privilegedObject);
+	}
+	
+	/**
+	 * @return true if password has expired
+	 */
+	public boolean isPasswordExpired() {
+		return authUser.isPasswordExpired();
 	}
 
 }

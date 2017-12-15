@@ -51,7 +51,7 @@ public class ProjectSerializer {
 		out.put(DESCRIPTION, project.getDescription());
 		out.put(ACTIVE, project.isActive());
 		out.put(IMPORT_MAPPING, project.getImportMapping());
-		out.put(EXPORT_MAPPING, project.getExportMapping());
+		//out.put(EXPORT_MAPPING, project.getExportMapping());
 		out.put(CARD_BINDING, bindedCard.isEmpty() ? "" : Long.parseLong(bindedCard));
 		final DateTime lastCheckin = project.getLastCheckin();
 

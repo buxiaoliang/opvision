@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.management.utility.bulkUpdate.BulkUpdateView', {
 		extend: 'Ext.panel.Panel',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.management.utility.bulkUpdate.BulkUpdate}

@@ -2,6 +2,7 @@ package integration.logic.auth;
 
 import static com.google.common.base.Suppliers.ofInstance;
 import static org.cmdbuild.auth.UserStores.inMemory;
+import static org.cmdbuild.auth.context.PrivilegeContexts.nullPrivilegeContext;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -22,7 +23,6 @@ import org.cmdbuild.auth.UserStore;
 import org.cmdbuild.auth.acl.CMGroup;
 import org.cmdbuild.auth.acl.NullGroup;
 import org.cmdbuild.auth.context.DefaultPrivilegeContextFactory;
-import org.cmdbuild.auth.context.NullPrivilegeContext;
 import org.cmdbuild.auth.user.AnonymousUser;
 import org.cmdbuild.auth.user.CMUser;
 import org.cmdbuild.auth.user.OperationUser;
@@ -104,7 +104,7 @@ public class DefaultAuthenticationLogicTest extends IntegrationTestBase {
 	private static final String PASSWORD_DEFAULT_GROUP = "userdef_password";
 
 	private static OperationUser anonymous() {
-		return new OperationUser(new AnonymousUser(), new NullPrivilegeContext(), new NullGroup());
+		return new OperationUser(new AnonymousUser(), nullPrivilegeContext(), new NullGroup());
 	}
 
 	private UserRolePrivilegeFixture fixture;

@@ -1,5 +1,6 @@
 package org.cmdbuild.dao.view;
 
+import org.cmdbuild.auth.acl.PrivilegeContext;
 import org.cmdbuild.dao.entry.CMCard;
 import org.cmdbuild.dao.entry.CMCard.CMCardDefinition;
 import org.cmdbuild.dao.entry.CMRelation;
@@ -179,6 +180,11 @@ public abstract class ForwardingDataView extends ForwardingObject implements CMD
 	@Override
 	public Iterable<? extends WhereClause> getAdditionalFiltersFor(final CMEntryType classToFilter) {
 		return delegate().getAdditionalFiltersFor(classToFilter);
+	}
+
+	@Override
+	public CMDataView use(final PrivilegeContext value) {
+		return delegate().use(value);
 	}
 
 }

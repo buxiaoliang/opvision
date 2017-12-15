@@ -6,7 +6,7 @@
 	Ext.define('CMDBuild.controller.administration.domain.tabs.EnabledClasses', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Global',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.administration.domain.tabs.EnabledClasses'

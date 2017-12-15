@@ -3,7 +3,10 @@
 	Ext.define('CMDBuild.view.management.utility.changePassword.ChangePasswordView', {
 		extend: 'Ext.panel.Panel',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: [
+	       'CMDBuild.core.constants.Proxy',
+	       'CMDBuild.proxy.utility.ChangePassword'
+		],
 
 		/**
 		 * @cfg {CMDBuild.controller.management.utility.changePassword.ChangePassword}
@@ -19,18 +22,42 @@
 		border: false,
 		frame: false,
 		layout: 'fit',
-
+		
+		passwordExpired: false,
+		helper: undefined,
+		
 		/**
 		 * @returns {Void}
 		 *
 		 * @override
 		 */
 		initComponent: function () {
-			Ext.apply(this, {
-				items: [
-					this.form = Ext.create('CMDBuild.view.management.utility.changePassword.FormPanel', { delegate: this.delegate })
-				]
-			});
+			if (this.passwordExpired) { // from CHANGE PASSWORD page
+				Ext.apply(this, {
+					items: [
+						this.form = Ext.create('CMDBuild.view.management.utility.changePassword.FormPanel', {
+							title: CMDBuild.Translation.changePassword,
+							border: true,
+							delegate: this.delegate,
+							helper: this.helper,
+							frame: true,
+							padding: 10 ,
+							disableCancelButton: true,
+							layout: {
+								type: 'vbox',
+								align: 'center'
+							}
+						})
+					]
+				});
+				
+			} else { // from UTILITY
+				Ext.apply(this, {
+					items: [
+						this.form = Ext.create('CMDBuild.view.management.utility.changePassword.FormPanel', {delegate: this.delegate})
+					]
+				});
+			}
 
 			this.callParent(arguments);
 		}

@@ -17,7 +17,7 @@
 		alternateClassName: 'CMDBuild.view.common.field.CMFilterChooserWindow', // Legacy class name
 		extend: 'CMDBuild.view.management.common.filter.CMFilterWindow',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Message',
 			'CMDBuild.proxy.Filter'

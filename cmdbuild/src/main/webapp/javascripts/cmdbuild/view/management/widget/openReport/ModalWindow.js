@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.management.widget.openReport.ModalWindow', {
 		extend: 'CMDBuild.core.window.AbstractCustomModal',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.management.widget.openReport.Modal}

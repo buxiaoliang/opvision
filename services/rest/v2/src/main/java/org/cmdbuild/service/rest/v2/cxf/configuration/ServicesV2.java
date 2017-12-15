@@ -27,7 +27,6 @@ import org.cmdbuild.service.rest.v2.Domains;
 import org.cmdbuild.service.rest.v2.EmailTemplates;
 import org.cmdbuild.service.rest.v2.FileStores;
 import org.cmdbuild.service.rest.v2.Functions;
-import org.cmdbuild.service.rest.v2.Geometries;
 import org.cmdbuild.service.rest.v2.GraphConfiguration;
 import org.cmdbuild.service.rest.v2.Icons;
 import org.cmdbuild.service.rest.v2.Impersonate;
@@ -111,6 +110,8 @@ import org.springframework.context.annotation.Scope;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
+import org.cmdbuild.service.rest.v2.GeoAttributes;
+import org.cmdbuild.service.rest.v2.GeoCards;
 
 @Configuration
 public class ServicesV2 implements LoggingSupport {
@@ -472,12 +473,19 @@ public class ServicesV2 implements LoggingSupport {
 		final CxfFileStores service = new CxfFileStores(v2_errorHandler(), helper.fileLogic());
 		return proxy(FileStores.class, service);
 	}
-
+	
 	@Bean
 	@Scope(value = SCOPE_REQUEST, proxyMode = TARGET_CLASS)
-	public Geometries v2_geometries() {
+	public GeoAttributes v2_geoAttributes() {
 		final CxfGeometries service = new CxfGeometries(v2_errorHandlerFacade(), helper.gisLogic());
-		return proxy(Geometries.class, service);
+		return proxy(GeoAttributes.class, service);
+	}
+	
+	@Bean
+	@Scope(value = SCOPE_REQUEST, proxyMode = TARGET_CLASS)
+	public GeoCards v2_geoCards() {
+		final CxfGeometries service = new CxfGeometries(v2_errorHandlerFacade(), helper.gisLogic());
+		return proxy(GeoCards.class, service);
 	}
 
 }

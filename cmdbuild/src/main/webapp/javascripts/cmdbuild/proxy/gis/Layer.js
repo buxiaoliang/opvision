@@ -6,7 +6,7 @@
 
 	 Ext.define('CMDBuild.proxy.gis.Layer', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.gis.Layer',
 			'CMDBuild.proxy.index.Json'

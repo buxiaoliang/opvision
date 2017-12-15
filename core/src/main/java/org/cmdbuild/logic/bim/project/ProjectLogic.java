@@ -16,15 +16,13 @@ public interface ProjectLogic extends Logic {
 		String getName();
 
 		String getDescription();
+		
+		String getIfcVersion();
 
 		boolean isActive();
 
-		boolean isSynch();
-
 		String getImportMapping();
-
-		String getExportMapping();
-
+		
 		DateTime getLastCheckin();
 
 		Iterable<String> getCardBinding();
@@ -39,10 +37,12 @@ public interface ProjectLogic extends Logic {
 
 	void updateProject(Project project);
 
-	DataHandler download(String projectId);
+	DataHandler downloadIfc(String projectId);
 
 	void enableProject(Project project);
 
 	void disableProject(Project project);
+
+	String downloadMapping(Project project);
 
 }

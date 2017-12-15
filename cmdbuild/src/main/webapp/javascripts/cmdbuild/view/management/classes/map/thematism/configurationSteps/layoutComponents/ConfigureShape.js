@@ -76,7 +76,7 @@
 		},
 		getRadioShape : function() {
 			var radio = Ext.create("Ext.form.RadioGroup", {
-				fieldLabel : "@@ Shape",
+				fieldLabel : CMDBuild.Translation.management.modcard.gis.shape,
 				vertical : true,
 				border : true,
 				items : [ {
@@ -101,13 +101,13 @@
 	function getShapeDescription(analysisType) {
 		switch (analysisType) {
 		case CMDBuild.gis.constants.shapes.CIRCLE:
-			return "@@ Circle";
+			return CMDBuild.Translation.management.modcard.gis.shapes.circle;
 		case CMDBuild.gis.constants.shapes.RECTANGLE:
-			return "@@ Rectangle";
+			return CMDBuild.Translation.management.modcard.gis.shapes.rectangle;
 		case CMDBuild.gis.constants.shapes.STAR:
-			return "@@ Star";
+			return CMDBuild.Translation.management.modcard.gis.shapes.star;
 		}
-		return "@@ Circle";
+		return CMDBuild.Translation.management.modcard.gis.shapes.circle;
 	}
 
 })();

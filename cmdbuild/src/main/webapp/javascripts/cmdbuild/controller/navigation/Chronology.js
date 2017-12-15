@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.navigation.Chronology', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.configurations.DataFormat',
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Global',

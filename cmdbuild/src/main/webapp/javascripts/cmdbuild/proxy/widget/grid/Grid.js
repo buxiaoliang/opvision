@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.widget.grid.Grid', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json'

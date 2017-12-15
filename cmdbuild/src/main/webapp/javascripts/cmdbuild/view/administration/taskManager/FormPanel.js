@@ -6,7 +6,7 @@
 	Ext.define('CMDBuild.view.administration.taskManager.FormPanel', {
 		extend: 'Ext.form.Panel',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		mixins: ['CMDBUild.view.common.CMFormFunctions'], // FIXME: use new class "CMDBuild.view.common.PanelFunctions"
 

@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.management.widget.customForm.RowEditWindow', {
 		extend: 'CMDBuild.core.window.AbstractModal',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.management.widget.customForm.layout.Grid}

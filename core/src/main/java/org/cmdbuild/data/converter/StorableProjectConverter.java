@@ -1,8 +1,9 @@
 package org.cmdbuild.data.converter;
 
-import static org.cmdbuild.logic.data.Utils.readBoolean;
+import static org.apache.commons.lang.BooleanUtils.toBooleanDefaultIfNull;
+import static org.apache.commons.lang.StringUtils.EMPTY;
+import static org.apache.commons.lang.StringUtils.defaultIfBlank;
 import static org.cmdbuild.logic.data.Utils.readDateTime;
-import static org.cmdbuild.logic.data.Utils.readString;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,10 +16,11 @@ public class StorableProjectConverter extends BaseStorableConverter<StorableProj
 
 	public static final String TABLE_NAME = "_BimProject";
 	public static final String PROJECT_ID = "ProjectId";
-
-	final String NAME = "Code", DESCRIPTION = "Description", ACTIVE = "Active", LAST_CHECKIN = "LastCheckin",
-			SYNCHRONIZED = "Synchronized", IMPORT_MAPPING = "ImportMapping", EXPORT_MAPPING = "ExportMapping",
-			EXPORT_PROJECT_ID = "ExportProjectId", SHAPE_PROJECT_ID = "ShapesProjectId";
+	public static final String NAME = "Code";
+	public static final String DESCRIPTION = "Description";
+	public static final String ACTIVE = "Active";
+	public static final String LAST_CHECKIN = "LastCheckin";
+	public static final String IMPORT_MAPPING = "ImportMapping";
 
 	@Override
 	public String getClassName() {
@@ -34,33 +36,24 @@ public class StorableProjectConverter extends BaseStorableConverter<StorableProj
 	public StorableProject convert(CMCard card) {
 		final StorableProject project = new StorableProject();
 		project.setCardId(card.getId());
-		project.setName(readString(card, NAME));
-		project.setDescription(readString(card, DESCRIPTION));
-		project.setProjectId(readString(card, PROJECT_ID));
-		project.setActive(readBoolean(card, ACTIVE));
+		project.setName(defaultIfBlank((String) card.get(NAME), EMPTY));
+		project.setDescription(defaultIfBlank((String) card.get(DESCRIPTION), EMPTY));
+		project.setProjectId(defaultIfBlank((String) card.get(PROJECT_ID), EMPTY));
+		project.setActive(toBooleanDefaultIfNull((Boolean) card.get(ACTIVE), false));
 		project.setLastCheckin(readDateTime(card, LAST_CHECKIN));
-		project.setSynch(readBoolean(card, SYNCHRONIZED));
-		project.setImportMapping(readString(card, IMPORT_MAPPING));
-		project.setExportMapping(readString(card, EXPORT_MAPPING));
-		project.setExportProjectId(readString(card, EXPORT_PROJECT_ID));
-		project.setShapeProjectId(readString(card, SHAPE_PROJECT_ID));
+		project.setImportMapping(defaultIfBlank((String) card.get(IMPORT_MAPPING), EMPTY));
 		return project;
 	}
 
 	@Override
 	public Map<String, Object> getValues(StorableProject storableProject) {
 		final Map<String, Object> values = new HashMap<String, Object>();
-
 		values.put(NAME, storableProject.getName());
 		values.put(DESCRIPTION, storableProject.getDescription());
 		values.put(PROJECT_ID, storableProject.getProjectId());
 		values.put(ACTIVE, storableProject.isActive());
 		values.put(LAST_CHECKIN, storableProject.getLastCheckin());
-		values.put(SYNCHRONIZED, storableProject.isSynch());
-		values.put(EXPORT_PROJECT_ID, storableProject.getExportProjectId());
 		values.put(IMPORT_MAPPING, storableProject.getImportMapping());
-		// values.put(EXPORT_MAPPING, storableProject.getExportMapping());
-		// values.put(SHAPE_PROJECT_ID, storableProject.getShapeProjectId());
 		return values;
 	}
 

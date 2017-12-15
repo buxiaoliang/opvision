@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.core.configurations.builder.RelationGraph', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.core.configurations.builder.RelationGraph'
 		],

@@ -1,8 +1,8 @@
 (function () {
 
-	Ext.define('CMDBuild.bim.proxy.Bim', {
+	 Ext.define('CMDBuild.bim.proxy.Bim', {
 
-		requires: [
+		uses: [
 			'CMDBuild.bim.data.CMBIMProjectModel',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.interfaces.FormSubmit',

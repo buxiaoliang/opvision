@@ -16,6 +16,8 @@ import org.cmdbuild.data.store.task.TaskStore;
 import org.cmdbuild.logic.email.DefaultEmailTemplateSenderFactory;
 import org.cmdbuild.logic.email.EmailTemplateSenderFactory;
 import org.cmdbuild.logic.taskmanager.DefaultTaskManagerLogic;
+import org.cmdbuild.logic.taskmanager.ObserverCollectorUpdater;
+import org.cmdbuild.logic.taskmanager.ObserverCollectorUpdater.ObserverCollectorUpdaterConfiguration;
 import org.cmdbuild.logic.taskmanager.TaskManagerLogic;
 import org.cmdbuild.logic.taskmanager.TransactionalTaskManagerLogic;
 import org.cmdbuild.logic.taskmanager.event.DefaultLogicAndObserverConverter;
@@ -41,6 +43,7 @@ import org.cmdbuild.logic.taskmanager.task.generic.GenericTaskJobFactory;
 import org.cmdbuild.logic.taskmanager.task.process.StartWorkflowTask;
 import org.cmdbuild.logic.taskmanager.task.process.StartWorkflowTaskJobFactory;
 import org.cmdbuild.services.event.DefaultObserverCollector;
+import org.cmdbuild.services.event.ObservableDataView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -83,6 +86,9 @@ public class TaskManager {
 	@Autowired
 	private Workflow workflow;
 
+	@Autowired
+	private Properties properties;
+
 	@Bean
 	public TaskManagerLogic taskManagerLogic() {
 		return new TransactionalTaskManagerLogic(new DefaultTaskManagerLogic( //
@@ -90,8 +96,8 @@ public class TaskManager {
 				taskStore(), //
 				defaultSchedulerTaskFacade(), //
 				defaultSynchronousEventFacade(), //
-				email.emailLogic() //
-		));
+				email.emailLogic(), //
+				observerCollectorUpdater()));
 	}
 
 	@Bean
@@ -168,18 +174,21 @@ public class TaskManager {
 	protected AsynchronousEventTaskJobFactory asynchronousEventTaskJobFactory() {
 		return new AsynchronousEventTaskJobFactory( //
 				data.systemDataView(), //
+				data.systemDataAccessLogic(), //
 				email.emailAccountFacade(), //
 				email.emailTemplateLogic(), //
 				taskStore(), //
 				defaultLogicAndStoreConverter(), //
-				emailTemplateSenderFactory() //
+				emailTemplateSenderFactory(), //
+				template.databaseTemplateEngine(), //
+				report.reportLogic() //
 		);
 	}
 
 	@Bean
 	protected ConnectorTaskJobFactory connectorTaskJobFactory() {
 		return new ConnectorTaskJobFactory( //
-				data.systemDataView(), //
+				new ObservableDataView(data.systemDataView(), defaultObserverCollector().allInOneObserver()), //
 				other.dataSourceHelper(), //
 				defaultAttributeValueAdapter(), //
 				email.emailAccountFacade(), //
@@ -261,6 +270,17 @@ public class TaskManager {
 	protected EmailTemplateSenderFactory emailTemplateSenderFactory() {
 		return new DefaultEmailTemplateSenderFactory(email.emailServiceFactory(), email.emailLogic(),
 				email.emailAttachmentsLogic());
+	}
+
+	@Bean
+	protected ObserverCollectorUpdater observerCollectorUpdater() {
+		
+		ObserverCollectorUpdaterConfiguration configuration = new ObserverCollectorUpdaterConfiguration(properties.cmdbuildProperties().isClustered(),
+					defaultObserverCollector(), taskStore(), defaultLogicAndStoreConverter(), defaultSynchronousEventFacade(), 
+					properties.schedulerProperties().getObserverCollectorUpdaterFixedDelay(), 
+					properties.schedulerProperties().getObserverCollectorUpdaterInitialDelay() );
+		return new ObserverCollectorUpdater(configuration);
+
 	}
 
 }

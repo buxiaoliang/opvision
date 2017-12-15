@@ -6,6 +6,4 @@ public interface SynchronizationLogic extends Logic {
 
 	void importIfc(String projectId);
 
-	void exportIfc(String sourceProjectId);
-
 }

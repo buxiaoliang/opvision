@@ -5,7 +5,7 @@
 	 */
 	Ext.define('CMDBuild.core.interfaces.service.LoadMask', {
 
-		requires: ['CMDBuild.core.LoadMask'],
+		uses: ['CMDBuild.core.LoadMask'],
 
 		singleton: true,
 

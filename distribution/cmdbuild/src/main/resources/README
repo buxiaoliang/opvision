@@ -1,5 +1,5 @@
 
-Copyright Tecnoteca Srl 2005-2016
+Copyright Tecnoteca Srl 2005-2017
 
 
 
@@ -31,34 +31,39 @@ The interactive user interfaces in modified source and object code versions of t
 In accordance with Section 7(b) of the GNU General Public License version 3, these Appropriate Legal Notices must retain the display of the "CMDBuild" logo.
 The Logo "CMDBuild" must be a clickable link that leads directly to the Internet URL http://www.cmdbuild.org/
 
-External contributors:
+External contributors: 
 
+* Arabic translation by Fahad Senan
+
+* Brazilian Portuguese translation by Simone Jaqueline Pio Lomonaco and Andre Gustavo Lomonaco 
+
+* Chinese translation by James Xue 
+
+* Croatian translation by Tomislav Perić 
+
+* Czech translation by Jiří Langr 
+
+* Dutch translation by Eric van Rheenen
+
+* European Portuguese translation by Ruben Silva 
+
+* French translation by Philippe Poumaroux and Jean Lasson
+
+* Greek translation by Dimitris Maniadakis
+
+* Hungarian translation by Márton Natkó 
+
+* Japanese translation by Shoji Seki 
+
+* Persian translation by Ali Amiri 
+
+* Russian translation by Pavel Kraynyukhov and Andrey Khlebnikov 
 
 * Serbian translation by Miroslav Zaric
-   (University of Novi Sad - http://www.uns.ac.rs/)
 
-* French translation by Jean Lasson and Philippe Poumaroux
+* Ukrainian translation by Artem Yanchuk
 
-* Russian translations by Andrey Khlebnikov
-
-* Brazilian Portuguese translations by Simone Jaqueline Pio Lomonaco
-   (IPPLUS Tecnologia - http://www.ipplus.com.br/)
-
-* Japanese translations by Shoji Seki
-
-* Vietnamese translations by Trong Nguyen
-
-* Croatian translations by Tomislav Perić
-
-* Persian translations by Ali Amiri
-
-* Hungarian translations by Márton Natkó
-
-* Chinese translation by James Xue
-
-* European Portuguese translation by Ruben Silva
-
-* Czech translation by Jiří Langr
+* Vietnamese translation by Trong Nguyen 
 
 Below is a list of the publicly available software and resources used
 by and distributed with CMDBuild, along with the licensing terms.

@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.administration.email.template.Values', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.administration.email.template.Template}

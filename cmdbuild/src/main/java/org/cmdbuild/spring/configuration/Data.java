@@ -5,6 +5,8 @@ import static org.cmdbuild.spring.util.Constants.SYSTEM;
 
 import org.cmdbuild.auth.UserStore;
 import org.cmdbuild.auth.user.OperationUser;
+import org.cmdbuild.common.cache.ClusterMessageReceiver;
+import org.cmdbuild.common.cache.ClusterMessageSender;
 import org.cmdbuild.dao.driver.DBDriver;
 import org.cmdbuild.dao.view.CMDataView;
 import org.cmdbuild.dao.view.DBDataView;
@@ -32,10 +34,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 
 @Configuration
 public class Data {
+
+	@Autowired
+	private Authentication authentication;
 
 	@Autowired
 	private CustomPages customPages;
@@ -60,6 +66,10 @@ public class Data {
 
 	@Autowired
 	private View view;
+	
+	//FIXME dino
+	@Autowired ClusterMessageReceiver clusterMessageReceiver;
+	@Autowired ClusterMessageSender clusterMessageSender;
 
 	@Bean
 	protected StorableConverter<Lookup> lookupStorableConverter() {
@@ -77,7 +87,10 @@ public class Data {
 
 	@Bean
 	public CachingStore<Lookup> cachedLookupStore() {
-		return new CachingStore<Lookup>(baseLookupStore());
+		CachingStore<Lookup> cachingStore = new CachingStore<Lookup>(baseLookupStore());
+		cachingStore.setClusterMessageSender(clusterMessageSender);
+		cachingStore.register(clusterMessageReceiver);
+		return cachingStore;
 	}
 
 	@Bean
@@ -115,7 +128,7 @@ public class Data {
 	public DataAccessLogic systemDataAccessLogic() {
 		final OperationUser user = userStore.getUser();
 		final DataAccessLogic _delegate = new DefaultDataAccessLogic(systemDataView(), lookupStore(), systemDataView(),
-				user, lock.dummyLockLogic());
+				user, lock.dummyLockLogic(), authentication.standardSessionLogic());
 		final DataAccessLogic delegate = new PrivilegedDataAccessLogic(_delegate, user.getPrivilegeContext());
 		return new SystemDataAccessLogic(delegate);
 	}

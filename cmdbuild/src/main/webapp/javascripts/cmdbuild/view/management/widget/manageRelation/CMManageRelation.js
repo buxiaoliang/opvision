@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.management.widget.manageRelation.CMManageRelation', {
 		extend: 'Ext.tree.Panel',
 
-		requires: ['CMDBuild.model.management.widget.manageRelation.CMRelationPanelModel'],
+		uses: ['CMDBuild.model.management.widget.manageRelation.CMRelationPanelModel'],
 
 		CHECK_NAME: 'manage_relation_check', // Used by the controller to identify the selected rows
 

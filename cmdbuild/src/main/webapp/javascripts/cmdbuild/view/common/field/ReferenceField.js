@@ -2,9 +2,9 @@
 
 	var FILTER_FIELD = "_SystemFieldFilter";
 
-	Ext.require('CMDBuild.proxy.Card');
 
 	Ext.define("CMDBuild.Management.ReferenceField", {
+		uses: ['CMDBuild.proxy.Card'],
 		statics: {
 			/**
 			 * @param {Object} attribute
@@ -109,6 +109,8 @@
 	Ext.define("CMDBuild.Management.ReferenceField.Field", {
 		extend: "CMDBuild.view.common.field.SearchableCombo",
 
+		uses: ['CMDBuild.proxy.Card'],
+		
 		mixins: {
 			observable: 'Ext.util.Observable'
 		},

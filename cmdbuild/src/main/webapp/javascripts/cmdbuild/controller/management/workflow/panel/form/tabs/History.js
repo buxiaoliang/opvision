@@ -8,7 +8,7 @@
 	Ext.define('CMDBuild.controller.management.workflow.panel.form.tabs.History', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.constants.WorkflowStates',
 			'CMDBuild.proxy.management.workflow.panel.form.tabs.History'

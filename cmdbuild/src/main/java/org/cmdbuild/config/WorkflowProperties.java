@@ -25,8 +25,8 @@ public class WorkflowProperties extends DefaultProperties implements WorkflowCon
 
 	private final Set<ChangeListener> changeListeners;
 
-	public WorkflowProperties() {
-		super();
+	public WorkflowProperties(PropertyContainer propertyContainer) {
+		super(propertyContainer);
 
 		changeListeners = new HashSet<RemoteSharkServiceConfiguration.ChangeListener>();
 

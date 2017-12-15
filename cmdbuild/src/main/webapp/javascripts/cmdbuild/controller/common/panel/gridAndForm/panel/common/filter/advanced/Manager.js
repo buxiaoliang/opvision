@@ -6,7 +6,7 @@
 	Ext.define('CMDBuild.controller.common.panel.gridAndForm.panel.common.filter.advanced.Manager', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.common.panel.gridAndForm.filter.advanced.Manager'
 		],

@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.gis.Button', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json'
 		],

@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.dataView.sql.GridPanel', {
 		extend: 'Ext.grid.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Message',
 			'CMDBuild.proxy.dataView.Sql'

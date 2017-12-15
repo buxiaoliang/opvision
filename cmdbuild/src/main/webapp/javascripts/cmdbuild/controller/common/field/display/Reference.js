@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.common.field.display.Reference', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.common.field.display.Reference'
 		],

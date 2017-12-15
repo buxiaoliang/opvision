@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd         http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd         http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.2.xsd	
+http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc">
+	<!-- This will automatically locate any and all property files you have 
+		within your classpath, provided they fall under the META-INF/spring directory. 
+		The located property files are parsed and their values can then be used within 
+		application context files in the form of ${propertyKey}. -->
+	<!-- <context:property-placeholder location="file:src/test/resources/META-INF/spring/test.properties"/> -->
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="org.postgresql.Driver" />
+		<property name="url"
+			value="jdbc:postgresql://localhost:5432/_cmdbuild-tests" />
+		<property name="username" value="postgres" />
+		<property name="password" value="postgres" />
+
+		<property name="maxIdle" value="4" />
+		<property name="maxActive" value="10" />
+		<property name="maxWait" value="10000" />
+		<property name="validationQuery" value="select 1" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testWhileIdle" value="true" />
+		<property name="timeBetweenEvictionRunsMillis" value="1200000" />
+		<property name="minEvictableIdleTimeMillis" value="1800000" />
+		<property name="numTestsPerEvictionRun" value="5" />
+		<property name="defaultAutoCommit" value="false" />
+
+		<!-- <property name="initialize" value="true"/> -->
+		<!-- <property name="schema" value="file:src/test/resources/db-schema-quartz.sql"/> -->
+		<!-- <property name="data" value="file:src/test/resources/db-data-quartz.sql"/> -->
+	</bean>
+
+	<!-- <jdbc:initialize-database> -->
+	<!-- <jdbc:script location="classpath:schema.sql"/> -->
+	<!-- non in classpath altrimenti prende quello generale, fare come per test.properties -->
+
+	<!-- </jdbc:initialize-database> -->
+
+	<context:component-scan base-package="org.cmdbuild.scheduler.quartz" />
+
+	<bean id="springIntegrationUtils4Scheduler" class="org.cmdbuild.scheduler.quartz.SpringIntegrationUtils4Scheduler" />
+
+
+
+
+</beans>

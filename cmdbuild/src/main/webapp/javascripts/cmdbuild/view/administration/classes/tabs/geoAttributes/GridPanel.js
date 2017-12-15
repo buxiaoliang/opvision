@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.classes.tabs.geoAttributes.GridPanel', {
 		extend: 'Ext.grid.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.administration.classes.tabs.GeoAttributes'
 		],

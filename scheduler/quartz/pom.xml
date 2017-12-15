@@ -5,14 +5,21 @@
 	<parent>
 		<groupId>org.cmdbuild</groupId>
 		<artifactId>cmdbuild-parent</artifactId>
-		<version>2.4.4-SNAPSHOT</version>
+		<version>2.5.1-SNAPSHOT</version>
 		<relativePath>../../parent</relativePath>
 	</parent>
 	<artifactId>cmdbuild-scheduler-quartz</artifactId>
 	<properties>
 		<quartz.version>2.2.2</quartz.version>
+		<hsqldb.version>1.4.196</hsqldb.version>
+		<spring.version>4.2.4.RELEASE</spring.version>
 	</properties>
 	<dependencies>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.cmdbuild</groupId> -->
+<!-- 			<artifactId>cmdbuild-core</artifactId> -->
+<!-- 			<version>${project.version}</version> -->
+<!-- 		</dependency> -->
 		<dependency>
 			<groupId>org.cmdbuild</groupId>
 			<artifactId>cmdbuild-scheduler-core</artifactId>
@@ -40,6 +47,67 @@
 			<version>${project.version}</version>
 			<classifier>tests</classifier>
 			<scope>test</scope>
+		</dependency>
+		
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.cmdbuild</groupId> -->
+<!-- 			<artifactId>cmdbuild</artifactId> -->
+<!-- 			<version>${project.version}</version> -->
+<!-- 			<classifier>tests</classifier> -->
+<!-- 			<scope>test</scope> -->
+<!-- 		</dependency> -->
+		
+
+	
+		<!-- logging -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+<!-- 			<scope>test</scope> -->
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+<!-- 			<scope>test</scope> -->
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring.version}</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.apache.tomcat</groupId> -->
+<!-- 			<artifactId>tomcat-jdbc</artifactId> -->
+<!-- 			<version>8.5.16</version> -->
+<!-- 			<scope>test</scope> -->
+<!-- 		</dependency> -->
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>1.4</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
 		</dependency>
 	</dependencies>
 </project>

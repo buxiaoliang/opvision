@@ -13,3 +13,5 @@ alfresco.log
 .hg/**
 *.iml
 .idea/**
+/cmdbuild/src/main/webapp/javascripts/node/**
+/cmdbuild/src/main/webapp/javascripts/node_modules/**

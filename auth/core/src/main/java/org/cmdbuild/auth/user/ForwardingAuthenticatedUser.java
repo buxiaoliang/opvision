@@ -1,5 +1,6 @@
 package org.cmdbuild.auth.user;
 
+import java.time.LocalDateTime;
 import org.cmdbuild.auth.PasswordAuthenticator.PasswordChanger;
 
 public abstract class ForwardingAuthenticatedUser extends ForwardingUser implements AuthenticatedUser {
@@ -31,6 +32,26 @@ public abstract class ForwardingAuthenticatedUser extends ForwardingUser impleme
 	@Override
 	public boolean canChangePassword() {
 		return delegate().canChangePassword();
+	}
+
+	@Override
+	public boolean isPasswordExpired() {
+		return delegate().isPasswordExpired();
+	}
+
+	@Override
+	public LocalDateTime getLastExpiringNotificationTimestamp() {
+		return delegate().getLastExpiringNotificationTimestamp();
+	}
+
+	@Override
+	public LocalDateTime getLastPasswordChangeTimestamp() {
+		return delegate().getLastPasswordChangeTimestamp();
+	}
+
+	@Override
+	public LocalDateTime getPasswordExpirationTimestamp() {
+		return delegate().getPasswordExpirationTimestamp();
 	}
 
 }

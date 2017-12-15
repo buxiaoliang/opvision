@@ -6,7 +6,7 @@
 	Ext.define('CMDBuild.controller.management.workflow.panel.form.tabs.attachment.Attachment', {
 		extend: 'CMDBuild.controller.common.panel.module.attachment.Tab',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.constants.WidgetType',
 			'CMDBuild.core.constants.WorkflowStates'

@@ -3,12 +3,11 @@
 	Ext.define('CMDBuild.controller.common.MainViewport', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.ModuleIdentifiers',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Message'
 		],
-
 		/**
 		 * @cfg {Object}
 		 */
@@ -42,7 +41,8 @@
 			'mainViewportSelectFirstExpandedAccordionSelectableNode',
 			'mainViewportStartingEntitySelect',
 			'onMainViewportAccordionSelect',
-			'onMainViewportCreditsClick'
+			'onMainViewportCreditsClick',
+			'mainViewAccordionSetLock'
 		],
 
 		/**
@@ -67,14 +67,6 @@
 		 * @private
 		 */
 		danglingCard: null,
-
-		/**
-		 * @cfg {Array}
-		 */
-		enableSynchronizationForAccordions: [
-			'class',
-			CMDBuild.core.constants.ModuleIdentifiers.getWorkflow()
-		],
 
 		/**
 		 * @cfg {Boolean}
@@ -104,7 +96,7 @@
 		 * @property {CMDBuild.view.common.MainViewport}
 		 */
 		view: undefined,
-
+		
 		/**
 		 * @param {Object} configObject
 		 *
@@ -672,8 +664,14 @@
 							modulePanel = modulePanel.view;
 						}
 
+						// unlock process instances when change content
+						var currentItem = this.view.moduleContainer.getLayout().getActiveItem();
+						if (Ext.ClassManager.getName(currentItem) === 'CMDBuild.view.management.workflow.WorkflowView') {
+							currentItem.fireEvent("workflowUnlockOnContentChange");
+						}
+						
 						this.view.moduleContainer.getLayout().setActiveItem(modulePanel);
-
+						
 						/**
 						 * Legacy event
 						 *
@@ -681,13 +679,13 @@
 						 */
 						modulePanel.fireEvent('CM_iamtofront', parameters.parameters);
 
-						if (Ext.isObject(modulePanel.delegate) && !Ext.Object.isEmpty(modulePanel.delegate) && Ext.isFunction(modulePanel.delegate.cmfg))
+						if (Ext.isObject(modulePanel.delegate) && !Ext.Object.isEmpty(modulePanel.delegate) && Ext.isFunction(modulePanel.delegate.cmfg)){
 							modulePanel.delegate.cmfg('onModuleInit', parameters.parameters);
+						}
+							
 					}
-
 					return true;
 				}
-
 				return false;
 			},
 
@@ -697,7 +695,11 @@
 			mainViewportModuleViewsGet: function () {
 				return this.moduleViewsBuffer;
 			},
-
+		
+		getEnableSynchronizationForAccordions : function() {
+			return [CMDBuild.core.constants.ModuleIdentifiers.getClasses(), CMDBuild.core.constants.ModuleIdentifiers.getWorkflow()];
+		},
+			
 		/**
 		 * Synchronize Class and Workflow selection from relative accordions with Navigation accordion, active only in management side
 		 *
@@ -709,12 +711,12 @@
 		 */
 		onMainViewportAccordionSelect: function (parameters) {
 			parameters = Ext.isObject(parameters) ? parameters : {};
-
+			
 			if (
 				Ext.isObject(parameters) && !Ext.Object.isEmpty(parameters)
 				&& Ext.isObject(parameters.node) && !Ext.Object.isEmpty(parameters.node)
 				&& Ext.isString(parameters.id) && !Ext.isEmpty(parameters.id)
-				&& Ext.Array.contains(this.enableSynchronizationForAccordions, parameters.id)
+				&& Ext.Array.contains(this.getEnableSynchronizationForAccordions(), parameters.id)
 				&& !this.isAdministration
 			) {
 				var menuAccordionController = this.cmfg('mainViewportAccordionControllerGet', CMDBuild.core.constants.ModuleIdentifiers.getNavigation()),
@@ -727,7 +729,32 @@
 					});
 			}
 		},
-
+		/**
+		 * Lock/Unlock Navigation to avoid user's interaction during grid/card loading 
+		 * 
+		 * !! Only on MANAGEMENT module
+		 * 
+		 * @returns {Void}
+		 */
+		mainViewAccordionSetLock: function(status){
+			var controllerAccordion = this.accordionControllerExpandedGet();
+			var _component = controllerAccordion.getView().findParentByType("panel");
+	
+			
+			//this.cmfg('mainViewportAccordionSetDisabled', { identifier: _identifier, state: status }); 
+			if(_component) {
+				if(status) {
+					_component.disable();
+					_component.addCls('cmdb-lock-panel');
+				} else {
+					_component.enable();
+					_component.removeCls('cmdb-lock-panel');
+				}
+			}
+			
+			
+		},
+		
 		/**
 		 * Manages footer credits link click action
 		 *

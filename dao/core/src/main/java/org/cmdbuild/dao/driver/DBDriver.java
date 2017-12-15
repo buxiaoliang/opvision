@@ -52,7 +52,7 @@ public interface DBDriver {
 	 * 
 	 * @param localname
 	 *            is the required class's local name.
-	 * @param localname
+	 * @param namespace
 	 *            is the required class's namespace.
 	 * 
 	 * @return the requested {@link DBClass} or {@code null} if no class has
@@ -125,7 +125,7 @@ public interface DBDriver {
 	 * 
 	 * @param localname
 	 *            is the required domain's local name.
-	 * @param localname
+	 * @param namespace
 	 *            is the required domain's namespace.
 	 * 
 	 * @return the requested {@link DBDomain} or {@code null} if no class has

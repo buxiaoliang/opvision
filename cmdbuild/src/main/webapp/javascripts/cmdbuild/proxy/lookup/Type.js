@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.lookup.Type', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json',
 			'CMDBuild.model.lookup.Type'

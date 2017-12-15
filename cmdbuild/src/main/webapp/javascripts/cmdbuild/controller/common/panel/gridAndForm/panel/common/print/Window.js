@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.common.panel.gridAndForm.panel.common.print.Window', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.interfaces.FormSubmit',
 			'CMDBuild.core.Message',

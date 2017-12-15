@@ -1,6 +1,6 @@
 {
 	"description": "English",
-	"release": "2.4-dev",
+	"release": "2.5-dev",
 	"administration": {
 		"description": "Administration module",
 		"modClass": {
@@ -317,7 +317,13 @@
 		"tooltip": {
 			"editParameters": "Edit the parameters",
 			"reload": "Reload",
-			"showData": "Show data"
+			"showData": "Show data",
+			"showAll": "Show all",
+			"hideAll": "Hide all"
+		},
+		"button": {
+			"showAll": "Show all",
+			"hideAll": "Hide all"
 		},
 		"tree_names": {
 			"class": "Standard",
@@ -560,7 +566,13 @@
 				"geo_attributes": "Geographical attributes",
 				"gisNavigation": "GIS Navigation",
 				"position": "Position",
-				"zoom": "Zoom"
+				"zoom": "Zoom",
+				"shape": "Shape",
+				"shapes": {
+					"circle": "Circle",
+					"rectangle": "Rectangle",
+					"star": "Star"
+				}
 			},
 			"maptoolbar": {
 				"add": "Add",
@@ -821,6 +833,7 @@
 	"defaultLevel": "Default level",
 	"defaultTranslation": "Default translation",
 	"delay": "Delay",
+	"deleteCard": "Delete card",
 	"deleteLabel": "Delete",
 	"deleteRow": "Delete row",
 	"deletionType": "Deletion type",
@@ -921,6 +934,8 @@
 	"filterInputParameters": "Filter input parameters",
 	"filterParameters": "Filter parameters",
 	"filtersForGroups": "Filters for groups",
+	"filterTypeExpression": "Expression",
+	"filterTypeNormal": "Normal",
 	"filterView": "From Filter",
 	"find": "Find",
 	"finish": "Finish",
@@ -984,6 +999,7 @@
 	"initialLongitude": "Initial longitude",
 	"initialZoomLevel": "Initial zoom level",
 	"instance": "Instance",
+	"inputParameter": "Input Parameter",
 	"instanceName": "Instance name",
 	"inverseDescription": "Inverse description",
 	"ipType": "IP type",
@@ -1236,7 +1252,6 @@
 	"set": "Set",
 	"setAsDefault": "Set as default",
 	"setFilter": "Set Filter",
-	"setLater": "Input Parameter",
 	"settleTimeMs": "\"Settle time\" (ms)",
 	"setup": "Setup",
 	"showDetails": "Show details",

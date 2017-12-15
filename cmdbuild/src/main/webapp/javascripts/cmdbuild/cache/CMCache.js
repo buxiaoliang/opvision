@@ -4,7 +4,7 @@
 	Ext.define("CMDBuild.cache.CMCache", {
 		extend: "Ext.util.Observable",
 
-		requires: [
+		uses: [
 			'CMDBuild.core.Message',
 			'CMDBuild.proxy.Cache',
 			'CMDBuild.proxy.common.tabs.attribute.Attribute',

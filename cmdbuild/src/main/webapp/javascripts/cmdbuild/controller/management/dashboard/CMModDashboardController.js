@@ -3,7 +3,7 @@
 	Ext.define("CMDBuild.controller.management.dashboard.CMModDashboardController", {
 		extend: "CMDBuild.controller.CMBasePanelController",
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		mixins: {
 			columnController: "CMDBuild.controller.common.CMDashboardColumnController"

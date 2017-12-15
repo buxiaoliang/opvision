@@ -33,6 +33,8 @@ import static org.cmdbuild.dao.query.clause.where.WhereClauses.condition;
 import static org.cmdbuild.dao.query.clause.where.WhereClauses.not;
 import static org.cmdbuild.dao.query.clause.where.WhereClauses.or;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -156,6 +158,7 @@ public abstract class DBUserFetcher implements UserFetcher, LoggingSupport {
 		final String email = userCard.get(userEmailAttribute(), String.class);
 		final String userDescription = userCard.get(userDescriptionAttribute(), String.class);
 		final String defaultGroupName = fetchDefaultGroupNameForUser(username);
+		final LocalDateTime passwordExpirationTimestamp = fetchPasswordExpirationTimestamp(userCard);
 		final UserImplBuilder userBuilder = UserImpl.newInstanceBuilder() //
 				.withId(userId) //
 				.withUsername(defaultString(username)) //
@@ -164,7 +167,10 @@ public abstract class DBUserFetcher implements UserFetcher, LoggingSupport {
 				.withDefaultGroupName(defaultGroupName) //
 				.withActiveStatus(extendedInformation() ? userCard.get(ACTIVE, Boolean.class) : null) //
 				.withServiceStatus(extendedInformation() ? userCard.get(SERVICE, Boolean.class) : null) //
-				.withPrivilegedStatus(extendedInformation() ? userCard.get(PRIVILEGED, Boolean.class) : null);
+				.withPrivilegedStatus(extendedInformation() ? userCard.get(PRIVILEGED, Boolean.class) : null) //
+				.withpasswordExpirationTimestamp(passwordExpirationTimestamp) //
+				.withLastPasswordChange(fetchTimestamp(userCard, userLastPasswordChangeTimestampAttribute())) //
+				.withLastExpiringNotification(fetchTimestamp(userCard, userLastExpiringNotification()));
 
 		final List<String> userGroups = fetchGroupNamesForUser(userId);
 		for (final String groupName : userGroups) {
@@ -173,6 +179,23 @@ public abstract class DBUserFetcher implements UserFetcher, LoggingSupport {
 		}
 		return userBuilder.build();
 	}
+
+	@Deprecated //favour general method
+	private LocalDateTime fetchPasswordExpirationTimestamp(CMCard userCard) {
+		org.joda.time.DateTime pe = userCard.get(userPasswordExpirationTimestampAttribute(), org.joda.time.DateTime.class , null);
+		if (pe == null)
+			return null;
+		return LocalDateTime.of(pe.getYear(), pe.getMonthOfYear(), pe.getDayOfMonth(), pe.getHourOfDay(), pe.getMinuteOfHour());
+	}
+	
+	private LocalDateTime fetchTimestamp(CMCard userCard, String attribute) {
+		org.joda.time.DateTime pe = userCard.get(attribute, org.joda.time.DateTime.class , null);
+		if (pe == null)
+			return null;
+		return LocalDateTime.of(pe.getYear(), pe.getMonthOfYear(), pe.getDayOfMonth(), pe.getHourOfDay(), pe.getMinuteOfHour(), pe.getSecondOfMinute(), pe.getMillisOfSecond());
+	}
+	
+	
 
 	protected abstract boolean extendedInformation();
 
@@ -292,7 +315,7 @@ public abstract class DBUserFetcher implements UserFetcher, LoggingSupport {
 						exclude(USER, userClass().getKeyAttributeName(), requireNonNull(exclude)), //
 						query(USER, asList(USERNAME, DESCRIPTION), query), //
 						activeOnly ? activeCondition(USER) : alwaysTrue()) //
-				) //
+		) //
 				.orderBy(safe(sort).entrySet() //
 						.stream() //
 						.collect(toMap(input -> attribute(USER, input.getKey()),
@@ -314,7 +337,7 @@ public abstract class DBUserFetcher implements UserFetcher, LoggingSupport {
 	}
 
 	private static WhereClause query(final Alias alias, final Iterable<String> names, final String query) {
-		return isBlank(query) || isEmpty(names) ? alwaysTrue() : and(from(names) //
+		return isBlank(query) || isEmpty(names) ? alwaysTrue() : or(from(names) //
 				.transform(input -> condition(attribute(alias, input), contains(query))));
 	}
 
@@ -339,7 +362,7 @@ public abstract class DBUserFetcher implements UserFetcher, LoggingSupport {
 				.where(or( //
 						condition(attribute(target, SERVICE), eq(true)), //
 						condition(attribute(target, PRIVILEGED), eq(true))) //
-				) //
+		) //
 				.run();
 		final List<CMUser> allUsers = Lists.newArrayList();
 		for (final CMQueryRow row : result) {
@@ -381,5 +404,9 @@ public abstract class DBUserFetcher implements UserFetcher, LoggingSupport {
 			throw new IllegalArgumentException("Unsupported login type");
 		}
 	}
+	
+	protected abstract String userPasswordExpirationTimestampAttribute();
+	protected abstract String userLastPasswordChangeTimestampAttribute();
+	protected abstract String userLastExpiringNotification();
 
 }

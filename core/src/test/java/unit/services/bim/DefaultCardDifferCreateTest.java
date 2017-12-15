@@ -18,8 +18,8 @@ import org.cmdbuild.dao.entrytype.CMAttribute;
 import org.cmdbuild.dao.entrytype.CMClass;
 import org.cmdbuild.dao.view.CMDataView;
 import org.cmdbuild.logic.data.lookup.LookupLogic;
+import org.cmdbuild.services.bim.BimDataView;
 import org.cmdbuild.services.bim.connector.DefaultCardDiffer;
-import org.cmdbuild.services.bim.connector.MapperRules;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -31,12 +31,12 @@ public class DefaultCardDifferCreateTest {
 	private static final String THECODE = "CodeValue1";
 	private DefaultCardDiffer differ;
 	private final CMDataView dataView = mock(CMDataView.class);
-	private final MapperRules mapperRules = mock(MapperRules.class);
+	private final BimDataView bimDataView = mock(BimDataView.class);
 	private final LookupLogic lookupLogic = mock(LookupLogic.class);
 
 	@Before
 	public void setUp() {
-		this.differ = new DefaultCardDiffer(dataView, lookupLogic, mapperRules);
+		this.differ = new DefaultCardDiffer(dataView, lookupLogic, bimDataView);
 	}
 
 	@Test
@@ -55,7 +55,7 @@ public class DefaultCardDifferCreateTest {
 		inorder.verify(source).getTypeName();
 		inorder.verify(dataView).findClass(CLASS_NAME);
 		verifyNoMoreInteractions(dataView, source);
-		verifyZeroInteractions(mapperRules, lookupLogic);
+		verifyZeroInteractions(bimDataView, lookupLogic);
 	}
 
 	@Test
@@ -74,7 +74,7 @@ public class DefaultCardDifferCreateTest {
 		differ.createCard(source);
 
 		// then
-		verifyZeroInteractions(mapperRules, lookupLogic);
+		verifyZeroInteractions(bimDataView, lookupLogic);
 		final InOrder inorder = inOrder(dataView, source);
 		inorder.verify(source).getTypeName();
 		inorder.verify(dataView).findClass(CLASS_NAME);
@@ -104,7 +104,7 @@ public class DefaultCardDifferCreateTest {
 		final CMCard card = differ.createCard(source);
 
 		// then
-		verifyZeroInteractions(mapperRules, lookupLogic);
+		verifyZeroInteractions(bimDataView, lookupLogic);
 		final InOrder inorder = inOrder(dataView, source);
 		inorder.verify(source).getTypeName();
 		inorder.verify(dataView).findClass(CLASS_NAME);
@@ -143,7 +143,7 @@ public class DefaultCardDifferCreateTest {
 		final CMCard card1 = differ.createCard(source);
 
 		// then
-		verifyZeroInteractions(mapperRules, lookupLogic);
+		verifyZeroInteractions(bimDataView, lookupLogic);
 		final InOrder inorder = inOrder(dataView, source, cardDefinition);
 		inorder.verify(source).getTypeName();
 		inorder.verify(dataView).findClass(CLASS_NAME);

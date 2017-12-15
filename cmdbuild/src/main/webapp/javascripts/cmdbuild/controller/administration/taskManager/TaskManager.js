@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.administration.taskManager.TaskManager', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		mixins: ['CMDBuild.controller.administration.taskManager.ExternalServices'],
 

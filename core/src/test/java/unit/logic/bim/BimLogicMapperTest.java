@@ -44,7 +44,7 @@ public class BimLogicMapperTest {
 		dataPersistence = mock(BimPersistence.class);
 		dataModelManager = mock(BimDataModelManager.class);
 		mapper = mock(Mapper.class);
-		bimLogic = new DefaultSynchronizationLogic(serviceFacade, dataPersistence, mapper, null, null);
+		bimLogic = new DefaultSynchronizationLogic(serviceFacade, dataPersistence, mapper);
 	}
 
 	@Test

@@ -27,6 +27,8 @@ public interface AuthenticatedUser extends CMUser {
 	/**
 	 * Method used to replace the old password with a new one
 	 * 
+	 * @param oldPassword
+	 * @param newPassword
 	 * @return true if the password has been changed successfully, false
 	 *         otherwise
 	 */
@@ -34,7 +36,14 @@ public interface AuthenticatedUser extends CMUser {
 
 	/**
 	 * Returns true if the user can change password, false otherwise
+	 * @return true if the user can change password, false otherwise
 	 */
 	public boolean canChangePassword();
+	
+	/**
+	 * @return true if password has expired
+	 */
+	@Override
+	boolean isPasswordExpired();
 
 }

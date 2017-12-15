@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.patchManager.PatchManager', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: ['CMDBuild.proxy.PatchManager'],
+		uses: ['CMDBuild.proxy.PatchManager'],
 
 		/**
 		 * @cfg {Array}

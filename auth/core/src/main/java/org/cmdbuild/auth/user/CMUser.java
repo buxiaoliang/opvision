@@ -1,5 +1,6 @@
 package org.cmdbuild.auth.user;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 public interface CMUser {
@@ -77,5 +78,28 @@ public interface CMUser {
 	 */
 	@Override
 	boolean equals(final Object obj);
+	
+	/**
+	 * @return true if password has expired
+	 */
+	boolean isPasswordExpired();
+	
+	/**
+	 * TODO javadoc
+	 * @return 
+	 */
+	LocalDateTime getPasswordExpirationTimestamp();
+	
+	/**
+	 * TODO javadoc
+	 * @return 
+	 */
+	LocalDateTime getLastPasswordChangeTimestamp();
+	
+	/**
+	 * TDO javadoc
+	 * @return 
+	 */
+	LocalDateTime getLastExpiringNotificationTimestamp();
 
 }

@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.lookup.list.FormPanel', {
 		extend: 'Ext.form.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.lookup.Lookup'

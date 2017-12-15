@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.administration.classes.tabs.widgets.form.Ping', {
 		extend: 'CMDBuild.controller.administration.classes.tabs.widgets.form.Abstract',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.administration.classes.tabs.widgets.ping.Definition'
 		],

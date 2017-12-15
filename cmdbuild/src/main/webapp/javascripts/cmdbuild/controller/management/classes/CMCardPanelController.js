@@ -1,9 +1,8 @@
 (function() {
 
-	Ext.require(['CMDBuild.proxy.Card']);
 
 	Ext.define("CMDBuild.controller.management.classes.CMCardPanelController", {
-
+		uses: ['CMDBuild.proxy.Card'],
 		mixins : {
 			observable : "Ext.util.Observable"
 		},

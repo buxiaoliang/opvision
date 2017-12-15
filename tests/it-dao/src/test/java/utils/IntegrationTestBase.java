@@ -1,10 +1,10 @@
 package utils;
 
+import static org.cmdbuild.auth.context.PrivilegeContexts.systemPrivilegeContext;
 import static org.mockito.Mockito.mock;
 
 import org.cmdbuild.auth.acl.CMGroup;
 import org.cmdbuild.auth.acl.PrivilegeContext;
-import org.cmdbuild.auth.context.SystemPrivilegeContext;
 import org.cmdbuild.auth.user.AuthenticatedUser;
 import org.cmdbuild.auth.user.OperationUser;
 import org.cmdbuild.dao.driver.DBDriver;
@@ -16,12 +16,15 @@ import org.cmdbuild.data.store.lookup.LookupStorableConverter;
 import org.cmdbuild.data.store.lookup.LookupStore;
 import org.junit.After;
 import org.junit.BeforeClass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class containing methods for initializing the integration tests database
  */
 public abstract class IntegrationTestBase {
 
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
 	protected static final DBInitializer dbInitializer = new DBInitializer();
 
 	private final DBDriver testDriver;
@@ -56,7 +59,7 @@ public abstract class IntegrationTestBase {
 
 	public OperationUser operationUser() {
 		final AuthenticatedUser authenticatedUser = mock(AuthenticatedUser.class);
-		final PrivilegeContext privilegeContext = new SystemPrivilegeContext();
+		final PrivilegeContext privilegeContext = systemPrivilegeContext();
 		final CMGroup group = mock(CMGroup.class);
 		return new OperationUser(authenticatedUser, privilegeContext, group);
 	}

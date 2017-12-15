@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.domain.tabs.properties.FormPanel', {
 		extend: 'Ext.form.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.administration.domain.tabs.Properties'

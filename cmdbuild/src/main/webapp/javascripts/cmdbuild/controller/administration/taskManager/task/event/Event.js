@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.administration.taskManager.task.event.Event', {
 		extend: 'CMDBuild.controller.administration.taskManager.task.Abstract',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.administration.taskManager.Form}

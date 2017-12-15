@@ -3,34 +3,35 @@ package org.cmdbuild.bim.model.implementation;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cmdbuild.bim.model.AttributeDefinition;
 import org.cmdbuild.bim.model.EntityDefinition;
 
 public class ImportEntityDefinition implements EntityDefinition {
 
-	private String typeName;
-	private String label;
+	private final String ifcType;
+	private String cmClass;
 	List<AttributeDefinition> attributes;
 
-	public ImportEntityDefinition(String name) {
+	public ImportEntityDefinition(final String name) {
 		attributes = new ArrayList<AttributeDefinition>();
-		label = "";
-		this.typeName = name;
+		cmClass = StringUtils.EMPTY;
+		this.ifcType = name;
 	}
 
 	@Override
-	public String getTypeName() {
-		return typeName;
+	public String getIfcType() {
+		return ifcType;
 	}
 
 	@Override
-	public void setLabel(String label) {
-		this.label = label;
+	public void setCmClass(final String label) {
+		this.cmClass = label;
 	}
 
 	@Override
-	public String getLabel() {
-		return label;
+	public String getCmClass() {
+		return cmClass;
 	}
 
 	@Override
@@ -41,24 +42,6 @@ public class ImportEntityDefinition implements EntityDefinition {
 	@Override
 	public boolean isValid() {
 		return true;
-	}
-
-	@Override
-	public String getShape() {
-		return null;
-	}
-
-	@Override
-	public void setShape(String shape) {
-	}
-
-	@Override
-	public void setContainerAttribute(String containerAttribute) {
-	}
-
-	@Override
-	public String getContainerAttribute() {
-		return null;
 	}
 
 }

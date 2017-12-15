@@ -17,7 +17,7 @@ import org.cmdbuild.dms.cmis.CmisDmsConfiguration;
 import org.cmdbuild.logger.Log;
 import org.cmdbuild.services.Settings;
 
-public class DmsProperties extends DefaultProperties implements AlfrescoDmsConfiguration, CmisDmsConfiguration {
+public final class DmsProperties extends DefaultProperties implements AlfrescoDmsConfiguration, CmisDmsConfiguration {
 
 	private static final long serialVersionUID = 1L;
 
@@ -84,8 +84,8 @@ public class DmsProperties extends DefaultProperties implements AlfrescoDmsConfi
 
 	private final Collection<ChangeListener> changeListeners;
 
-	public DmsProperties() {
-		super();
+	public DmsProperties(PropertyContainer propertyContainer) {
+		super(propertyContainer);
 		changeListeners = newHashSet();
 		for (final Entry<String, String> entry : DEFAULTS.entrySet()) {
 			setProperty(entry.getKey(), entry.getValue());

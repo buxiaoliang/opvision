@@ -10,7 +10,7 @@
 	Ext.define('CMDBuild.controller.management.workflow.panel.form.Form', {
 		extend: 'CMDBuild.controller.common.panel.gridAndForm.panel.form.Form',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.controller.management.workflow.panel.form.tabs.activity.Activity'
 		],

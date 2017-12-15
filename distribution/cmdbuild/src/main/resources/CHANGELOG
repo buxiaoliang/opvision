@@ -1,5 +1,16 @@
-CMDBuild 2.4.4 (released YYYY/MM/DD)
 
+CMDBuild 2.5.1 (released XXXX-XX-XX)
+
+NEW FEATURES
+
+ * something
+
+FIXES
+
+* something
+
+
+CMDBuild 2.5.0 (released 2017-11-27)
 
 NEW FEATURES
 
@@ -15,6 +26,21 @@ NEW FEATURES
 
  * Import mapping of BIM projects can be loaded from the administration module
 
+ * Privilege of a card in the case of a default group
+
+ * Error handling when importing a CSV file
+
+ * Expressions within filters
+
+ * Report as an attachment of email notification within asynchronous tasks
+ 
+ * Compress javascripts to speed up application loading
+
+ * Displayable attributes in list for DataView
+ 
+ * Add password expiration policy
+ 
+ * Added Ukrainian translation
 
 FIXES
 
@@ -102,11 +128,42 @@ FIXES
 
  * Empty process drop-down while adding start workflow widget to classes
 
+ * Console errors while start/stop task
+
+ * Client libraries update
+
+ * Resizable Textarea fields have some problems when inside wrappers
+
+ * Optimized endpoint implementation
+
+ * DataView interface code implementation
+
+ * Navigation chronology doesn't works on processes
+
+ * DataView on processes allow to edit process as card
+
+ * Root of all classes visible in NavigationTree origin combobox
+
+ * A View with a filter on a Process is treated as a Class
+
+ * Pre-valorization not working on createModifyCard widget
+ 
+ * History records displayed with wrong order
+ 
+ * SelectedAttributesGroup workflow metadata shows empty form
+
+ * Fields of Add attachments form are to tight
+ 
+ * Widget createModifyCard doesn't working on card
+ 
+ * Mask on toolbar during grid data loading
+ 
+ * Adding openReport widget, the dropdown show only 25 items
+ 
+ * Missing icon on administration module
 
 
-
-
-CMDBuild 2.4.3 (released 2017/02/22)
+CMDBuild 2.4.3 (released 2017-02-22)
 
 
 NEW FEATURES
@@ -268,29 +325,11 @@ FIXES
 
  * System classes not displayed in domain comboboxes
 
- * System classes not displayed in permissions tab
-
- * System classes not displayed in classes administration accordion
-
- * IE8 freezed on startup
-
- * NavigationTree: not managed active state on administration
-
- * Class with no write permissions selectable in import CSV
-
- * System classes not displayed in administration
-
- * Class print routing error
-
- * GIS navigation tree doesn't correctly select nodes on subsequent read action
-
- * Stack on empty grid after removing last page report while on page next to the first
 
 
 
 
-
-CMDBuild 2.4.2 (released 2016/10/18)
+CMDBuild 2.4.2 (released 2016-10-18)
 
 
 NEW FEATURES
@@ -424,7 +463,7 @@ FIXES
 
 
 
-CMDBuild 2.4.1 (released 2016/06/16)
+CMDBuild 2.4.1 (released 2016-06-16)
 
 
 NEW FEATURES
@@ -592,7 +631,7 @@ FIXES
 
 
 
-CMDBuild 2.4.0 (released 2016/03/31)
+CMDBuild 2.4.0 (released 2016-03-31)
 
 
 NEW FEATURES
@@ -822,7 +861,7 @@ FIXES
 
 
 
-CMDBuild 2.3.4 (released 2015/10/21)
+CMDBuild 2.3.4 (released 2015-10-21)
 
 
 NEW FEATURES
@@ -906,7 +945,7 @@ FIXES
 
 
 
-CMDBuild 2.3.3 (released 2015/08/06)
+CMDBuild 2.3.3 (released 2015-08-06)
 
 
 NEW FEATURES
@@ -986,7 +1025,7 @@ FIXES
 
 
 
-CMDBuild 2.3.2 (released 2015/06/05)
+CMDBuild 2.3.2 (released 2015-06-05)
 
 
 NEW FEATURES
@@ -1092,7 +1131,7 @@ FIXES
 
 
 
-CMDBuild 2.3.1 (released 2015/04/30)
+CMDBuild 2.3.1 (released 2015-04-30)
 
 
 NEW FEATURES
@@ -1202,7 +1241,7 @@ FIXES
 
 
 
-CMDBuild 2.3.0 (released 2015/02/03)
+CMDBuild 2.3.0 (released 2015-02-03)
 
 
 NEW FEATURES
@@ -1298,7 +1337,7 @@ FIXES
 
 
 
-CMDBuild 2.2.2 (released 2014/11/17)
+CMDBuild 2.2.2 (released 2014-11-17)
 
 
 NEW FEATURES
@@ -1444,7 +1483,7 @@ FIXES
 
 
 
-CMDBuild 2.2.1 (released 2014/08/06)
+CMDBuild 2.2.1 (released 2014-08-06)
 
 
 NEW FEATURES
@@ -1490,7 +1529,7 @@ FIXES
 
 
 
-CMDBuild 2.2.0 (released 2014/06/13)
+CMDBuild 2.2.0 (released 2014-06-13)
 
 
 NEW FEATURES
@@ -1550,7 +1589,7 @@ FIXES
 
 
 
-CMDBuild 2.1.8 (released 2014/03/17)
+CMDBuild 2.1.8 (released 2014-03-17)
 
 
 NEW FEATURES
@@ -1592,7 +1631,7 @@ FIXES
 
 
 
-CMDBuild 2.1.7 (released 2014/02/14)
+CMDBuild 2.1.7 (released 2014-02-14)
 
 
 NEW FEATURES
@@ -1646,7 +1685,7 @@ FIXES
 
 
 
-CMDBuild 2.1.6 (released 2013/12/23)
+CMDBuild 2.1.6 (released 2013-12-23)
 
 
 NEW FEATURES
@@ -1714,7 +1753,7 @@ FIXES
 
 
 
-CMDBuild 2.1.5 (released 2013/10/31)
+CMDBuild 2.1.5 (released 2013-10-31)
 
 
 NEW FEATURES
@@ -1880,7 +1919,7 @@ FIXES
 
 
 
-CMDBuild 2.1.4 (released 2013/08/02)
+CMDBuild 2.1.4 (released 2013-08-02)
 
 
 NEW FEATURES
@@ -1960,7 +1999,7 @@ FIXES
 
 
 
-CMDBuild 2.1.3.3 (released 2013/07/05)
+CMDBuild 2.1.3.3 (released 2013-07-05)
 
 
 FIXES
@@ -1971,7 +2010,7 @@ FIXES
 
 
 
-CMDBuild 2.1.3.2 (released 2013/07/05)
+CMDBuild 2.1.3.2 (released 2013-07-05)
 
 
 NEW FEATURES
@@ -1997,7 +2036,7 @@ FIXES
 
 
 
-CMDBuild 2.1.3.1 (released 2013/06/25)
+CMDBuild 2.1.3.1 (released 2013-06-25)
 
 
 FIXES
@@ -2014,7 +2053,7 @@ FIXES
 
 
 
-CMDBuild 2.1.3 (released 2013/06/21)
+CMDBuild 2.1.3 (released 2013-06-21)
 
 
 FIXES
@@ -2049,7 +2088,7 @@ FIXES
 
 
 
-CMDBuild 2.1.2.2 (released 2013/06/18)
+CMDBuild 2.1.2.2 (released 2013-06-18)
 
 
 NEW FEATURES
@@ -2159,7 +2198,7 @@ FIXES
 
 
 
-CMDBuild 2.1.2.1 (released 2013/05/31)
+CMDBuild 2.1.2.1 (released 2013-05-31)
 
 
 FIXES
@@ -2178,7 +2217,7 @@ FIXES
 
 
 
-CMDBuild 2.1.2 (released 2013/05/27)
+CMDBuild 2.1.2 (released 2013-05-27)
 
 
 NEW FEATURES
@@ -2252,7 +2291,7 @@ FIXES
 
 
 
-CMDBuild 2.1.1 (released 2013/05/13)
+CMDBuild 2.1.1 (released 2013-05-13)
 
 
 FIXES
@@ -2269,7 +2308,7 @@ FIXES
 
 
 
-CMDBuild 2.1.0 (released 2013/05/09)
+CMDBuild 2.1.0 (released 2013-05-09)
 
 
 NEW FEATURES
@@ -2288,7 +2327,7 @@ NEW FEATURES
 
 
 
-CMDBuild 2.0.4 (released 2013/02/07)
+CMDBuild 2.0.4 (released 2013-02-07)
 
 
 NEW FEATURES
@@ -2324,7 +2363,7 @@ FIXES
 
 
 
-CMDBuild 2.0.3 (released 2012/12/21)
+CMDBuild 2.0.3 (released 2012-12-21)
 
 
 NEW FEATURES
@@ -2376,7 +2415,7 @@ FIXES
 
 
 
-CMDBuild 2.0.2 (released 2012/10/08)
+CMDBuild 2.0.2 (released 2012-10-08)
 
 
 NEW FEATURES
@@ -2398,7 +2437,7 @@ FIXES
 
 
 
-CMDBuild 2.0.1 (released 2012/09/17)
+CMDBuild 2.0.1 (released 2012-09-17)
 
 
 NEW FEATURES
@@ -2420,7 +2459,7 @@ FIXES
 
 
 
-CMDBuild 2.0.0 (released 2012/08/31)
+CMDBuild 2.0.0 (released 2012-08-31)
 
 
 NEW MAJOR FEATURES
@@ -2466,7 +2505,7 @@ FIXES
 
 
 
-CMDBuild 1.5.4 (released 2012/05/11)
+CMDBuild 1.5.4 (released 2012-05-11)
 
 
 NEW FEATURES
@@ -2489,7 +2528,7 @@ FIXES
 
 
 
-CMDBuild 1.5.3 (released 2012/04/04)
+CMDBuild 1.5.3 (released 2012-04-04)
 
 
 NEW FEATURES
@@ -2516,7 +2555,7 @@ FIXES
 
 
 
-CMDBuild 1.5.2 (released 2012/03/19)
+CMDBuild 1.5.2 (released 2012-03-19)
 
 
 NEW FEATURES
@@ -2547,7 +2586,7 @@ FIXES
 
 
 
-CMDBuild 1.5.1 (released 2012/03/01)
+CMDBuild 1.5.1 (released 2012-03-01)
 
 
 NEW FEATURES
@@ -2595,7 +2634,7 @@ FIXES
 
 
 
-CMDBuild 1.5.0 (released 2012/01/31)
+CMDBuild 1.5.0 (released 2012-01-31)
 
 
 NEW FEATURES
@@ -2695,7 +2734,7 @@ FIXES
 
 
 
-CMDBuild 1.4.0 (released 2011/09/19)
+CMDBuild 1.4.0 (released 2011-09-19)
 
 
 NEW FEATURES
@@ -2763,7 +2802,7 @@ FIXES
 
 
 
-CMDBuild 1.3.1 (released 2011/03/16)
+CMDBuild 1.3.1 (released 2011-03-16)
 
 
 NEW FEATURES

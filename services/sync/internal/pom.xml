@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.cmdbuild</groupId>
 		<artifactId>cmdbuild-parent</artifactId>
-		<version>2.4.4-SNAPSHOT</version>
+		<version>2.5.1-SNAPSHOT</version>
 		<relativePath>../../../parent</relativePath>
 	</parent>
 	<artifactId>cmdbuild-services-sync-internal</artifactId>

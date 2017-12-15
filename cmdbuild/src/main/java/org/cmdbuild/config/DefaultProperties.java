@@ -1,38 +1,72 @@
 package org.cmdbuild.config;
 
-import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Properties;
+import java.util.Map;
+import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 
-public class DefaultProperties extends Properties {
+public class DefaultProperties {
 
-	private static final long serialVersionUID = -1L;
+	private final PropertyContainer propertyContainer;
 
-	private File file;
+	public DefaultProperties(PropertyContainer propertyContainer) {
+		checkNotNull(propertyContainer);
+		this.propertyContainer = propertyContainer;
+	}
 
-	public void load(final String file) throws IOException {
-		this.file = new File(file);
-		load(new FileInputStream(file));
+	public PropertyContainer getPropertyContainer() {
+		return propertyContainer;
 	}
 
 	public void store() throws IOException {
-		store(new FileOutputStream(file), EMPTY);
+		propertyContainer.store();
 	}
 
+	@Deprecated
 	public File getPath() {
-		return file.getParentFile();
+		return propertyContainer.getFile().getParentFile();
 	}
 
-	@Override
-	public final synchronized Object setProperty(final String key, final String value) {
-		return setProperty0(key, value);
+	public String setProperty(final String key, final String value) {
+		return propertyContainer.setProperty(key, value);
 	}
 
-	protected Object setProperty0(final String key, final String value) {
-		return super.setProperty(key, value);
+	public String getProperty(String key) {
+		return propertyContainer.getProperty(key);
 	}
+
+	public String getProperty(String key, String defaultValue) {
+		return firstNonNull(propertyContainer.getProperty(key), defaultValue);
+	}
+
+	/**
+	 * return read only map view of content
+	 *
+	 * @return
+	 */
+	public Map<String, String> asMap() {
+		return propertyContainer.getPropertiesAsMap();
+	}
+
+	public interface PropertyContainer {
+
+		public void store() throws IOException;
+
+		@Deprecated
+		public File getFile();
+
+		public String setProperty(String key, String value);
+
+		public String getProperty(String key);
+
+		/**
+		 * return read only map view of content
+		 *
+		 * @return
+		 */
+		public Map<String, String> getPropertiesAsMap();
+	}
+
 }

@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.management.accordion.Report', {
 		extend: 'CMDBuild.view.common.abstract.Accordion',
 
-		requires: ['CMDBuild.model.report.accordion.Management'],
+		uses: ['CMDBuild.model.report.accordion.Management'],
 
 		/**
 		 * @cfg {CMDBuild.controller.management.accordion.Report}

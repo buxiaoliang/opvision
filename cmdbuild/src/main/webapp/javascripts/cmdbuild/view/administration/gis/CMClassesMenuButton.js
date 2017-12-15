@@ -12,7 +12,7 @@
 	Ext.define('CMDBuild.view.administration.gis.CMClassesMenuButton', {
 		extend: 'Ext.button.Button',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Global',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Utils',

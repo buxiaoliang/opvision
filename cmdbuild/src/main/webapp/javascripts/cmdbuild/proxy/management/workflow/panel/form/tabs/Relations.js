@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.management.workflow.panel.form.tabs.Relations', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json'
 		],

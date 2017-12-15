@@ -2,7 +2,7 @@ package org.cmdbuild.config;
 
 import org.cmdbuild.services.Settings;
 
-public class CmdbfProperties extends DefaultProperties implements CmdbfConfiguration {
+public final class CmdbfProperties extends DefaultProperties implements CmdbfConfiguration {
 
 	private static final long serialVersionUID = 1L;
 
@@ -12,8 +12,8 @@ public class CmdbfProperties extends DefaultProperties implements CmdbfConfigura
 	private static final String SCHEMA_LOCATION = "schemalocation";
 	private static final String RECONCILIATION_RULES = "reconciliationrules";
 
-	public CmdbfProperties() {
-		super();
+	public CmdbfProperties(PropertyContainer propertyContainer) {
+		super(propertyContainer);
 		setProperty(MDR_ID, "http://www.cmdbuild.org");
 		setProperty(SCHEMA_LOCATION, "http://localhost:8080/cmdbuild/services/cmdb-schema");
 	}

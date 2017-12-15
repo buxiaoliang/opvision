@@ -14,15 +14,6 @@ public class BimserverRevision implements BimRevision {
 	}
 
 	@Override
-	public String getIdentifier() {
-		return Long.toString(getOid());
-	}
-
-	public long getOid() {
-		return revision.getOid();
-	}
-
-	@Override
 	public String getProjectId() {
 		return Long.toString(revision.getProjectId());
 	}
@@ -30,11 +21,6 @@ public class BimserverRevision implements BimRevision {
 	@Override
 	public Date getDate() {
 		return revision.getDate();
-	}
-
-	@Override
-	public String getUser() {
-		return Long.toString(revision.getUserId());
 	}
 
 	@Override

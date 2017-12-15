@@ -7,7 +7,7 @@
 	Ext.define('CMDBuild.controller.management.common.tabs.email.EmailWindow', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.controller.common.abstract.Widget',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Message',

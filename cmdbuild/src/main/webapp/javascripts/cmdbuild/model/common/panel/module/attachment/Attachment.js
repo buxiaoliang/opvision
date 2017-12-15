@@ -1,13 +1,11 @@
 (function () {
 
-	Ext.require([
-		'CMDBuild.core.configurations.DataFormat',
-		'CMDBuild.core.constants.Proxy'
-	]);
-
 	Ext.define('CMDBuild.model.common.panel.module.attachment.Attachment', {
 		extend: 'Ext.data.Model',
-
+		uses: [
+			'CMDBuild.core.configurations.DataFormat',
+			'CMDBuild.core.constants.Proxy'
+		],
 		fields: [
 			{ name: CMDBuild.core.constants.Proxy.AUTHOR, type: 'string' },
 			{ name: CMDBuild.core.constants.Proxy.CATEGORY, type: 'string' },

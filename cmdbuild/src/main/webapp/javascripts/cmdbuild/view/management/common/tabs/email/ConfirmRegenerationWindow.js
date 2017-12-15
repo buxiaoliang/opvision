@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.management.common.tabs.email.ConfirmRegenerationWindow', {
 		extend: 'CMDBuild.core.window.AbstractModal',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.common.tabs.email.Email'
 		],

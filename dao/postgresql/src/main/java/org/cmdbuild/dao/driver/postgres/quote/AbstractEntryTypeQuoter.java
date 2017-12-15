@@ -1,5 +1,6 @@
 package org.cmdbuild.dao.driver.postgres.quote;
 
+import static com.google.common.base.Objects.equal;
 import static java.lang.String.format;
 
 import org.cmdbuild.dao.entrytype.CMEntryType;
@@ -17,7 +18,7 @@ public abstract class AbstractEntryTypeQuoter implements Quoter {
 
 	protected String quoteClassOrDomain(final CMIdentifier identifier) {
 		final String quotedTypeName;
-		if (identifier.getNameSpace() != CMIdentifier.DEFAULT_NAMESPACE) {
+		if (!equal(identifier.getNameSpace(), CMIdentifier.DEFAULT_NAMESPACE)) {
 			quotedTypeName = format("%s%s%s", //
 					IdentQuoter.quote(identifier.getNameSpace()), //
 					NAMESPACE_LOCALNAME_SEPARATOR, //

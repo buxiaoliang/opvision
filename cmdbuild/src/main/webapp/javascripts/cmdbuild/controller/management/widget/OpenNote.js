@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.widget.OpenNote', {
 		extend: 'CMDBuild.controller.common.abstract.Widget',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.management.common.CMWidgetManagerController}

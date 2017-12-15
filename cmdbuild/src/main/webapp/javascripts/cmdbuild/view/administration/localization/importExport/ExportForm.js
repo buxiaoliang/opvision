@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.localization.importExport.ExportForm', {
 		extend: 'Ext.form.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.localization.Export',

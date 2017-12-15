@@ -1,6 +1,6 @@
 {
 	"description": "Српски",
-	"release": "2.4-dev",
+	"release": "2.5-dev",
 	"administration": {
 		"description": "Администрациони модул",
 		"modClass": {
@@ -317,7 +317,13 @@
 		"tooltip": {
 			"editParameters": "Измени параметре",
 			"reload": "Поново учитај",
-			"showData": "Прикажи подаци"
+			"showData": "Прикажи подаци",
+			"showAll": "<em>Show all</em>",
+			"hideAll": "<em>Hide all</em>"
+		},
+		"button": {
+			"showAll": "<em>Show all</em>",
+			"hideAll": "<em>Hide all</em>"
 		},
 		"tree_names": {
 			"class": "Стандардне",
@@ -560,7 +566,13 @@
 				"geo_attributes": "Географски атрибути",
 				"gisNavigation": "GIS Навигација",
 				"position": "Позиција",
-				"zoom": "Увећање"
+				"zoom": "Увећање",
+				"shape": "<em>Shape</em>",
+				"shapes": {
+					"circle": "<em>Circle</em>",
+					"rectangle": "<em>Rectangle</em>",
+					"star": "<em>Star</em>"
+				}
 			},
 			"maptoolbar": {
 				"add": "Додај",
@@ -922,6 +934,8 @@
 	"filterInputParameters": "<em>Filter input parameters</em>",
 	"filterParameters": "<em>Filter parameters</em>",
 	"filtersForGroups": "Групни филтер",
+	"filterTypeExpression": "<em>Expression</em>",
+	"filterTypeNormal": "<em>Normal</em>",
 	"filterView": "Филтер од",
 	"find": "<em>Find</em>",
 	"finish": "Крај",
@@ -984,6 +998,7 @@
 	"initialLatitude": "Почетна географска ширина",
 	"initialLongitude": "Почетна географска дужина",
 	"initialZoomLevel": "Почетно увећање",
+	"inputParameter": "Улазни параметар",
 	"instance": "Инстанца",
 	"instanceName": "Назив инстанце",
 	"inverseDescription": "Инверзни опис",
@@ -1237,7 +1252,6 @@
 	"set": "Постави",
 	"setAsDefault": "Постави као подразумевани",
 	"setFilter": "Постави филтер",
-	"setLater": "Улазни параметар",
 	"settleTimeMs": "<em>\"Settle time\" (ms)</em>",
 	"setup": "Општа подешавања",
 	"showDetails": "Прикажи детаље",

@@ -7,8 +7,7 @@ public class BimserverSerializer implements Serializer {
 
 	private final SSerializerPluginConfiguration serializerByContentType;
 
-	protected BimserverSerializer(
-			final SSerializerPluginConfiguration serializerByContentType) {
+	protected BimserverSerializer(final SSerializerPluginConfiguration serializerByContentType) {
 		this.serializerByContentType = serializerByContentType;
 	}
 

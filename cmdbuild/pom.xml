@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.cmdbuild</groupId>
 		<artifactId>cmdbuild-parent</artifactId>
-		<version>2.4.4-SNAPSHOT</version>
+		<version>2.5.1-SNAPSHOT</version>
 		<relativePath>../parent</relativePath>
 	</parent>
 	<artifactId>cmdbuild</artifactId>
@@ -181,6 +181,20 @@
 		<finalName>cmdbuild-${project.version}</finalName>
 		<plugins>
 			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>2.6.1</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>src/main/webapp/javascripts/cmdbuild/collection/</directory>
+							<includes>
+								<include>*.js</include>
+							</includes>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>${maven-war-plugin.version}</version>
 				<configuration>
@@ -210,5 +224,57 @@
 				<artifactId>tomcat-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
-	</build>
+	</build>	
+	
+	<profiles>
+		<profile>
+			<id>run-frontend-maven-plugin</id>			
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<!-- 
+												 
+							 You can disable the frontend-maven-plugin by passing -P-run-frontend-maven-plugin to maven, or by disabling
+							 the run-frontend-maven-plugin profile in another way.
+							 
+							 FIXME: remove this profile, merge plugin with default config, once everyone has moved to mvn >=3.1
+							 
+					-->
+					<plugin>
+						<groupId>com.github.eirslett</groupId>
+						<artifactId>frontend-maven-plugin</artifactId>
+						<version>1.6</version>
+						<configuration>
+							<workingDirectory>src/main/webapp/javascripts</workingDirectory>
+						</configuration>
+						<executions>
+							<execution>
+								<id>install node and npm</id>
+								<goals>
+									<goal>install-node-and-npm</goal>
+								</goals>
+								<configuration>
+									<nodeVersion>v4.6.0</nodeVersion>
+								</configuration>
+							</execution>
+							<execution>
+								<id>npm install</id>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>gulp build</id>
+								<goals>
+									<goal>gulp</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.accordion.Dashboard', {
 		extend: 'CMDBuild.controller.common.abstract.Accordion',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.dashboard.Dashboard'
 		],

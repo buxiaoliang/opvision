@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.administration.taskManager.task.common.emailFilterForm.EditWindow', {
 		extend: 'CMDBuild.controller.CMBasePanelController',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.administration.taskManager.task.common.emailFilterForm.EmailFilterForm}

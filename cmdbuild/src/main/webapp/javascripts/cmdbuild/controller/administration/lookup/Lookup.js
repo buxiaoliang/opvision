@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.administration.lookup.Lookup', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.ModuleIdentifiers',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.lookup.Type',

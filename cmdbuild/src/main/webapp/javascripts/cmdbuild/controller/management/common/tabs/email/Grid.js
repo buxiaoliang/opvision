@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.common.tabs.email.Grid', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.controller.management.common.tabs.email.Email',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Message',

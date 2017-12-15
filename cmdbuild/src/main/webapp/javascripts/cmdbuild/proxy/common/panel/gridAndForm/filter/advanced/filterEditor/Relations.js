@@ -5,7 +5,7 @@
 	 */
 	Ext.define('CMDBuild.proxy.common.panel.gridAndForm.filter.advanced.filterEditor.Relations', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.common.panel.gridAndForm.filter.advanced.filterEditor.relations.DestinationEditorStore',
 			'CMDBuild.model.common.panel.gridAndForm.filter.advanced.filterEditor.relations.DomainGrid'

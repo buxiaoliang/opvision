@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.management.common.tabs.email.emailWindow.EditForm', {
 		extend: 'Ext.form.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy'
 		],

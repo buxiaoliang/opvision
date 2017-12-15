@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.common.panel.gridAndForm.panel.common.print.WindowView', {
 		extend: 'CMDBuild.core.window.AbstractCustomModal',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.common.panel.gridAndForm.panel.common.print.Window}

@@ -21,7 +21,7 @@ public class DefaultPrivilegeContextFactory implements PrivilegeContextFactory {
 		final DefaultPrivilegeContextBuilder privilegeCtxBuilder = DefaultPrivilegeContext.newBuilderInstance();
 		for (final CMGroup group : groups) {
 			final List<PrivilegePair> privileges = group.getAllPrivileges();
-			privilegeCtxBuilder.withPrivileges(privileges);
+			privilegeCtxBuilder.withPrivileges(group.getName(), privileges);
 		}
 		return privilegeCtxBuilder.build();
 	}

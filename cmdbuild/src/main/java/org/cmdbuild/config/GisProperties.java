@@ -6,7 +6,7 @@ import org.cmdbuild.exception.ORMException.ORMExceptionType;
 import org.cmdbuild.services.Settings;
 import org.cmdbuild.services.gis.GisDatabaseService;
 
-public class GisProperties extends DefaultProperties implements GisConfiguration {
+public final class GisProperties extends DefaultProperties implements GisConfiguration {
 
 	private static final long serialVersionUID = 1L;
 	private static final int MAX_ZOOM = 24;
@@ -41,7 +41,8 @@ public class GisProperties extends DefaultProperties implements GisConfiguration
 	private static final String OSM_MAXZOOM = "osm_maxzoom";
 	private static final String OSM_MINZOOM = "osm_minzoom";
 
-	public GisProperties() {
+	public GisProperties(PropertyContainer propertyContainer) {
+		super(propertyContainer);
 		setProperty(ENABLED, Boolean.FALSE.toString());
 
 		setProperty(CENTER_LON, String.valueOf(0));
@@ -72,14 +73,14 @@ public class GisProperties extends DefaultProperties implements GisConfiguration
 	}
 
 	@Override
-	protected Object setProperty0(final String key, final String value) {
+	public String setProperty(final String key, final String value) {
 		if (ENABLED.equals(key) && Boolean.TRUE.toString().equalsIgnoreCase(value)) {
 			final GisDatabaseService gisDatabaseService = applicationContext().getBean(GisDatabaseService.class);
 			if (!gisDatabaseService.isPostGISConfigured()) {
 				throw ORMExceptionType.ORM_POSTGIS_NOT_FOUND.createException();
 			}
 		}
-		return super.setProperty0(key, value);
+		return super.setProperty(key, value);
 	}
 
 	public static GisProperties getInstance() {

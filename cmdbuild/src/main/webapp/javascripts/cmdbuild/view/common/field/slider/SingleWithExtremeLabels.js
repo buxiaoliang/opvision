@@ -7,7 +7,7 @@
 	Ext.define('CMDBuild.view.common.field.slider.SingleWithExtremeLabels', {
 		extend: 'Ext.form.FieldContainer',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		mixins: ['Ext.form.field.Field'], // To enable functionalities restricted to Ext.form.field.Field classes (loadRecord, etc.)
 

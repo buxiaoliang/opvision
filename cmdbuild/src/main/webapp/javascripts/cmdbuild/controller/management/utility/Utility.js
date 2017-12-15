@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.utility.Utility', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.common.MainViewport}

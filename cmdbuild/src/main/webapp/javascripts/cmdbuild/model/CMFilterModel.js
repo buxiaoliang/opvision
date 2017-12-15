@@ -6,7 +6,7 @@
 	Ext.define('CMDBuild.model.CMFilterModel', {
 		extend: 'Ext.data.Model',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		fields: [
 			{ name: CMDBuild.core.constants.Proxy.ID, type: 'string' },

@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.common.field.multiselect.Group', {
 		extend: 'Ext.ux.form.MultiSelect',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.common.field.multiselect.Group'
 		],

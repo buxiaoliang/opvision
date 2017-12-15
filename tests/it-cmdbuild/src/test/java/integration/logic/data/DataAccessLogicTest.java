@@ -20,6 +20,7 @@ import org.cmdbuild.dao.view.DBDataView;
 import org.cmdbuild.data.store.dao.DataViewStore;
 import org.cmdbuild.data.store.lookup.DataViewLookupStore;
 import org.cmdbuild.data.store.lookup.LookupStorableConverter;
+import org.cmdbuild.logic.auth.SessionLogic;
 import org.cmdbuild.logic.commands.GetRelationList.DomainWithSource;
 import org.cmdbuild.logic.commands.GetRelationList.GetRelationListResponse;
 import org.cmdbuild.logic.data.DataDefinitionLogic;
@@ -34,6 +35,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import com.google.common.collect.Iterables;
 
@@ -57,13 +61,22 @@ public class DataAccessLogicTest extends IntegrationTestBase {
 
 	@Before
 	public void createDataDefinitionLogic() throws Exception {
+		final SessionLogic sessionLogic = Mockito.mock(SessionLogic.class, new Answer<SessionLogic>() {
+
+			@Override
+			public SessionLogic answer(final InvocationOnMock invocation) throws Throwable {
+				throw new UnsupportedOperationException();
+			}
+
+		});
 		dataAccessLogic = new DefaultDataAccessLogic( //
 				dbDataView(), //
 				new DataViewLookupStore( //
 						DataViewStore.newInstance(dbDataView(), new LookupStorableConverter())), //
 				dbDataView(), //
 				operationUser(), //
-				new DummyLockLogic());
+				new DummyLockLogic(), //
+				sessionLogic);
 	}
 
 	@Test(expected = NullPointerException.class)
@@ -77,8 +90,8 @@ public class DataAccessLogicTest extends IntegrationTestBase {
 	public void shouldNotRetrieveCardsIfNotExistentClassName() throws Exception {
 		// when
 		final QueryOptions queryOptions = createQueryOptions(10, 0, new JSONArray(), new JSONObject());
-		final Iterable<Card> fetchedCards =
-				dataAccessLogic.fetchCards("not_existent_class_name", queryOptions).elements();
+		final Iterable<Card> fetchedCards = dataAccessLogic.fetchCards("not_existent_class_name", queryOptions)
+				.elements();
 
 		// then
 		assertTrue(isEmpty(fetchedCards));
@@ -104,8 +117,8 @@ public class DataAccessLogicTest extends IntegrationTestBase {
 
 		// when
 		final QueryOptions queryOptions = createQueryOptions(10, 0, new JSONArray(), null);
-		final Iterable<Card> fetchedCards =
-				dataAccessLogic.fetchCards(newClass.getIdentifier().getLocalName(), queryOptions).elements();
+		final Iterable<Card> fetchedCards = dataAccessLogic
+				.fetchCards(newClass.getIdentifier().getLocalName(), queryOptions).elements();
 
 		// then
 		assertEquals(size(fetchedCards), 3);
@@ -131,8 +144,8 @@ public class DataAccessLogicTest extends IntegrationTestBase {
 
 		// when
 		final QueryOptions queryOptions = createQueryOptions(10, 0, new JSONArray(), new JSONObject());
-		final Iterable<Card> fetchedCards =
-				dataAccessLogic.fetchCards(newClass.getIdentifier().getLocalName(), queryOptions).elements();
+		final Iterable<Card> fetchedCards = dataAccessLogic
+				.fetchCards(newClass.getIdentifier().getLocalName(), queryOptions).elements();
 
 		// then
 		assertEquals(size(fetchedCards), 3);
@@ -164,8 +177,8 @@ public class DataAccessLogicTest extends IntegrationTestBase {
 
 		// when
 		final QueryOptions queryOptions = createQueryOptions(10, 0, sortersArray, null);
-		final Iterable<Card> fetchedCards =
-				dataAccessLogic.fetchCards(newClass.getIdentifier().getLocalName(), queryOptions).elements();
+		final Iterable<Card> fetchedCards = dataAccessLogic
+				.fetchCards(newClass.getIdentifier().getLocalName(), queryOptions).elements();
 
 		// then
 		assertEquals(get(fetchedCards, 0).getAttribute("Code"), "bar");
@@ -195,13 +208,13 @@ public class DataAccessLogicTest extends IntegrationTestBase {
 				.setCode("zzz") //
 				.setDescription("description_baz") //
 				.save();
-		final JSONObject filterObject =
-				new JSONObject("{attribute: {simple: {attribute: Code, operator: equal, value:[foo]}}}");
+		final JSONObject filterObject = new JSONObject(
+				"{attribute: {simple: {attribute: Code, operator: equal, value:[foo]}}}");
 
 		// when
 		final QueryOptions queryOptions = createQueryOptions(10, 0, new JSONArray(), filterObject);
-		final Iterable<Card> fetchedCards =
-				dataAccessLogic.fetchCards(newClass.getIdentifier().getLocalName(), queryOptions).elements();
+		final Iterable<Card> fetchedCards = dataAccessLogic
+				.fetchCards(newClass.getIdentifier().getLocalName(), queryOptions).elements();
 
 		// then
 		assertEquals(size(fetchedCards), 1);
@@ -229,13 +242,13 @@ public class DataAccessLogicTest extends IntegrationTestBase {
 				.setCode("zzz") //
 				.setDescription("description_baz") //
 				.save();
-		final JSONObject filterObject =
-				new JSONObject("{query: dESc, attribute: {simple: {attribute: Code, operator: equal, value:['foo']}}}");
+		final JSONObject filterObject = new JSONObject(
+				"{query: dESc, attribute: {simple: {attribute: Code, operator: equal, value:['foo']}}}");
 
 		// when
 		final QueryOptions queryOptions = createQueryOptions(10, 0, new JSONArray(), filterObject);
-		final Iterable<Card> fetchedCards =
-				dataAccessLogic.fetchCards(newClass.getIdentifier().getLocalName(), queryOptions).elements();
+		final Iterable<Card> fetchedCards = dataAccessLogic
+				.fetchCards(newClass.getIdentifier().getLocalName(), queryOptions).elements();
 
 		// then
 		assertEquals(size(fetchedCards), 1);
@@ -270,8 +283,8 @@ public class DataAccessLogicTest extends IntegrationTestBase {
 
 		// when
 		final QueryOptions queryOptions = createQueryOptions(10, 0, sortersArray, filterObject);
-		final Iterable<Card> fetchedCards =
-				dataAccessLogic.fetchCards(newClass.getIdentifier().getLocalName(), queryOptions).elements();
+		final Iterable<Card> fetchedCards = dataAccessLogic
+				.fetchCards(newClass.getIdentifier().getLocalName(), queryOptions).elements();
 
 		// then
 		assertEquals(size(fetchedCards), 3);
@@ -336,8 +349,8 @@ public class DataAccessLogicTest extends IntegrationTestBase {
 				.setCode("baz") //
 				.setDescription("description_zzz") //
 				.save();
-		final JSONObject filterObject =
-				new JSONObject("{attribute: {and: [{simple: {attribute: Code, operator: notcontain, value:['bar']}}, "
+		final JSONObject filterObject = new JSONObject(
+				"{attribute: {and: [{simple: {attribute: Code, operator: notcontain, value:['bar']}}, "
 						+ "{simple: {attribute: Description, operator: contain, value: ['sc_f']}}]}}");
 
 		// when
@@ -453,8 +466,8 @@ public class DataAccessLogicTest extends IntegrationTestBase {
 
 	private CMClass createClassWithAllTypeOfAttributes() {
 		final CMClass fooClass = dbDataView().create(newClass("Foo"));
-		final DataDefinitionLogic dataDefinitionLogic =
-				new DefaultDataDefinitionLogic(new DBDataView(createBaseDriver()));
+		final DataDefinitionLogic dataDefinitionLogic = new DefaultDataDefinitionLogic(
+				new DBDataView(createBaseDriver()));
 
 		final Attribute integerAttribute = Attribute.newAttribute() //
 				.withName(INTEGER_ATTRIBUTE_NAME) //

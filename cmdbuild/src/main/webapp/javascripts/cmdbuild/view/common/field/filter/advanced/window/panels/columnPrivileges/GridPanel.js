@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.common.field.filter.advanced.window.panels.columnPrivileges.GridPanel', {
 		extend: 'Ext.grid.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.common.field.filter.advanced.window.ColumnPrivilegesGridRecord'
 		],

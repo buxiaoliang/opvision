@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.administration.domain.Domain', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json'
 		],

@@ -12,11 +12,9 @@ public class ConversionUtils {
 			final DefaultPersistenceProject modifiableProject = new DefaultPersistenceProject();
 			modifiableProject.setActive(input.isActive());
 			modifiableProject.setDescription(input.getDescription());
-			modifiableProject.setExportProjectId(input.getExportProjectId());
 			modifiableProject.setLastCheckin(input.getLastCheckin());
 			modifiableProject.setName(input.getName());
 			modifiableProject.setProjectId(input.getProjectId());
-			modifiableProject.setSynch(input.isSynch());
 			modifiableProject.setCardBinding(input.getCardBinding());
 			return modifiableProject;
 		}

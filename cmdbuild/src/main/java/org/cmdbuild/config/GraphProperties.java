@@ -6,7 +6,7 @@ import static java.lang.Integer.parseInt;
 
 import org.cmdbuild.services.Settings;
 
-public class GraphProperties extends DefaultProperties implements GraphConfiguration {
+public final class GraphProperties extends DefaultProperties implements GraphConfiguration {
 
 	private static final long serialVersionUID = 1L;
 
@@ -26,8 +26,8 @@ public class GraphProperties extends DefaultProperties implements GraphConfigura
 	private static final String USERNAME = "username";
 	private static final String PASSWORD = "password";
 
-	public GraphProperties() {
-		super();
+	public GraphProperties(PropertyContainer propertyContainer) {
+		super(propertyContainer);
 		setProperty(BASE_LEVEL, "1");
 		setProperty(CLUSTERING_THRESHOLD, "100");
 		setProperty(DISPLAY_LABEL, "none");

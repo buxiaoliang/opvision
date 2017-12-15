@@ -2,7 +2,7 @@ package org.cmdbuild.config;
 
 import org.cmdbuild.services.Settings;
 
-public class NotificationProperties extends DefaultProperties {
+public final class NotificationProperties extends DefaultProperties {
 
 	private static final long serialVersionUID = 1L;
 
@@ -14,8 +14,8 @@ public class NotificationProperties extends DefaultProperties {
 	private static final String EMAIL_DMS_DESTINATION = "notification.email.dms.destination";
 	private static final String EMAIL_DMS_SILENCE = "notification.email.dms.silence";
 
-	public NotificationProperties() {
-		super();
+	public NotificationProperties(PropertyContainer propertyContainer) {
+		super(propertyContainer);
 		setProperty(ENABLE, "false");
 		setProperty(EMAIL_DMS_ACCOUNT, "");
 		setProperty(EMAIL_DMS_TEMPLATE, "");

@@ -6,7 +6,7 @@
 	Ext.define('CMDBuild.controller.administration.classes.tabs.widgets.form.Empty', {
 		extend: 'CMDBuild.controller.administration.classes.tabs.widgets.form.Abstract',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.administration.classes.tabs.widgets.Widgets}

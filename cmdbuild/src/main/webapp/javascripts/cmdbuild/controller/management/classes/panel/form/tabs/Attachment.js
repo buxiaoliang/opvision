@@ -9,7 +9,7 @@
 	Ext.define('CMDBuild.controller.management.classes.panel.form.tabs.Attachment', {
 		extend: 'CMDBuild.controller.common.panel.module.attachment.Tab',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Global',
 			'CMDBuild.core.constants.ModuleIdentifiers',
 			'CMDBuild.core.constants.Proxy'

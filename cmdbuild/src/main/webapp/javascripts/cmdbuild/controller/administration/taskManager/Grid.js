@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.administration.taskManager.Grid', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.administration.taskManager.Grid',
 			'CMDBuild.proxy.administration.taskManager.task.Connector',

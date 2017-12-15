@@ -20,7 +20,7 @@
 	Ext.define('CMDBuild.controller.common.panel.module.form.Tab', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @property {Boolean} For avoid the loading of the card in editing
@@ -124,7 +124,11 @@
 			if ((! this.previousCard || this.previousCard.id != id) || (activityId && activityId !== this.previousCard.activityId)) {
 				this.inEditing = false;
 			}
-			this.cmfg('tabEmailEditModeSet', true);
+			
+			if(typeof Ext.ClassManager.get("CMDBuild.controller.management.common.tabs.email.Email").cmfg == 'function') {
+				Ext.ClassManager.get("CMDBuild.controller.management.common.tabs.email.Email").cmfg('tabEmailEditModeSet', true);
+			}
+			
 			this.previousCard = {
 					id : id,
 					activityId : activityId
@@ -133,9 +137,6 @@
 			if (! this.inEditing) {
 				this.controllerForm.cmfg('panelModuleFormPanelFieldsBuild', { subTabToSelect: parameters.subTabToSelect });
 				this.controllerForm.cmfg('panelModuleFormPanelFieldsDataSet', this.buildValues());
-			}
-			else {
-				
 			}
 			this.inEditing = bEditing;
 

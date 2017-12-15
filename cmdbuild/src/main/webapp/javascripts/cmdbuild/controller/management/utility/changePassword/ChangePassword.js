@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.utility.changePassword.ChangePassword', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Message',
 			'CMDBuild.proxy.utility.ChangePassword'
@@ -31,6 +31,9 @@
 		 * @cfg {CMDBuild.view.management.utility.changePassword.ChangePasswordView}
 		 */
 		view: undefined,
+		
+		passwordExpired: false,
+		helper: undefined,
 
 		/**
 		 * @param {Object} configurationObject
@@ -42,8 +45,8 @@
 		 */
 		constructor: function (configurationObject) {
 			this.callParent(arguments);
-
-			this.view = Ext.create('CMDBuild.view.management.utility.changePassword.ChangePasswordView', { delegate: this });
+			
+			this.view = Ext.create('CMDBuild.view.management.utility.changePassword.ChangePasswordView', { delegate: this,  passwordExpired: this.passwordExpired, helper: this.helper});
 
 			// Shorthands
 			this.form = this.view.form;
@@ -60,17 +63,27 @@
 		 * @returns {Void}
 		 */
 		onUtilityChangePasswordSaveButtonClick: function () {
-			if (this.validate(this.form))
+			if (this.validate(this.form)) {
 				CMDBuild.proxy.utility.ChangePassword.save({
 					params: Ext.create('CMDBuild.model.utility.ChangePassword', this.form.getValues()).getDataLegacy(),
 					scope: this,
 					callback: function (options, success, response) {
 						this.cmfg('onUtilityChangePasswordAbortButtonClick');
+						
+						
 					},
 					success: function (response, options, decodedResponse) {
 						CMDBuild.core.Message.info(null, CMDBuild.Translation.passwordChanged);
+						console.log(decodedResponse);
+						if (this.passwordExpired) {
+							setTimeout(function(){
+								window.location = 'logout.jsp';								
+							}, 1000);
+						}
 					}
 				});
+			}
+				
 		}
 	});
 

@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.administration.taskManager.task.Connector', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Global',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json',

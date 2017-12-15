@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
+<%@page import="org.cmdbuild.auth.PasswordManagementService"%>
 <%@ page import="com.google.common.base.Joiner" %>
 <%@ page import="java.util.Collection" %>
 <%@ page import="org.apache.commons.lang3.StringEscapeUtils" %>
@@ -29,6 +30,9 @@
 
 	if (!operationUser.hasAdministratorPrivileges()) {
 		response.sendRedirect("management.jsp");
+	}
+	if (PasswordManagementService.isPasswordManagementEnabled()  && operationUser.isPasswordExpired()) {
+		response.sendRedirect("change-password.jsp");
 	}
 %>
 

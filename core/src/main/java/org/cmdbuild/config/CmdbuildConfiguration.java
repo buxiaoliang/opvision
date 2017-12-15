@@ -60,5 +60,9 @@ public interface CmdbuildConfiguration {
 	boolean isImportCsvOneByOne();
 
 	void setImportCsvOneByOne(boolean value);
+	
+	boolean isClustered();
+	
+	void setClustered(boolean value);
 
 }

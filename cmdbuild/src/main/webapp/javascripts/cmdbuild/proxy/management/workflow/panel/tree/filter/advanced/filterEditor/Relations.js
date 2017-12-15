@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.management.workflow.panel.tree.filter.advanced.filterEditor.Relations', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.management.workflow.panel.tree.filter.advanced.filterEditor.relations.DestinationEditorStore',
 			'CMDBuild.model.management.workflow.panel.tree.filter.advanced.filterEditor.relations.DomainGrid'

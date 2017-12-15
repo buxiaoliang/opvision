@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.administration.navigationTree.Tree', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.navigationTree.NavigationTree',
 			'CMDBuild.core.Utils'

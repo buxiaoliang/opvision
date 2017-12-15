@@ -24,9 +24,6 @@ public class Serialization {
 	private LookupStore lookupStore;
 
 	@Autowired
-	private PrivilegeManagement privilegeManagement;
-
-	@Autowired
 	private UserStore userStore;
 
 	@Autowired
@@ -51,7 +48,7 @@ public class Serialization {
 		return new ClassSerializer( //
 				data.systemDataView(), //
 				workflow.systemWorkflowLogicBuilder(), //
-				privilegeManagement.userPrivilegeContext(), //
+				userStore.getUser().getPrivilegeContext(), //
 				data.securityLogic(), //
 				userStore, //
 				web.contextStoreNotifier() //
@@ -63,7 +60,7 @@ public class Serialization {
 	public DomainSerializer domainSerializer() {
 		return new DomainSerializer( //
 				data.systemDataView(), //
-				privilegeManagement.userPrivilegeContext());
+				userStore.getUser().getPrivilegeContext());
 	}
 
 	@Bean

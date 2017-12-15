@@ -82,8 +82,8 @@ public class DefaultEmailTemplateSenderFactory implements EmailTemplateSenderFac
 		}
 
 		protected void validate() {
-			Validate.notNull(account, "missing '%s' supplier", EmailAccount.class);
-			Validate.notNull(template, "missing '%s' supplier", Template.class);
+			Validate.notNull(account, "missing email account");
+			Validate.notNull(template, "missing email template");
 			attachments = defaultIfNull(attachments, NO_ATTACHMENTS);
 			templateResolver = defaultIfNull(templateResolver, identity());
 		}

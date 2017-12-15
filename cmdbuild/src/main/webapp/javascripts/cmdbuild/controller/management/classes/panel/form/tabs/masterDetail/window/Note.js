@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.classes.panel.form.tabs.masterDetail.window.Note', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.management.classes.panel.form.tabs.masterDetail.window.Note'
 		],

@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.widget.customForm.Export', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.management.widget.customForm.Csv'
 		],

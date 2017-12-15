@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.common.panel.module.attachment.GridPanel', {
 		extend: 'Ext.grid.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.configurations.DataFormat',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.common.panel.module.attachment.Attachment'

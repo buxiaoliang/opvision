@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.core.interfaces.messages.Warning', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Message'
 		],

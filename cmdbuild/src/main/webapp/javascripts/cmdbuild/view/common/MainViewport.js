@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.common.MainViewport', {
 		extend: 'Ext.container.Viewport',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.common.MainViewport}

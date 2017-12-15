@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.report.jasper.form.Step1Panel', {
 		extend: 'Ext.form.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy'
 		],

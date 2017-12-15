@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.common.widgets.grid.ImportCSV', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.LoadMask',
 			'CMDBuild.core.Message',

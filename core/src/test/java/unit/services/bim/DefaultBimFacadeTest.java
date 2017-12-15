@@ -30,6 +30,7 @@ public class DefaultBimFacadeTest {
 
 	private static final String ID = "123";
 	private static final String NAME = "projectName";
+	private static final String DESCRIPTION = "projectDescription";
 	private static final String REVISIONID = "456";
 	private static final boolean STATUS = true;
 	private static final String FILE = "pippo";
@@ -37,55 +38,9 @@ public class DefaultBimFacadeTest {
 	@Before
 	public void setUp() throws Exception {
 		service = mock(BimService.class);
-		serviceFacade = new DefaultBimFacade(service, null);
+		serviceFacade = new DefaultBimFacade(service);
 	}
 
-	@Test
-	public void getProjectByPoidForwardsToService() throws Exception {
-
-		// when
-		serviceFacade.getProjectById(ID);
-
-		// then
-		final InOrder inOrder = inOrder(service);
-		inOrder.verify(service).getProjectByPoid(ID);
-		verifyNoMoreInteractions(service);
-	}
-
-	@Test
-	public void downloadProjectDoesNothingIfNoRevisions() throws Exception {
-		// given
-		when(service.getLastRevisionOfProject(ID)).thenReturn(INVALID_ID);
-
-		// when
-		final DataHandler download = serviceFacade.download(ID);
-
-		// then
-		final InOrder inOrder = inOrder(service);
-		inOrder.verify(service).getLastRevisionOfProject(ID);
-		verifyNoMoreInteractions(service);
-
-		assertTrue(download == null);
-	}
-
-	@Test
-	public void downloadProjectWhenThereIsARevision() throws Exception {
-		// given
-		when(service.getLastRevisionOfProject(ID)).thenReturn(REVISIONID);
-		final DataHandler data = mock(DataHandler.class);
-		when(service.downloadIfc(REVISIONID)).thenReturn(data);
-
-		// when
-		final DataHandler download = serviceFacade.download(ID);
-
-		// then
-		final InOrder inOrder = inOrder(service);
-		inOrder.verify(service).getLastRevisionOfProject(ID);
-		inOrder.verify(service).downloadIfc(REVISIONID);
-		verifyNoMoreInteractions(service);
-
-		assertTrue(download.equals(data));
-	}
 
 	@Test
 	public void createProjectWithNameAndStatus() throws Exception {
@@ -98,14 +53,14 @@ public class DefaultBimFacadeTest {
 		when(projectCreated.getIdentifier()).thenReturn(ID);
 		when(projectCreated.getName()).thenReturn(NAME);
 		when(projectCreated.isActive()).thenReturn(STATUS);
-		when(service.createProject(NAME)).thenReturn(projectCreated);
+		when(service.createProject(NAME, null, null)).thenReturn(projectCreated);
 
 		// when
-		final BimFacadeProject result = serviceFacade.createProjectAndUploadFile(projectToCreate);
+		final BimFacadeProject result = serviceFacade.createProject(projectToCreate);
 
 		// then
 		final InOrder inOrder = inOrder(service);
-		inOrder.verify(service).createProject(NAME);
+		inOrder.verify(service).createProject(NAME, null, null);
 		verifyNoMoreInteractions(service);
 
 		assertTrue(result.getProjectId().equals(ID));
@@ -114,7 +69,7 @@ public class DefaultBimFacadeTest {
 	}
 
 	@Test
-	public void createProjectAndLoadFile() throws Exception {
+	public void createProjectAndUploadFile() throws Exception {
 		// given
 		final BimFacadeProject projectToCreate = mock(BimFacadeProject.class);
 		when(projectToCreate.getName()).thenReturn(NAME);
@@ -132,18 +87,17 @@ public class DefaultBimFacadeTest {
 
 		final BimRevision revision = mock(BimRevision.class);
 		when(revision.isValid()).thenReturn(true);
-		when(service.createProject(NAME)).thenReturn(projectCreated);
-		when(service.checkin(ID, file)).thenReturn(now);
-		when(service.getRevision(REVISIONID)).thenReturn(revision);
+		when(service.createProject(NAME, null, null)).thenReturn(projectCreated);
+		when(service.checkin(ID, file, null)).thenReturn(now);
 		when(service.getProjectByPoid(ID)).thenReturn(projectCreated);
 
 		// when
-		final BimFacadeProject result = serviceFacade.createProjectAndUploadFile(projectToCreate);
+		final BimFacadeProject result = serviceFacade.createProject(projectToCreate);
 
 		// then
 		final InOrder inOrder = inOrder(service);
-		inOrder.verify(service).createProject(NAME);
-		inOrder.verify(service).checkin(ID, file);
+		inOrder.verify(service).createProject(NAME, null, null);
+		inOrder.verify(service).checkin(ID, file, null);
 		inOrder.verify(service).getProjectByPoid(ID);
 		inOrder.verify(service).getLastRevisionOfProject(ID);
 		verifyNoMoreInteractions(service);
@@ -207,12 +161,15 @@ public class DefaultBimFacadeTest {
 		when(projectToUpdate.getProjectId()).thenReturn(ID);
 		when(projectToUpdate.getName()).thenReturn(NAME);
 		when(projectToUpdate.isActive()).thenReturn(STATUS);
+		when(projectToUpdate.getDescription()).thenReturn(DESCRIPTION);
+
 
 		final BimProject oldProject = mock(BimProject.class);
 		when(oldProject.getIdentifier()).thenReturn(ID);
 		when(oldProject.getName()).thenReturn(NAME);
 		when(oldProject.isActive()).thenReturn(STATUS);
 		when(service.getProjectByPoid(ID)).thenReturn(oldProject);
+		when(service.updateProject(oldProject)).thenReturn(oldProject);
 
 		// when
 		final BimFacadeProject updatedProject = serviceFacade.updateProject(projectToUpdate);
@@ -220,6 +177,7 @@ public class DefaultBimFacadeTest {
 		// then
 		final InOrder inOrder = inOrder(service);
 		inOrder.verify(service).getProjectByPoid(ID);
+		inOrder.verify(service).updateProject(oldProject);
 		verifyNoMoreInteractions(service);
 
 		assertTrue(updatedProject.getProjectId().equals(ID));
@@ -234,13 +192,17 @@ public class DefaultBimFacadeTest {
 		when(projectToUpdate.getProjectId()).thenReturn(ID);
 		when(projectToUpdate.getName()).thenReturn(NAME);
 		when(projectToUpdate.isActive()).thenReturn(STATUS);
+		when(projectToUpdate.getDescription()).thenReturn(DESCRIPTION);
+
 
 		final BimProject oldProject = mock(BimProject.class);
 		when(oldProject.getIdentifier()).thenReturn(ID);
 		when(oldProject.getName()).thenReturn(NAME);
+		when(oldProject.getDescription()).thenReturn(DESCRIPTION);
 		when(oldProject.isActive()).thenReturn(!STATUS);
 		when(service.getProjectByPoid(ID)).thenReturn(oldProject);
-
+		when(service.updateProject(oldProject)).thenReturn(oldProject);
+		
 		// when
 		final BimFacadeProject updatedProject = serviceFacade.updateProject(projectToUpdate);
 
@@ -262,6 +224,7 @@ public class DefaultBimFacadeTest {
 		when(projectToUpdate.getProjectId()).thenReturn(ID);
 		when(projectToUpdate.getName()).thenReturn(NAME);
 		when(projectToUpdate.isActive()).thenReturn(STATUS);
+		when(projectToUpdate.getDescription()).thenReturn(DESCRIPTION);
 		final File file = new File(FILE);
 		when(projectToUpdate.getFile()).thenReturn(file);
 
@@ -271,11 +234,11 @@ public class DefaultBimFacadeTest {
 		when(service.getLastRevisionOfProject(project.getIdentifier())).thenReturn(REVISIONID);
 
 		when(service.getProjectByPoid(ID)).thenReturn(project);
+		when(service.updateProject(project)).thenReturn(project);
 
 		final BimRevision revision = mock(BimRevision.class);
 		final Date date = new Date();
 		when(revision.getDate()).thenReturn(date);
-		when(service.getRevision(REVISIONID)).thenReturn(revision);
 
 		// when
 		serviceFacade.updateProject(projectToUpdate);
@@ -283,8 +246,9 @@ public class DefaultBimFacadeTest {
 		// then
 		final InOrder inOrder = inOrder(service);
 		inOrder.verify(service).getProjectByPoid(ID);
-		inOrder.verify(service).checkin(ID, file);
+		inOrder.verify(service).checkin(ID, file, null);
 		inOrder.verify(service).getProjectByPoid(ID);
+		inOrder.verify(service).updateProject(project);
 		inOrder.verify(service).enableProject(ID);
 
 		verifyNoMoreInteractions(service);

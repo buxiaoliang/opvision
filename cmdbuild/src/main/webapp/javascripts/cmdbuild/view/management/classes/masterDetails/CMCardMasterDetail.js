@@ -1,17 +1,16 @@
 (function() {
 
-	Ext.require([
-		'CMDBuild.core.constants.Global',
-		'CMDBuild.core.constants.Proxy',
-		'CMDBuild.proxy.management.classes.tabs.MasterDetail'
-	]);
 
 	var MD = "detail";
 	var FK = "foreignkey";
 
 	Ext.define("CMDBuild.view.management.classes.masterDetails.CMCardMasterDetail", {
 		extend: "Ext.panel.Panel",
-
+		uses: [
+			'CMDBuild.core.constants.Global',
+			'CMDBuild.core.constants.Proxy',
+			'CMDBuild.proxy.management.classes.tabs.MasterDetail'
+		],
 		/**
 		 * @property {Array}
 		 */

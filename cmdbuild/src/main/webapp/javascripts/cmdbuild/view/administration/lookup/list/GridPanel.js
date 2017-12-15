@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.lookup.list.GridPanel', {
 		extend: 'Ext.grid.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.lookup.Lookup'
 		],

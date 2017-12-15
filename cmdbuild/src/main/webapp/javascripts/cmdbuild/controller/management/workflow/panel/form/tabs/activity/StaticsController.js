@@ -1,9 +1,7 @@
 (function() {
 
-	Ext.require(['CMDBuild.core.constants.Global']);
-
 	Ext.define('CMDBuild.controller.management.workflow.panel.form.tabs.activity.StaticsController', {
-
+		uses: ['CMDBuild.core.constants.Global'],
 		singleton: true,
 
 		/**

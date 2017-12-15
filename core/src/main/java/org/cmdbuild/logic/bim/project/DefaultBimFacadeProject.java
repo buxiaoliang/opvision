@@ -8,9 +8,11 @@ import org.joda.time.DateTime;
 class DefaultBimFacadeProject implements BimFacadeProject {
 
 	private String name;
+	private String description;
 	private File file;
 	private boolean active;
 	private String projectId;
+	private String ifcVersion;
 
 	@Override
 	public String getProjectId() {
@@ -50,11 +52,6 @@ class DefaultBimFacadeProject implements BimFacadeProject {
 	}
 
 	@Override
-	public boolean isSynch() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
 	public void setLastCheckin(final DateTime lastCheckin) {
 		throw new UnsupportedOperationException();
 	}
@@ -64,13 +61,22 @@ class DefaultBimFacadeProject implements BimFacadeProject {
 	}
 
 	@Override
-	public String getShapeProjectId() {
-		throw new UnsupportedOperationException("to do");
+	public String getDescription() {
+		return this.description;
 	}
 
 	@Override
-	public String getExportProjectId() {
-		throw new UnsupportedOperationException("to do");
+	public String getIfcVersion() {
+		return this.ifcVersion;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setIfcVersion(String ifcVersion) {
+		this.ifcVersion = ifcVersion;
+		
 	}
 
 }

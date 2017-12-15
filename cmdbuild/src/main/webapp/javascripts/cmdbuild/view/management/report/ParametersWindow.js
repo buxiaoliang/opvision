@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.management.report.ParametersWindow', {
 		extend: 'CMDBuild.core.window.AbstractCustomModal',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.management.report.Parameters}

@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.administration.userAndGroup.group.tabs.DefaultFilters', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json',
 			'CMDBuild.model.administration.userAndGroup.group.defaultFilters.Filter'

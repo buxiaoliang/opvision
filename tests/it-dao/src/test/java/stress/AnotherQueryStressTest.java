@@ -1,13 +1,14 @@
 package stress;
 
 import static com.google.common.collect.FluentIterable.from;
+import static com.google.common.reflect.Reflection.newProxy;
+import static org.cmdbuild.common.utils.Reflection.unsupported;
 import static org.cmdbuild.dao.query.clause.AnyAttribute.anyAttribute;
 import static org.cmdbuild.dao.query.clause.QueryAliasAttribute.attribute;
 import static org.cmdbuild.dao.query.clause.where.AndWhereClause.and;
 import static org.cmdbuild.dao.query.clause.where.EqualsOperatorAndValue.eq;
 import static org.cmdbuild.dao.query.clause.where.OrWhereClause.or;
 import static org.cmdbuild.dao.query.clause.where.SimpleWhereClause.condition;
-import static org.mockito.Mockito.mock;
 import static utils.IntegrationTestUtils.NO_PARENT;
 import static utils.IntegrationTestUtils.newClass;
 import static utils.IntegrationTestUtils.newSuperClass;
@@ -20,17 +21,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import org.cmdbuild.auth.UserStore;
-import org.cmdbuild.auth.acl.PrivilegeContext;
-import org.cmdbuild.auth.context.SystemPrivilegeContext;
 import org.cmdbuild.dao.driver.DBDriver;
 import org.cmdbuild.dao.entrytype.CMAttribute;
 import org.cmdbuild.dao.entrytype.CMClass;
 import org.cmdbuild.dao.entrytype.DBClass;
 import org.cmdbuild.dao.view.CMDataView;
 import org.cmdbuild.dao.view.user.UserDataView;
-import org.cmdbuild.dao.view.user.privileges.RowAndColumnPrivilegeFetcher;
-import org.cmdbuild.privileges.fetchers.DataViewRowAndColumnPrivilegeFetcher;
+import org.cmdbuild.dao.view.user.privileges.RowAndColumnPrivilegeFetcherFactory;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -92,7 +89,8 @@ public class AnotherQueryStressTest extends IntegrationTestBase {
 				/*
 				 * at least one superclass and one standard class
 				 */
-				final boolean isSuperclass = ((classIndex == 0) ? 0.0 : (classIndex == 1) ? 1.0 : Math.random()) < SUPER_CLASSES_RATIO;
+				final boolean isSuperclass = ((classIndex == 0) ? 0.0
+						: (classIndex == 1) ? 1.0 : Math.random()) < SUPER_CLASSES_RATIO;
 				final DBClass currentClass;
 				if (isSuperclass) {
 					currentClass = dbDataView().create(newSuperClass(withIdentifier(className, NAMESPACE), parent));
@@ -168,7 +166,7 @@ public class AnotherQueryStressTest extends IntegrationTestBase {
 				.where(or( //
 						condition(attribute(subclass1, attributeName1), eq("foo")), //
 						and( //
-						condition(attribute(subclass2, attributeName2), eq("foo")), //
+								condition(attribute(subclass2, attributeName2), eq("foo")), //
 								condition(attribute(subclass3, attributeName3), eq("foo")) //
 						) //
 				)) //
@@ -193,15 +191,11 @@ public class AnotherQueryStressTest extends IntegrationTestBase {
 	@Test(timeout = DEFAULT_TIMEOUT)
 	public void simpleQueryWithSingleConditionUsingUserDataView() throws Exception {
 		// given
-		final PrivilegeContext privilegeContext = new SystemPrivilegeContext();
-		final RowAndColumnPrivilegeFetcher rowPrivilegeFetcher = new DataViewRowAndColumnPrivilegeFetcher( //
-				dbDataView(), //
-				privilegeContext, //
-				mock(UserStore.class) //
-		);
+		final RowAndColumnPrivilegeFetcherFactory rowPrivilegeFetcherFactory = newProxy(
+				RowAndColumnPrivilegeFetcherFactory.class, unsupported("should not be used"));
 		final CMDataView userDataView = new UserDataView( //
 				dbDataView(), //
-				privilegeContext, rowPrivilegeFetcher, //
+				rowPrivilegeFetcherFactory, //
 				operationUser() //
 		);
 		final List<DBClass> leaves = Lists.newArrayList(rootClass.getLeaves());

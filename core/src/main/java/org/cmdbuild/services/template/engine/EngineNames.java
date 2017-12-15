@@ -12,6 +12,7 @@ public class EngineNames {
 	public static final String CARD_PREFIX = "card";
 	public static final String CQL_PREFIX = "cql";
 	public static final String EMAIL_PREFIX = "email";
+	public static final String FUNCTION_PREFIX = "function";
 	public static final String GROUP_PREFIX = "group";
 	public static final String GROUP_USERS_PREFIX = "groupUsers";
 	public static final String MAPPER_PREFIX = "mapper";

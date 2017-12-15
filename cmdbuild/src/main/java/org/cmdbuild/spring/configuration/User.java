@@ -68,7 +68,7 @@ public class User {
 	public DataAccessLogic webServiceDataAccessLogic() {
 		final OperationUser user = operationUser();
 		final DataAccessLogic _delegate = new DefaultDataAccessLogic(data.systemDataView(), data.lookupStore(),
-				userDataView(), user, lock.dummyLockLogic());
+				userDataView(), user, lock.dummyLockLogic(), authentication.standardSessionLogic());
 		final DataAccessLogic delegate = new PrivilegedDataAccessLogic(_delegate, user.getPrivilegeContext());
 		return new WebServiceDataAccessLogic(delegate);
 	}
@@ -79,7 +79,8 @@ public class User {
 	public DataAccessLogic userDataAccessLogic() {
 		final OperationUser user = operationUser();
 		final DataAccessLogic _delegate = new DefaultDataAccessLogic(data.systemDataView(), data.lookupStore(),
-				userDataView(), operationUser(), lock.configurationAwareLockLogic());
+				userDataView(), operationUser(), lock.configurationAwareLockLogic(),
+				authentication.standardSessionLogic());
 		final DataAccessLogic delegate = new PrivilegedDataAccessLogic(_delegate, user.getPrivilegeContext());
 		return new UserDataAccessLogic(delegate);
 	}
@@ -92,7 +93,6 @@ public class User {
 	public CMDataView userDataView() {
 		final CMDataView userDataView = new UserDataView( //
 				data.systemDataView(), //
-				operationUser().getPrivilegeContext(), //
 				privilegeManagement.rowAndColumnPrivilegeFetcher(), //
 				operationUser());
 		return new ObservableDataView( //

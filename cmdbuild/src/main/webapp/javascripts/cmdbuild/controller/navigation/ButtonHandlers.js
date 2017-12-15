@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.controller.navigation.ButtonHandlers', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.ModuleIdentifiers',
 			'CMDBuild.core.constants.Proxy'
 		],

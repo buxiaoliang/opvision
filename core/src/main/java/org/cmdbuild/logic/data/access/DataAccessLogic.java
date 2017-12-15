@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 import javax.activation.DataHandler;
 
@@ -118,18 +117,7 @@ public interface DataAccessLogic extends Logic {
 	PagedElements<CMAttribute> getDomainAttributes(String className, boolean onlyActive,
 			AttributesQuery attributesQuery);
 
-	/**
-	 * Fetches the card with the specified Id from the class with the specified
-	 * name
-	 *
-	 * @param className
-	 * @param cardId
-	 * @throws NoSuchElementException
-	 *             if the card with the specified Id number does not exist or it
-	 *             is not unique
-	 * @return the card with the specified Id.
-	 */
-	Card fetchCard(String className, Long cardId);
+	CardWithMetadata fetchCard(String className, Long cardId);
 
 	CMCard fetchCMCard(String className, Long cardId);
 

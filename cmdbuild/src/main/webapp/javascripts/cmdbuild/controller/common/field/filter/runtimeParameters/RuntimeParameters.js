@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.common.field.filter.runtimeParameters.RuntimeParameters', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.templateResolver.Utils',
 			'CMDBuild.proxy.common.field.filter.RuntimeParameters'

@@ -1,8 +1,9 @@
 (function() {
 
-	Ext.require('CMDBuild.proxy.dashboard.Chart');
-
 	Ext.define("CMDBuild.controller.common.chart.CMChartPortletControllerPreviewStrategy", {
+
+		uses: ['CMDBuild.proxy.dashboard.Chart'],
+		
 		doRequest: function(caller, cb) {
 			var me = caller;
 			var chartId = me.chartConfiguration.getId();
@@ -42,6 +43,8 @@
 	});
 
 	Ext.define("CMDBuild.controller.common.chart.CMChartPortletControllerDefaultStrategy", {
+		uses: ['CMDBuild.proxy.dashboard.Chart'],
+
 		doRequest: function(caller, cb) {
 			var me = caller;
 			var dashbaordId = me.dashboardId;
@@ -82,6 +85,8 @@
 	});
 
 	Ext.define("CMDBuild.controller.common.chart.CMChartPortletController", {
+		uses: ['CMDBuild.proxy.dashboard.Chart'],
+
 		statics: {
 			buildStoreForChart: function(chartConfiguration) {
 				var fields = [];

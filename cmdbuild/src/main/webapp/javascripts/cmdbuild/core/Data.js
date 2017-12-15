@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.core.Data', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.configurations.Timeout',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.CookiesManager'

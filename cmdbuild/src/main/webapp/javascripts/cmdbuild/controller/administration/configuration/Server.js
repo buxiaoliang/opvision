@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.administration.configuration.Server', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.Message',
 			'CMDBuild.proxy.administration.configuration.Server'
 		],

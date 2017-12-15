@@ -194,6 +194,7 @@ public class SimpleQueryTest extends IntegrationTestBase {
 
 	@Test
 	public void singleWhereClause() {
+		logger.info("singleWhereClause BEGIN");
 		final DBClass newClass = dbDataView().create(newClass("foo"));
 		final int NUMBER_OF_INSERTED_CARDS = 5;
 		for (int i = 0; i < NUMBER_OF_INSERTED_CARDS; i++) {
@@ -214,6 +215,7 @@ public class SimpleQueryTest extends IntegrationTestBase {
 				.getOnlyRow();
 
 		assertThat(row.getCard(newClass).get(codeAttributeName), equalTo(codeValueToFind));
+		logger.info("singleWhereClause END");
 	}
 
 	@Test

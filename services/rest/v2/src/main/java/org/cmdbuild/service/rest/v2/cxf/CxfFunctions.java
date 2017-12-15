@@ -29,6 +29,7 @@ import org.cmdbuild.dao.entry.CMValueSet;
 import org.cmdbuild.dao.entrytype.attributetype.CMAttributeType;
 import org.cmdbuild.dao.function.CMFunction;
 import org.cmdbuild.dao.function.CMFunction.CMFunctionParameter;
+import org.cmdbuild.dao.function.CMFunction.CMFunctionOutputParameter;
 import org.cmdbuild.dao.query.CMQueryResult;
 import org.cmdbuild.dao.query.clause.Clauses;
 import org.cmdbuild.dao.query.clause.alias.Alias;
@@ -176,11 +177,12 @@ public class CxfFunctions implements Functions {
 		if (!function.isPresent()) {
 			errorHandler.functionNotFound(functionId);
 		}
-		final Iterable<CMFunctionParameter> parameters = function.get().getOutputParameters();
-		return serialize(parameters, limit, offset);
+		final Iterable<CMFunctionOutputParameter> oParameters = function.get().getOutputParameters();
+		
+		return serialize(oParameters, limit, offset);
 	}
 
-	private ResponseMultiple<Attribute> serialize(final Iterable<CMFunctionParameter> parameters, final Integer limit,
+	private ResponseMultiple<Attribute> serialize(final Iterable<? extends CMFunctionParameter> parameters, final Integer limit,
 			final Integer offset) {
 		final Iterable<Attribute> elements = from(parameters) //
 				.skip((offset == null) ? 0 : offset) //

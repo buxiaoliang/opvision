@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.common.field.multiselect.Group', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json',
 			'CMDBuild.model.common.field.multiselect.Group'

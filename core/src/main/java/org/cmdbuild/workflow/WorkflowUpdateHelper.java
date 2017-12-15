@@ -33,7 +33,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.Builder;
-import org.cmdbuild.auth.context.SystemPrivilegeContext;
+import org.cmdbuild.auth.context.PrivilegeContexts.SystemPrivilegeContext;
 import org.cmdbuild.auth.user.OperationUser;
 import org.cmdbuild.common.template.TemplateResolver;
 import org.cmdbuild.dao.entry.CMCard;
@@ -136,8 +136,8 @@ class WorkflowUpdateHelper {
 
 	}
 
-	public static WorkflowUpdateHelperBuilder newInstance(final OperationUser operationUser,
-			final CMClass processClass, final CMCardDefinition cardDefinition) {
+	public static WorkflowUpdateHelperBuilder newInstance(final OperationUser operationUser, final CMClass processClass,
+			final CMCardDefinition cardDefinition) {
 		return new WorkflowUpdateHelperBuilder() //
 				.withOperationUser(operationUser) //
 				.withProcessClass(processClass) //
@@ -196,7 +196,8 @@ class WorkflowUpdateHelper {
 		}
 		logger.debug(marker, "getting stored activity instance ids", Object.class.cast(activityInstanceIds));
 		logger.debug(marker, "getting stored activity definition ids", Object.class.cast(activityDefinitionIds));
-		logger.debug(marker, "getting stored current activity performers", Object.class.cast(currentActivityPerformers));
+		logger.debug(marker, "getting stored current activity performers",
+				Object.class.cast(currentActivityPerformers));
 		logger.debug(marker, "getting stored all activity performers", Object.class.cast(allActivityPerformers));
 	}
 
@@ -368,7 +369,8 @@ class WorkflowUpdateHelper {
 
 			logger.debug(marker, "new activity instance ids: '{}'", Object.class.cast(activityInstanceIds));
 			logger.debug(marker, "new activity definition ids: '{}'", Object.class.cast(activityDefinitionIds));
-			logger.debug(marker, "new activity instance performers: '{}'", Object.class.cast(currentActivityPerformers));
+			logger.debug(marker, "new activity instance performers: '{}'",
+					Object.class.cast(currentActivityPerformers));
 
 			updateCodeWithFirstActivityInfo();
 		}

@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.common.panel.gridAndForm.panel.common.graph.Window', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.common.panel.gridAndForm.Graph'
 		],

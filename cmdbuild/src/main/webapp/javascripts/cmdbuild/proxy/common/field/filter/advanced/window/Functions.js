@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.common.field.filter.advanced.window.Functions', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json',
 			'CMDBuild.model.common.field.filter.advanced.window.Function'

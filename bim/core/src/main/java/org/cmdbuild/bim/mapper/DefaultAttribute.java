@@ -7,7 +7,7 @@ public class DefaultAttribute implements Attribute {
 	private final String name;
 	private String value;
 
-	private DefaultAttribute(String name, String value) {
+	private DefaultAttribute(final String name, final String value) {
 		this.name = name;
 		this.value = value;
 	}
@@ -32,7 +32,7 @@ public class DefaultAttribute implements Attribute {
 	}
 
 	@Override
-	public void setValue(String value) {
+	public void setValue(final String value) {
 		this.value = value;
 	}
 

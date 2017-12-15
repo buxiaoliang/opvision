@@ -129,7 +129,7 @@
 	Ext.define("CMDBuild.view.administration.dashboard._DataSourceInputFildSet", {
 		extend: "Ext.form.FieldSet",
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		statics: {
 			builders: {

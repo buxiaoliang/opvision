@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.administration.taskManager.task.event.asynchronous.Asynchronous', {
 		extend: 'CMDBuild.controller.administration.taskManager.task.Abstract',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.administration.taskManager.task.event.Asynchronous'
 		],
@@ -63,12 +63,14 @@
 			this.controllerStep2 = Ext.create('CMDBuild.controller.administration.taskManager.task.event.asynchronous.Step2', { parentDelegate: this });
 			this.controllerStep3 = Ext.create('CMDBuild.controller.administration.taskManager.task.common.CronConfiguration', { parentDelegate: this });
 			this.controllerStep4 = Ext.create('CMDBuild.controller.administration.taskManager.task.event.asynchronous.Step4', { parentDelegate: this });
+			this.controllerStep5 = Ext.create('CMDBuild.controller.administration.taskManager.task.generic.Step5', { parentDelegate: this });
 
 			this.cmfg('taskManagerFormPanelsAdd', [
 				this.controllerStep1.getView(),
 				this.controllerStep2.getView(),
 				this.controllerStep3.getView(),
-				this.controllerStep4.getView()
+				this.controllerStep4.getView(),
+				this.controllerStep5.getView()
 			]);
 		},
 
@@ -154,6 +156,12 @@
 							// this.controllerStep4.setValueWorkflowCombo(record.get(CMDBuild.core.constants.Proxy.WORKFLOW_CLASS_NAME));
 							// this.controllerStep4.setValueWorkflowFieldsetCheckbox(record.get(CMDBuild.core.constants.Proxy.WORKFLOW_ACTIVE));
 
+							// Setup step 5
+							this.controllerStep5.setValueReportAttributesGrid(record.get(CMDBuild.core.constants.Proxy.REPORT_PARAMETERS));
+							this.controllerStep5.setValueReportCombo(record.get(CMDBuild.core.constants.Proxy.REPORT_NAME));
+							this.controllerStep5.setValueReportExtension(record.get(CMDBuild.core.constants.Proxy.REPORT_EXTENSION));
+							this.controllerStep5.setValueReportFieldsetCheckbox(record.get(CMDBuild.core.constants.Proxy.REPORT_ACTIVE));
+
 							this.cmfg('taskManagerFormPanelForwarder', {
 								functionName: 'disableModify',
 								params: true
@@ -211,6 +219,18 @@
 				submitDatas[CMDBuild.core.constants.Proxy.DESCRIPTION] = formData[CMDBuild.core.constants.Proxy.DESCRIPTION];
 				submitDatas[CMDBuild.core.constants.Proxy.ID] = formData[CMDBuild.core.constants.Proxy.ID];
 
+				var reportFieldsetCheckboxValue = this.controllerStep5.getValueReportFieldsetCheckbox();
+				if (reportFieldsetCheckboxValue) {
+					var attributesGridValues = this.controllerStep5.getValueReportAttributeGrid();
+
+					if (!Ext.Object.isEmpty(attributesGridValues))
+						submitDatas[CMDBuild.core.constants.Proxy.REPORT_PARAMETERS] = Ext.encode(attributesGridValues);
+
+					submitDatas[CMDBuild.core.constants.Proxy.REPORT_ACTIVE] = reportFieldsetCheckboxValue;
+					submitDatas[CMDBuild.core.constants.Proxy.REPORT_EXTENSION] = formData[CMDBuild.core.constants.Proxy.REPORT_EXTENSION];
+					submitDatas[CMDBuild.core.constants.Proxy.REPORT_NAME] = formData[CMDBuild.core.constants.Proxy.REPORT_NAME];
+				}
+				
 				if (Ext.isEmpty(formData[CMDBuild.core.constants.Proxy.ID])) {
 					CMDBuild.proxy.administration.taskManager.task.event.Asynchronous.create({
 						params: submitDatas,

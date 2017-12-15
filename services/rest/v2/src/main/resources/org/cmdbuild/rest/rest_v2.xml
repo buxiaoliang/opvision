@@ -45,7 +45,8 @@
 			<ref bean="v2_emailTemplates" />
 			<ref bean="v2_fileStores" />
 			<ref bean="v2_functions" />
-			<ref bean="v2_geometries" />
+			<ref bean="v2_geoAttributes" />
+			<ref bean="v2_geoCards" />
 			<ref bean="v2_graphConfiguration" />
 			<ref bean="v2_icons" />
 			<ref bean="v2_impersonate" />

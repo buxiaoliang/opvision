@@ -8,7 +8,7 @@
 	Ext.define('CMDBuild.view.management.workflow.panel.form.tabs.history.RowExpander', {
 		extend: 'Ext.grid.plugin.RowExpander',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Utils'
 		],

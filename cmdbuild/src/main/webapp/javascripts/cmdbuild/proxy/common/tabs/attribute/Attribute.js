@@ -5,7 +5,7 @@
 	 */
 	Ext.define('CMDBuild.proxy.common.tabs.attribute.Attribute', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json',
 			'CMDBuild.model.common.tabs.attribute.Attribute',

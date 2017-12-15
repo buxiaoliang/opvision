@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.taskManager.task.common.reportForm.ReportFormView', {
 		extend: 'Ext.form.FieldContainer',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.administration.taskManager.task.common.ReportForm'

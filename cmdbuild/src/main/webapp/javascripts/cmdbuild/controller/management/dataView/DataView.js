@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.dataView.DataView', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.common.MainViewport}
@@ -95,8 +95,9 @@
 
 				this.dataViewSelectedSet({ value: selectedDataView });
 
-				CMDBuild.clearComponent(this.view);
-
+				this.view.removeAll(true);
+				
+				
 				switch(this.cmfg('dataViewSelectedGet', CMDBuild.core.constants.Proxy.SECTION_HIERARCHY)[0]) {
 					case 'sql':
 					default: {

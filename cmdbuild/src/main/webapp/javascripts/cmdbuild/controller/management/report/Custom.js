@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.report.Custom', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Message',
 			'CMDBuild.proxy.index.Json',

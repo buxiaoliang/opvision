@@ -1,7 +1,7 @@
 package org.cmdbuild.data.converter;
 
-import static org.cmdbuild.logic.data.Utils.readBoolean;
-import static org.cmdbuild.logic.data.Utils.readString;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +13,7 @@ import org.cmdbuild.model.bim.StorableLayer;
 public class StorableLayerConverter extends BaseStorableConverter<StorableLayer> {
 
 	final String TABLE_NAME = "_BimLayer", CLASS_NAME = "ClassName", ACTIVE = "Active", BIM_ROOT = "Root",
-			EXPORT = "Export", CONTAINER = "Container", ROOT_REFERENCE = "RootReference";
+			ROOT_REFERENCE = "RootReference";
 
 	@Override
 	public String getClassName() {
@@ -27,12 +27,10 @@ public class StorableLayerConverter extends BaseStorableConverter<StorableLayer>
 
 	@Override
 	public StorableLayer convert(CMCard card) {
-		final StorableLayer layer = new StorableLayer(readString(card, CLASS_NAME));
-		layer.setActive(readBoolean(card, ACTIVE));
-		layer.setRoot(readBoolean(card, BIM_ROOT));
-		layer.setExport(readBoolean(card, EXPORT));
-		layer.setContainer(readBoolean(card, CONTAINER));
-		layer.setRootReference(readString(card, ROOT_REFERENCE));
+		final StorableLayer layer = new StorableLayer(defaultIfBlank((String)card.get(CLASS_NAME), EMPTY));
+		layer.setActive((Boolean)card.get(ACTIVE));
+		layer.setRoot((Boolean)card.get(BIM_ROOT));
+		layer.setRootReference(defaultIfBlank((String)card.get(ROOT_REFERENCE), EMPTY));
 		return layer;
 	}
 
@@ -43,8 +41,6 @@ public class StorableLayerConverter extends BaseStorableConverter<StorableLayer>
 		values.put(CLASS_NAME, layer.getClassName());
 		values.put(ACTIVE, layer.isActive());
 		values.put(BIM_ROOT, layer.isRoot());
-		values.put(EXPORT, layer.isExport());
-		values.put(CONTAINER, layer.isContainer());
 		values.put(ROOT_REFERENCE, layer.getRootReference());
 		return values;
 	}

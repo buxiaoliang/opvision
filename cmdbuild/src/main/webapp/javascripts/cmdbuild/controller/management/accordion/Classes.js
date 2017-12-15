@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.accordion.Classes', {
 		extend: 'CMDBuild.controller.common.abstract.Accordion',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Global',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.management.classes.Classes'

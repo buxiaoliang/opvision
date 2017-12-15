@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.administration.userAndGroup.group.tabs.privileges.Classes', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json',
 			'CMDBuild.model.administration.userAndGroup.group.privileges.GridRecord'

@@ -26,10 +26,10 @@ CMDBuild.WidgetBuilders.RangeQueryAttribute.prototype.getQueryOptions = function
 /**
  * @override
  */
-CMDBuild.WidgetBuilders.RangeQueryAttribute.prototype.buildFieldsetForFilter = function(field, query, originalFieldName) {
+CMDBuild.WidgetBuilders.RangeQueryAttribute.prototype.buildFieldsetForFilter = function(field, query, originalFieldName, taskManager) {
 	var field2 = field.cloneConfig();
 	field2.hideLabel = true;
 	field2.disable();
 
-	return this.genericBuildFieldsetForFilter([field, field2], query, originalFieldName);
+	return this.genericBuildFieldsetForFilter([field, field2], query, originalFieldName, taskManager);
 };

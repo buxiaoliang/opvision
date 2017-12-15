@@ -1,7 +1,5 @@
 package org.cmdbuild.bim.service.bimserver;
 
-
-
 public interface BimserverConfiguration {
 
 	public static interface ChangeListener {

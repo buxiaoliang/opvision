@@ -1,6 +1,7 @@
 package unit.cxf;
 
 import static java.util.Arrays.asList;
+import static org.cmdbuild.auth.context.PrivilegeContexts.nullPrivilegeContext;
 import static org.cmdbuild.service.rest.v1.constants.Serialization.GROUP;
 import static org.cmdbuild.service.rest.v1.model.Models.newSession;
 import static org.hamcrest.Matchers.equalTo;
@@ -19,7 +20,6 @@ import javax.ws.rs.WebApplicationException;
 
 import org.cmdbuild.auth.acl.CMGroup;
 import org.cmdbuild.auth.acl.NullGroup;
-import org.cmdbuild.auth.context.NullPrivilegeContext;
 import org.cmdbuild.auth.user.AuthenticatedUser;
 import org.cmdbuild.auth.user.OperationUser;
 import org.cmdbuild.exception.AuthException;
@@ -136,7 +136,7 @@ public class CxfSessionsTest {
 				.when(authenticatedUser).getUsername();
 		doReturn(asList("bar", "baz")) //
 				.when(authenticatedUser).getGroupNames();
-		final OperationUser operationUser = new OperationUser(authenticatedUser, new NullPrivilegeContext(),
+		final OperationUser operationUser = new OperationUser(authenticatedUser, nullPrivilegeContext(),
 				new NullGroup());
 		doReturn(operationUser) //
 				.when(sessionLogic).getUser(anyString());
@@ -188,7 +188,7 @@ public class CxfSessionsTest {
 				.when(group).getName();
 		doReturn(true) //
 				.when(group).isActive();
-		final OperationUser operationUser = new OperationUser(authenticatedUser, new NullPrivilegeContext(), group);
+		final OperationUser operationUser = new OperationUser(authenticatedUser, nullPrivilegeContext(), group);
 		doReturn(operationUser) //
 				.when(sessionLogic).getUser(anyString());
 
@@ -252,7 +252,7 @@ public class CxfSessionsTest {
 				.when(authenticatedUser).getUsername();
 		doReturn(asList("foo", "bar", "baz")) //
 				.when(authenticatedUser).getGroupNames();
-		final OperationUser operationUser = new OperationUser(authenticatedUser, new NullPrivilegeContext(),
+		final OperationUser operationUser = new OperationUser(authenticatedUser, nullPrivilegeContext(),
 				new NullGroup());
 		doReturn(operationUser) //
 				.when(sessionLogic).getUser(anyString());

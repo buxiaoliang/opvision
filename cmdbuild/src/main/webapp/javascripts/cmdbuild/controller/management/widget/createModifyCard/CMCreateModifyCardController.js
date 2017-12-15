@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.widget.createModifyCard.CMCreateModifyCardController', {
 		extend: 'CMDBuild.controller.common.abstract.Widget',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Global',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Message',
@@ -231,6 +231,7 @@
 
 						// Override attributes with model configuration values
 						if (!this.cmfg('widgetCreateModifyCardConfigurationIsEmpty', CMDBuild.core.constants.Proxy.MODEL)) {
+							
 							var configurationModel = this.cmfg('widgetCreateModifyCardConfigurationGet', CMDBuild.core.constants.Proxy.MODEL);
 
 							attributes = [];
@@ -252,9 +253,10 @@
 									}
 								}, this);
 						}
-
+						
+						
+						
 						this.view.fillForm(attributes, false);
-
 						if (Ext.isFunction(callback))
 							Ext.callback(callback, this);
 					} else {
@@ -272,7 +274,7 @@
 		loadCard: function (loadRemoteData, params, cb) {
 			var me = this;
 			var cardId;
-
+			
 			if (params) {
 				cardId = params.Id || params.cardId;
 			} else {
@@ -298,7 +300,6 @@
 							// returned from the server are of the class and not of the activity
 							data = Ext.Object.merge((me.card.raw || me.card.data), data);
 						}
-
 						addRefenceAttributesToDataIfNeeded(decodedResult.referenceAttributes, data);
 						var card = Ext.create('CMDBuild.DummyModel', data);
 
@@ -313,8 +314,37 @@
 		loadCardStandardCallBack: function (card) {
 			var me = this;
 			this.card = card;
-
+			
 			this.loadFields(card.get('IdClass'), function () {
+				var card;
+				if(this.card.getData()['Id'] == -1) {
+					var _fields = this.view.getForm().getFields().items,
+						presets = this.cmfg('widgetCreateModifyCardConfigurationGet', CMDBuild.core.constants.Proxy.PRESETS);
+	
+					var values = {
+						Id: -1, // to have a new card
+						IdClass: this.card.get('IdClass')
+					}
+					
+					if (presets != null) {
+						for(var i in _fields) {
+							var field = _fields[i];
+							
+							if (presets[field.name]) {
+					
+								var cardAttributeName = field.name;
+								var cardAttributePresetValue = this.clientForm.getValues()[presets[field.name]];
+			
+								if (typeof cardAttributePresetValue != 'undefined')
+									values[cardAttributeName] = cardAttributePresetValue;
+							}
+						};
+					}
+					
+					card = new CMDBuild.DummyModel(values);
+				} else {
+					card = this.card;
+				}
 				me.view.loadCard(card, bothpanel = true);
 				if (me.isEditable(card)) {
 					me.view.editMode();

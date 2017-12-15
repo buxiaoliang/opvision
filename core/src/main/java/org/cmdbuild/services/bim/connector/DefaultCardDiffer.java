@@ -12,7 +12,6 @@ import org.cmdbuild.dao.entry.CMCard.CMCardDefinition;
 import org.cmdbuild.dao.entry.IdAndDescription;
 import org.cmdbuild.dao.entrytype.CMAttribute;
 import org.cmdbuild.dao.entrytype.CMClass;
-import org.cmdbuild.dao.entrytype.CMDomain;
 import org.cmdbuild.dao.entrytype.attributetype.CMAttributeType;
 import org.cmdbuild.dao.entrytype.attributetype.LookupAttributeType;
 import org.cmdbuild.dao.entrytype.attributetype.ReferenceAttributeType;
@@ -20,20 +19,21 @@ import org.cmdbuild.dao.view.CMDataView;
 import org.cmdbuild.data.store.lookup.Lookup;
 import org.cmdbuild.data.store.lookup.LookupType;
 import org.cmdbuild.logic.data.lookup.LookupLogic;
+import org.cmdbuild.services.bim.BimDataView;
+import org.cmdbuild.services.bim.DefaultBimDataView.BimCard;
 import org.slf4j.Logger;
 
-@Deprecated
 public class DefaultCardDiffer implements CardDiffer {
 
+	private final BimDataView bimdataView;
 	private final CMDataView dataView;
 	private final LookupLogic lookupLogic;
-	private final MapperRules support;
 	private final Logger logger = org.cmdbuild.bim.logging.LoggingSupport.logger;
 
-	public DefaultCardDiffer(final CMDataView dataView, final LookupLogic lookupLogic, final MapperRules support) {
+	public DefaultCardDiffer(final CMDataView dataView, final LookupLogic lookupLogic, final BimDataView bimDataView) {
+		this.bimdataView = bimDataView;
 		this.dataView = dataView;
 		this.lookupLogic = lookupLogic;
-		this.support = support;
 	}
 
 	@Override
@@ -42,7 +42,6 @@ public class DefaultCardDiffer implements CardDiffer {
 		final CMClass theClass = oldCard.getType();
 		final String className = theClass.getName();
 		if (!className.equals(sourceEntity.getTypeName())) {
-			// better safe than sorry...
 			return updatedCard;
 		}
 
@@ -64,9 +63,9 @@ public class DefaultCardDiffer implements CardDiffer {
 					final IdAndDescription oldReference = (IdAndDescription) oldAttributeValue;
 					Long newReferencedId = null;
 					if (isReference) {
-						final String referencedClass = findReferencedClassNameFromReferenceAttribute(attribute);
 						final String newReferencedKey = sourceEntity.getAttributeByName(attributeName).getValue();
-						newReferencedId = support.findIdFromKey(newReferencedKey, referencedClass, dataView);
+						BimCard bimData = bimdataView.getBimDataFromGlobalid(newReferencedKey);
+						newReferencedId = bimData.getId();
 					} else if (isLookup) {
 						final String lookupType = ((LookupAttributeType) attribute.getType()).getLookupTypeName();
 						final String newLookupValue = sourceEntity.getAttributeByName(attributeName).getValue();
@@ -76,14 +75,16 @@ public class DefaultCardDiffer implements CardDiffer {
 						final IdAndDescription newReference = new IdAndDescription(newReferencedId, "");
 						cardDefinition.set(attributeName, newReference);
 						sendDelta = true;
+						logger.debug("attributeName {} attributeValue {}", attributeName, newReferencedId);
 					}
 				} else {
-					final Object newAttributeValue = attributeType.convertValue(sourceEntity.getAttributeByName(
-							attributeName).getValue());
+					final Object newAttributeValue = attributeType
+							.convertValue(sourceEntity.getAttributeByName(attributeName).getValue());
 					if ((newAttributeValue != null && !newAttributeValue.equals(oldAttributeValue))
 							|| (newAttributeValue == null && oldAttributeValue != null)) {
 						cardDefinition.set(attributeName, newAttributeValue);
 						sendDelta = true;
+						logger.debug("attributeName {} attributeValue {}", attributeName, newAttributeValue);
 					}
 				}
 			}
@@ -110,7 +111,6 @@ public class DefaultCardDiffer implements CardDiffer {
 		logger.info("Building card of type " + className);
 		boolean sendDelta = false;
 
-		// FIXME Da ottimizzare!!!
 		for (final CMAttribute attribute : attributes) {
 			final String attributeName = attribute.getName();
 			final boolean isReference = attribute.getType() instanceof ReferenceAttributeType;
@@ -120,9 +120,9 @@ public class DefaultCardDiffer implements CardDiffer {
 				if (isReference || isLookup) {
 					Long newReferencedId = null;
 					if (isReference) {
-						final String referencedClass = findReferencedClassNameFromReferenceAttribute(attribute);
 						final String referencedGuid = sourceAttribute.getValue();
-						newReferencedId = support.findIdFromKey(referencedGuid, referencedClass, dataView);
+						BimCard bimData = bimdataView.getBimDataFromGlobalid(referencedGuid);
+						newReferencedId = bimData.getId();
 					} else if (isLookup) {
 						final String newLookupValue = sourceAttribute.getValue();
 						final String lookupType = ((LookupAttributeType) attribute.getType()).getLookupTypeName();
@@ -132,10 +132,12 @@ public class DefaultCardDiffer implements CardDiffer {
 						sourceAttribute.setValue(newReferencedId.toString());
 						cardDefinition.set(attributeName, sourceAttribute.getValue());
 						sendDelta = true;
+						logger.debug("attributeName {} attributeValue {}", attributeName, newReferencedId);
 					}
 				} else {
 					cardDefinition.set(attributeName, sourceAttribute.getValue());
 					sendDelta = true;
+					logger.debug("attributeName {} attributeValue {}", attributeName, sourceAttribute.getValue());
 				}
 			}
 		}
@@ -143,19 +145,6 @@ public class DefaultCardDiffer implements CardDiffer {
 			newCard = cardDefinition.save();
 		}
 		return newCard;
-	}
-
-	private String findReferencedClassNameFromReferenceAttribute(final CMAttribute attribute) {
-		final String domainName = ((ReferenceAttributeType) attribute.getType()).getDomainName();
-		final CMDomain domain = dataView.findDomain(domainName);
-		String referencedClass = "";
-		final String ownerClassName = attribute.getOwner().getName();
-		if (domain.getClass1().getName().equals(ownerClassName)) {
-			referencedClass = domain.getClass2().getName();
-		} else {
-			referencedClass = domain.getClass1().getName();
-		}
-		return referencedClass;
 	}
 
 	private Long findLookupIdFromDescription(final String lookupValue, final String lookupType) {

@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.management.common.widgets.grid.ImportCSVWindow', {
 		extend: 'CMDBuild.core.window.AbstractModal',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.widget.grid.Csv'

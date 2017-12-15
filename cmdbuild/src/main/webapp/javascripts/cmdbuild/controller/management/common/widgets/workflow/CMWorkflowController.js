@@ -1,16 +1,16 @@
 (function() {
 
-	Ext.require([
-		'CMDBuild.controller.management.common.widgets.workflow.StaticsController',
-		'CMDBuild.core.constants.Global',
-		'CMDBuild.core.Message',
-		'CMDBuild.proxy.management.widget.Workflow'
-	]);
-
 	var ERROR_TEMPLATE = "<p class=\"{0}\">{1}</p>";
 	var FILTER_FIELD = "_SystemFieldFilter";
 
 	Ext.define("CMDBuild.controller.management.common.widgets.workflow.CMWorkflowController", {
+		uses: [
+			'CMDBuild.controller.management.common.widgets.workflow.StaticsController',
+			'CMDBuild.core.constants.Global',
+			'CMDBuild.core.Message',
+			'CMDBuild.proxy.management.widget.Workflow'
+		],
+
 		mixins: {
 			observable: "Ext.util.Observable",
 			widgetcontroller: "CMDBuild.controller.management.common.widgets.CMWidgetController"

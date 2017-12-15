@@ -1,7 +1,9 @@
 package integration.logic.data.filter;
 
+import static com.google.common.reflect.Reflection.newProxy;
 import static integration.logic.data.DataDefinitionLogicTest.a;
 import static integration.logic.data.DataDefinitionLogicTest.newClass;
+import static org.cmdbuild.common.utils.Reflection.unsupported;
 import static utils.IntegrationTestUtils.newAttribute;
 
 import java.util.Map;
@@ -15,6 +17,7 @@ import org.cmdbuild.dao.entrytype.attributetype.CMAttributeType;
 import org.cmdbuild.data.store.dao.DataViewStore;
 import org.cmdbuild.data.store.lookup.DataViewLookupStore;
 import org.cmdbuild.data.store.lookup.LookupStorableConverter;
+import org.cmdbuild.logic.auth.SessionLogic;
 import org.cmdbuild.logic.data.DataDefinitionLogic;
 import org.cmdbuild.logic.data.DefaultDataDefinitionLogic;
 import org.cmdbuild.logic.data.DummyLockLogic;
@@ -54,6 +57,7 @@ public abstract class FilteredCardsFixture extends IntegrationTestBase {
 
 	@Before
 	public void setUp() throws Exception {
+		final SessionLogic sessionLogic = newProxy(SessionLogic.class, unsupported("should not be used"));
 		dataDefinitionLogic = new DefaultDataDefinitionLogic(dbDataView());
 		dataAccessLogic = new DefaultDataAccessLogic( //
 				dbDataView(), //
@@ -61,7 +65,8 @@ public abstract class FilteredCardsFixture extends IntegrationTestBase {
 						DataViewStore.newInstance(dbDataView(), new LookupStorableConverter())), //
 				dbDataView(), //
 				operationUser(), //
-				new DummyLockLogic());
+				new DummyLockLogic(), //
+				sessionLogic);
 		createClassesAndDomains();
 		initializeDatabaseData();
 	}

@@ -5,7 +5,7 @@
 	 */
 	Ext.define('CMDBuild.core.configurations.builder.Localization', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.administration.configuration.GeneralOptions',
 			'CMDBuild.proxy.core.configurations.builder.Localization'

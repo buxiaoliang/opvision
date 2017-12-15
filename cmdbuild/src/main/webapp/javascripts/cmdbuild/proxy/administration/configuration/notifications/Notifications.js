@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.administration.configuration.notifications.Notifications', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json'
 		],

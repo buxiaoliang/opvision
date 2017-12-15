@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.core.fieldManager.builders.text.HtmlEditor', {
 		extend: 'CMDBuild.core.fieldManager.builders.Abstract',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy'
 		],

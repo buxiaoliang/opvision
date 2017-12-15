@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.administration.configuration.notifications.tabs.Email', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.administration.configuration.notifications.tabs.Email'
 		],

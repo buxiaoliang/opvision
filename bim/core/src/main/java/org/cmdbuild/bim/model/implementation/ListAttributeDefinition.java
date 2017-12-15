@@ -9,26 +9,28 @@ import com.google.common.collect.Lists;
 public class ListAttributeDefinition extends DefaultAttributeDefinition {
 
 	private EntityDefinition reference = EntityDefinition.NULL_ENTITYDEFINITION;
-	private List<EntityDefinition> allReferences = Lists.newArrayList();
+	private final List<EntityDefinition> allReferences = Lists.newArrayList();
 
 	public List<EntityDefinition> getAllReferences() {
 		return allReferences;
 	}
 
-	public ListAttributeDefinition(String attributeName) {
+	public ListAttributeDefinition(final String attributeName) {
 		super(attributeName);
 	}
 
-	public void setReference(EntityDefinition referencedEntity) {
+	public void setReference(final EntityDefinition referencedEntity) {
 		this.reference = referencedEntity;
 	}
 
+	@Override
 	public EntityDefinition getReference() {
 		return reference;
 	}
-	
-	public String toString(){
-		return "LIST OF --> " + this.getName();
+
+	@Override
+	public String toString() {
+		return "LIST OF --> " + this.getIfcName();
 	}
 
 }

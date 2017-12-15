@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.report.jasper.GridPanel', {
 		extend: 'Ext.grid.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.Message',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.report.Jasper'

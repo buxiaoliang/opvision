@@ -1,10 +1,10 @@
 package org.cmdbuild.services;
 
+import static org.cmdbuild.auth.context.PrivilegeContexts.nullPrivilegeContext;
 import static org.cmdbuild.auth.user.AuthenticatedUserImpl.ANONYMOUS_USER;
 
 import org.cmdbuild.auth.UserStore;
 import org.cmdbuild.auth.acl.NullGroup;
-import org.cmdbuild.auth.context.NullPrivilegeContext;
 import org.cmdbuild.auth.user.OperationUser;
 import org.cmdbuild.listeners.ValuesStore;
 
@@ -22,7 +22,7 @@ public class ValuesStoreBasedUserStore implements UserStore {
 	public OperationUser getUser() {
 		OperationUser operationUser = (OperationUser) valuesStore.get(AUTH_KEY);
 		if (operationUser == null) {
-			operationUser = new OperationUser(ANONYMOUS_USER, new NullPrivilegeContext(), new NullGroup());
+			operationUser = new OperationUser(ANONYMOUS_USER, nullPrivilegeContext(), new NullGroup());
 			setUser(operationUser);
 		}
 		return operationUser;

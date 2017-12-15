@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.common.field.display.Reference', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.common.field.display.Reference',
 			'CMDBuild.proxy.index.Json'

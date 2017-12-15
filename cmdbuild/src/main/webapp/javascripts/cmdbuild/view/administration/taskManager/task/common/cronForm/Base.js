@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.taskManager.task.common.cronForm.Base', {
 		extend: 'Ext.panel.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy'
 		],

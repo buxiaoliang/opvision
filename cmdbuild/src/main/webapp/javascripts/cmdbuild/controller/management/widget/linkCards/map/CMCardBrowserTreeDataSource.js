@@ -1,8 +1,7 @@
 (function() {
 
-	Ext.require('CMDBuild.proxy.gis.Gis');
-
 	Ext.define("CMDBuild.controller.management.widget.linkCards.map.CMCardBrowserTreeDataSource", {
+		uses: ['CMDBuild.proxy.gis.Gis'],
 
 		GEOSERVER: "GeoServer",
 

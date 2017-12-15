@@ -15,6 +15,8 @@ import org.cmdbuild.logic.files.DefaultFileLogic;
 import org.cmdbuild.logic.files.DefaultFileStore;
 import org.cmdbuild.logic.files.DefaultFileSystemFacade;
 import org.cmdbuild.logic.files.DefaultHashing;
+import org.cmdbuild.common.cache.ClusterMessageReceiver;
+import org.cmdbuild.common.cache.ClusterMessageSender;
 import org.cmdbuild.logic.files.CacheExpiration;
 import org.cmdbuild.logic.files.FileLogic;
 import org.cmdbuild.logic.files.FileStore;
@@ -24,13 +26,18 @@ import org.cmdbuild.services.DefaultFilesStore;
 import org.cmdbuild.services.FilesStore;
 import org.cmdbuild.services.ForwardingFilesStore;
 import org.cmdbuild.services.Settings;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 
 @Configuration
 public class Files {
 
 	private static final String IMAGES_DIRECTORY = "images";
+	
+	private @Autowired ClusterMessageReceiver clusterMessageReceiver;
+	private @Autowired ClusterMessageSender clusterMessageSender;
 
 	private static class FilesStoreWithLimitations extends ForwardingFilesStore {
 
@@ -118,7 +125,7 @@ public class Files {
 
 	@Bean
 	protected CachedFileSystemFacade cachedFileSystemFacade() {
-		return new CachedFileSystemFacade(defaultFileSystemFacade(), new CacheExpiration() {
+		CachedFileSystemFacade fsf = new CachedFileSystemFacade(defaultFileSystemFacade(), new CacheExpiration() {
 
 			@Override
 			public long duration() {
@@ -131,6 +138,9 @@ public class Files {
 			}
 
 		});
+		fsf.setClusterMessageSender(clusterMessageSender);
+		fsf.register(clusterMessageReceiver);
+		return fsf;
 	}
 
 	@Bean
@@ -140,7 +150,7 @@ public class Files {
 
 	@Bean
 	protected CachedHashing cachedHashing() {
-		return new CachedHashing(defaultHashing(), new CacheExpiration() {
+		CachedHashing cached = new CachedHashing(defaultHashing(), new CacheExpiration() {
 
 			@Override
 			public long duration() {
@@ -153,6 +163,9 @@ public class Files {
 			}
 
 		});
+		cached.setClusterMessageSender(clusterMessageSender);
+		cached.register(clusterMessageReceiver);
+		return cached;
 	}
 
 	@Bean

@@ -4,33 +4,25 @@ import java.util.List;
 
 public interface EntityDefinition {
 
-	String getTypeName();
+	String getIfcType();
 
 	List<AttributeDefinition> getAttributes();
 
 	boolean isValid();
 
-	String getLabel();
+	String getCmClass();
 
-	void setLabel(String label);
-
-	String getShape();
-
-	void setShape(String shape);
-	
-	String getContainerAttribute();
-	
-	void setContainerAttribute(String containerAttribute);
+	void setCmClass(String className);
 
 	final EntityDefinition NULL_ENTITYDEFINITION = new EntityDefinition() {
 
 		@Override
-		public String getTypeName() {
+		public String getIfcType() {
 			return "";
 		}
 
 		@Override
-		public String getLabel() {
+		public String getCmClass() {
 			return "";
 		}
 
@@ -45,35 +37,9 @@ public interface EntityDefinition {
 		}
 
 		@Override
-		public String getShape() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public void setLabel(final String label) {
-		}
-
-		@Override
-		public void setShape(final String shape) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void setContainerAttribute(String containerAttribute) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public String getContainerAttribute() {
-			// TODO Auto-generated method stub
-			return null;
+		public void setCmClass(final String label) {
 		}
 
 	};
-
-
 
 }

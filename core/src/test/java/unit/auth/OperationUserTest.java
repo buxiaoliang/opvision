@@ -1,5 +1,6 @@
 package unit.auth;
 
+import static org.cmdbuild.auth.context.PrivilegeContexts.nullPrivilegeContext;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
@@ -20,7 +21,6 @@ import org.cmdbuild.auth.acl.NullGroup;
 import org.cmdbuild.auth.acl.PrivilegeContext;
 import org.cmdbuild.auth.acl.PrivilegePair;
 import org.cmdbuild.auth.acl.SerializablePrivilege;
-import org.cmdbuild.auth.context.NullPrivilegeContext;
 import org.cmdbuild.auth.privileges.constants.PrivilegedObjectType;
 import org.cmdbuild.auth.user.AnonymousUser;
 import org.cmdbuild.auth.user.AuthenticatedUser;
@@ -83,7 +83,7 @@ public class OperationUserTest {
 
 	@Test(expected = NullPointerException.class)
 	public void shouldFailCreationIfAuthenticatedUserIsNull() {
-		final OperationUser operationUser = new OperationUser(null, new NullPrivilegeContext(), new NullGroup());
+		final OperationUser operationUser = new OperationUser(null, nullPrivilegeContext(), new NullGroup());
 	}
 
 	@Test(expected = NullPointerException.class)
@@ -93,7 +93,7 @@ public class OperationUserTest {
 
 	@Test(expected = NullPointerException.class)
 	public void shouldFailCreationIfSelectedGroupIsNull() {
-		final OperationUser operationUser = new OperationUser(ANONYMOUS_USER, new NullPrivilegeContext(), null);
+		final OperationUser operationUser = new OperationUser(ANONYMOUS_USER, nullPrivilegeContext(), null);
 	}
 
 	/*

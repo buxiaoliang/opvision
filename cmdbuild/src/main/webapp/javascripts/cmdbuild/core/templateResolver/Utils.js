@@ -1,9 +1,8 @@
 (function () {
 
-	Ext.require(['CMDBuild.core.constants.TemplateResolver']);
-
 	Ext.define('CMDBuild.core.templateResolver.Utils', {
-
+		uses: ['CMDBuild.core.constants.TemplateResolver'],
+		
 		singleton: true,
 
 		/**

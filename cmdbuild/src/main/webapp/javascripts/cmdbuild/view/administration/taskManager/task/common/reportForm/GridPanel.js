@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.taskManager.task.common.reportForm.GridPanel', {
 		extend: 'Ext.grid.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.administration.taskManager.task.common.reportForm.Grid'

@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.management.widget.openReport.OpenReportView', {
 		extend: 'Ext.form.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.management.widget.openReport.OpenReport'

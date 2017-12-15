@@ -15,6 +15,7 @@ import org.cmdbuild.logic.email.EmailLogic.Email;
 import org.cmdbuild.logic.taskmanager.event.SynchronousEventFacade;
 import org.cmdbuild.logic.taskmanager.scheduler.SchedulerFacade;
 import org.cmdbuild.logic.taskmanager.scheduler.SchedulerFacade.Callback;
+import org.cmdbuild.logic.taskmanager.store.DefaultLogicAndStoreConverter;
 import org.cmdbuild.logic.taskmanager.store.LogicAndStoreConverter;
 import org.cmdbuild.logic.taskmanager.task.connector.ConnectorTask;
 import org.cmdbuild.logic.taskmanager.task.email.ReadEmailTask;
@@ -24,6 +25,7 @@ import org.cmdbuild.logic.taskmanager.task.generic.GenericTask;
 import org.cmdbuild.logic.taskmanager.task.process.StartWorkflowTask;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
+import javax.annotation.Nullable;
 
 import com.google.common.base.Function;
 
@@ -621,12 +623,16 @@ public class DefaultTaskManagerLogic implements TaskManagerLogic {
 
 	public DefaultTaskManagerLogic(final LogicAndStoreConverter converter, final TaskStore store,
 			final SchedulerFacade schedulerFacade, final SynchronousEventFacade synchronousEventFacade,
-			final EmailLogic emailLogic) {
+			final EmailLogic emailLogic, @Nullable ObserverCollectorUpdater observerCollectorUpdater) {
 		this.converter = converter;
 		this.store = store;
 		this.schedulerFacade = schedulerFacade;
 		this.synchronousEventFacade = synchronousEventFacade;
 		this.emailLogic = emailLogic;
+		
+		if (observerCollectorUpdater != null) {
+			observerCollectorUpdater.enable();
+		}
 	}
 
 	@Override

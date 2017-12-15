@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.workflow.tabs.taskManager.GridPanel', {
 		extend: 'Ext.grid.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.administration.workflow.tabs.Tasks'
 		],

@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.management.widget.openReport.ParametersWindow', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.interfaces.FormSubmit',
 			'CMDBuild.proxy.index.Json'

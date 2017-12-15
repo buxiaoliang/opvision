@@ -1,6 +1,6 @@
 {
 	"description": "中文",
-	"release": "2.4-dev",
+	"release": "2.5-dev",
 	"administration": {
 		"description": "管理模块",
 		"modClass": {
@@ -317,7 +317,13 @@
 		"tooltip": {
 			"editParameters": "编辑参数",
 			"reload": "重新加载",
-			"showData": "显示数据"
+			"showData": "显示数据",
+			"showAll": "<em>Show all</em>",
+			"hideAll": "<em>Hide all</em>"
+		},
+		"button": {
+			"showAll": "<em>Show all</em>",
+			"hideAll": "<em>Hide all</em>"
 		},
 		"tree_names": {
 			"class": "标准的",
@@ -560,7 +566,13 @@
 				"geo_attributes": "地理属性",
 				"gisNavigation": "GIS导航",
 				"position": "位置",
-				"zoom": "缩放"
+				"zoom": "缩放",
+				"shape": "<em>Shape</em>",
+				"shapes": {
+					"circle": "<em>Circle</em>",
+					"rectangle": "<em>Rectangle</em>",
+					"star": "<em>Star</em>"
+				}
 			},
 			"maptoolbar": {
 				"add": "增加",
@@ -922,6 +934,8 @@
 	"filterInputParameters": "<em>Filter input parameters</em>",
 	"filterParameters": "<em>Filter parameters</em>",
 	"filtersForGroups": "组的过滤器",
+	"filterTypeExpression": "<em>Expression</em>",
+	"filterTypeNormal": "<em>Normal</em>",
 	"filterView": "从过滤器",
 	"find": "<em>Find</em>",
 	"finish": "完成",
@@ -984,6 +998,7 @@
 	"initialLatitude": "初始纬度",
 	"initialLongitude": "初始经度",
 	"initialZoomLevel": "初使变焦等级",
+	"inputParameter": "输入参数",
 	"instance": "实例",
 	"instanceName": "实例名称",
 	"inverseDescription": "<em>Inverse description</em>",
@@ -1237,7 +1252,6 @@
 	"set": "设置",
 	"setAsDefault": "设置为缺省",
 	"setFilter": "设置过滤器",
-	"setLater": "输入参数",
 	"settleTimeMs": "<em>\"Settle time\" (ms)</em>",
 	"setup": "安装",
 	"showDetails": "<em>Show details</em>",

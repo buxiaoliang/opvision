@@ -6,9 +6,8 @@ import org.joda.time.DateTime;
 public class StorableProject implements Storable {
 
 	private String projectId, name, description, //
-		importMapping, exportMapping, //
-		exportProjectId, shapeProjectId;
-	private boolean active, synch;
+		importMapping;
+	private boolean active;
 	private DateTime lastCheckin;
 	private Long cardId;
 	
@@ -59,14 +58,6 @@ public class StorableProject implements Storable {
 		this.lastCheckin = lastCheckin;
 	}
 
-	public boolean isSynch() {
-		return synch;
-	}
-
-	public void setSynch(boolean synch) {
-		this.synch = synch;
-	}
-
 	public String getImportMapping() {
 		return importMapping;
 	}
@@ -75,18 +66,6 @@ public class StorableProject implements Storable {
 		this.importMapping = importMapping;
 	}
 	
-	public void setExportProjectId(final String exportProjectId) {
-		this.exportProjectId = exportProjectId;
-	}
-
-	public String getExportMapping() {
-		return exportMapping;
-	}
-
-	public void setExportMapping(String exportMapping) {
-		this.exportMapping = exportMapping;
-	}
-
 	public Long getCardId() {
 		return cardId;
 	}
@@ -95,15 +74,4 @@ public class StorableProject implements Storable {
 		this.cardId = cardId;
 	}
 
-	public String getExportProjectId() {
-		return exportProjectId;
-	}
-
-	public String getShapeProjectId() {
-		return shapeProjectId;
-	}
-
-	public void setShapeProjectId(String shapeProjectId) {
-		this.shapeProjectId = shapeProjectId;
-	}
 }

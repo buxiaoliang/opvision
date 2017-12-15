@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.userAndGroup.group.tabs.defaultFilters.TreePanel', {
 		extend: 'Ext.tree.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.administration.userAndGroup.group.tabs.DefaultFilters',
 			'CMDBuild.model.administration.userAndGroup.group.defaultFilters.TreeNode',

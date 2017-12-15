@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.accordion.Workflow', {
 		extend: 'CMDBuild.controller.common.abstract.Accordion',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.ModuleIdentifiers',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.management.workflow.Workflow'

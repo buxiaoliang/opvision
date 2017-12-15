@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.taskManager.task.common.notificationForm.TemplateCombo', {
 		extend: 'Ext.form.field.ComboBox',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.administration.taskManager.task.common.NotificationForm'

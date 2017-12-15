@@ -6,7 +6,7 @@
 	Ext.define('CMDBuild.core.buttons.iconized.add.Relation', {
 		extend: 'Ext.button.Split',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Utils',
 			'CMDBuild.proxy.core.buttons.iconized.add.Relation'

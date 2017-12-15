@@ -6,7 +6,7 @@ import org.cmdbuild.dao.entry.CMCard;
 import org.slf4j.Logger;
 
 public interface CardDiffer {
-	
+
 	Logger logger = LoggingSupport.logger;
 
 	CMCard updateCard(Entity sourceEntity, CMCard oldCard);

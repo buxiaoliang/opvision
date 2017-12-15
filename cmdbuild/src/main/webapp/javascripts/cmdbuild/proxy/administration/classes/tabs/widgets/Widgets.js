@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.administration.classes.tabs.widgets.Widgets', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.administration.classes.tabs.widgets.Grid',
 			'CMDBuild.proxy.index.Json'

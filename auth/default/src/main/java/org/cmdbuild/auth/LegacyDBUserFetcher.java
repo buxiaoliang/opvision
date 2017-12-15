@@ -67,5 +67,19 @@ public abstract class LegacyDBUserFetcher extends DBUserFetcher {
 	protected boolean extendedInformation() {
 		return true;
 	}
+	@Override
+	protected String userPasswordExpirationTimestampAttribute() {
+		return "PasswordExpiration";
+	}
+	@Override
+	protected String userLastPasswordChangeTimestampAttribute() {
+		return "LastPasswordChange";
+	}
+	@Override
+	protected String userLastExpiringNotification() {
+		return "LastExpiringNotification";
+	}
+
+	
 
 }

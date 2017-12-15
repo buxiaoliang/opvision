@@ -1,13 +1,11 @@
 (function () {
 
-	Ext.require([
-		'CMDBuild.core.constants.Global',
-		'CMDBuild.core.constants.Proxy'
-	]);
-
 	Ext.define('CMDBuild.model.administration.workflow.Workflow', { // TODO: waiting for refactor (rename and structure)
 		extend: 'Ext.data.Model',
-
+		uses: [
+			'CMDBuild.core.constants.Global',
+			'CMDBuild.core.constants.Proxy'
+		],
 		fields: [
 			{ name: CMDBuild.core.constants.Proxy.ACTIVE, type: 'boolean', defaultValue: true },
 			{ name: CMDBuild.core.constants.Proxy.CAPABILITIES, type: 'auto', defaultValue: {} },

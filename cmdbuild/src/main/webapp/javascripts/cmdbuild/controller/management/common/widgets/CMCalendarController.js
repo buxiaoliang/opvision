@@ -1,12 +1,11 @@
 (function() {
 
-	Ext.require([
-		'CMDBuild.core.Message',
-		'CMDBuild.proxy.management.widget.Calendar'
-	]);
 
 	Ext.define("CMDBuild.controller.management.common.widgets.CMCalendarController", {
-
+		uses: [
+			'CMDBuild.core.Message',
+			'CMDBuild.proxy.management.widget.Calendar'
+		],
 		mixins: {
 			observable: "Ext.util.Observable",
 			widgetcontroller: "CMDBuild.controller.management.common.widgets.CMWidgetController"

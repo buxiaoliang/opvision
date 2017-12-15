@@ -2,7 +2,7 @@
 
 	Ext.define("CMDBuild.controller.management.widget.linkCards.map.CMMapController", {
 
-		requires: [
+		uses: [
 			'CMDBuild.controller.management.widget.linkCards.map.LayerBuilder',
 			'CMDBuild.proxy.gis.Gis',
 			'CMDBuild.view.management.widget.linkCards.map.CMMiniCardGrid'

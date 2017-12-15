@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.gis.Icon', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json',
 			'CMDBuild.model.gis.Icon'

@@ -6,7 +6,7 @@
 	Ext.define('CMDBuild.controller.management.classes.tabs.Email', {
 		extend: 'CMDBuild.controller.management.common.tabs.email.Email',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.common.tabs.email.Email'
 		],

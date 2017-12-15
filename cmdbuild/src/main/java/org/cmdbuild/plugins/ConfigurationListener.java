@@ -1,11 +1,12 @@
 package org.cmdbuild.plugins;
 
+import java.io.File;
 import static java.lang.String.format;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import org.apache.commons.lang3.StringUtils;
+import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 import org.apache.log4j.PropertyConfigurator;
 import org.cmdbuild.logger.Log;
 import org.cmdbuild.services.Settings;
@@ -42,8 +43,10 @@ public class ConfigurationListener implements ServletContextListener {
 		final String path = sce.getServletContext().getRealPath(ROOT_PATH);
 
 		// we get the fully qualified path to configs
-		String configPath = StringUtils.defaultString(sce.getServletContext().getInitParameter(CONFIG_LOCATION_PARAM),
-				sce.getServletContext().getRealPath(DEFAULT_CONFIG_LOCATION));
+		String configPath = firstNonNull(
+				sce.getServletContext().getInitParameter(CONFIG_LOCATION_PARAM),
+				sce.getServletContext().getRealPath(DEFAULT_CONFIG_LOCATION),
+				path + "/" + DEFAULT_CONFIG_LOCATION); // this is required if WEB-INF/config is a symlink (for example when we emulate a cluster on a single host, and want to share config dir via symlink)
 
 		/*
 		 * Next we set the properties for all the servlets and JSP pages in this
@@ -57,11 +60,11 @@ public class ConfigurationListener implements ServletContextListener {
 		final String[] modules = sce.getServletContext().getInitParameter(MODULES_PARAM).split(MODULES_SEPARATOR);
 		final Settings settings = Settings.getInstance();
 		for (final String module : modules) {
-			logger.debug("loading configurations for '{}'", module);
+			logger.debug("loading configurations for module = {}", module);
 			try {
-				settings.load(module, moduleFile(configPath, module));
-			} catch (final Throwable e) {
-				logger.error("unable to load configuration file for '{}'", module);
+				settings.getModule(module, new File(moduleFile(configPath, module)));
+			} catch (Exception e) {
+				logger.error("unable to load configuration file for module = " + module, e);
 			}
 		}
 		settings.setRootPath(path);

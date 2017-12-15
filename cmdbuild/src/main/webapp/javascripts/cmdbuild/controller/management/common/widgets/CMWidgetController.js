@@ -5,7 +5,7 @@
 	 */
 	Ext.define('CMDBuild.controller.management.common.widgets.CMWidgetController', {
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		statics: {
 			WIDGET_NAME: '',

@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.routes.Classes', {
 		extend: 'CMDBuild.controller.common.abstract.Routes',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Message',
 			'CMDBuild.proxy.management.routes.Classes'

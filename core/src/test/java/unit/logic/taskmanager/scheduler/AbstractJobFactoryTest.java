@@ -12,6 +12,7 @@ import org.cmdbuild.logic.taskmanager.scheduler.AbstractJobFactory;
 import org.cmdbuild.scheduler.Job;
 import org.cmdbuild.scheduler.command.Command;
 import org.junit.Test;
+import static org.mockito.Mockito.times;
 
 public class AbstractJobFactoryTest {
 
@@ -40,7 +41,7 @@ public class AbstractJobFactoryTest {
 		output.execute();
 
 		// then
-		verify(task).getId();
+		verify(task, times(2)).getId();
 		verifyNoMoreInteractions(task);
 		assertThat(output.getName(), equalTo("42"));
 	}
@@ -71,7 +72,7 @@ public class AbstractJobFactoryTest {
 		output.execute();
 
 		// then
-		verify(task).getId();
+		verify(task, times(2)).getId();
 		verify(command).execute();
 		verifyNoMoreInteractions(task, command);
 		assertThat(output.getName(), equalTo("42"));

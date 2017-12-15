@@ -2,17 +2,20 @@
 
 	var tr = CMDBuild.Translation.administration.modDashboard.charts;
 
-	Ext.require([
-		'CMDBuild.core.Message',
-		'CMDBuild.proxy.dashboard.Chart'
-	]);
-
 	Ext.define("CMDBuild.controller.administration.dashboard.CMDashboardChartConfigurationPanelControllerDelegate", {
+		uses: [
+			'CMDBuild.core.Message',
+			'CMDBuild.proxy.dashboard.Chart'
+		],
 		dashboardChartAreChanged: Ext.emptyFn
 	});
 
 	Ext.define("CMDBuild.controller.administration.dashboard.CMDashboardChartConfigurationPanelController", {
-
+		uses: [
+			'CMDBuild.core.Message',
+			'CMDBuild.proxy.dashboard.Chart'
+		],
+		
 		alias: "controller.cmdashboardchartconfiguration",
 
 		statics: {

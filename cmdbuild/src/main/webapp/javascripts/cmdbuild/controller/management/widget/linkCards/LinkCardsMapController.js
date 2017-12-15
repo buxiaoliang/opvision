@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.widget.linkCards.LinkCardsMapController', {
 		extend: 'CMDBuild.controller.management.widget.linkCards.map.CMMapController',
 
-		requires: [
+		uses: [
 			'CMDBuild.controller.management.widget.linkCards.map.CMCardBrowserTreeDataSource',
 			'CMDBuild.controller.management.widget.linkCards.map.CMMapLayerSwitcherController',
 			'CMDBuild.controller.management.widget.linkCards.map.CMSelectFeatureController'

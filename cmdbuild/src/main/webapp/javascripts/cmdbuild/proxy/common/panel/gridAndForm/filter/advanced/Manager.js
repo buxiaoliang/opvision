@@ -5,7 +5,7 @@
 	 */
 	Ext.define('CMDBuild.proxy.common.panel.gridAndForm.filter.advanced.Manager', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.common.panel.gridAndForm.filter.advanced.Filter',
 			'CMDBuild.proxy.index.Json'

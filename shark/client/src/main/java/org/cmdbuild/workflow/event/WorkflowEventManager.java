@@ -19,6 +19,7 @@ public interface WorkflowEventManager {
 	 * Process events for a certain session and remove them.
 	 * 
 	 * @param sessionId
+	 * @throws org.cmdbuild.workflow.CMWorkflowException
 	 */
 	void processEvents(int sessionId) throws CMWorkflowException;
 

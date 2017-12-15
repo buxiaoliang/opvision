@@ -6,7 +6,7 @@
 	Ext.define('CMDBuild.core.fieldManager.FieldManager', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		mixins: ['CMDBuild.core.fieldManager.ExternalServices'],
 

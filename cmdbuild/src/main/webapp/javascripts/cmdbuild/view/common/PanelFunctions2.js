@@ -14,7 +14,7 @@
 	 */
 	Ext.define('CMDBuild.view.common.PanelFunctions2', {
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @param {Object} field

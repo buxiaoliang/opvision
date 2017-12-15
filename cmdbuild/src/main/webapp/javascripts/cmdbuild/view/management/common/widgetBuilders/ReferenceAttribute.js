@@ -24,7 +24,7 @@
 	 * @param attribute
 	 * @return Ext.form.FieldSet
 	 */
-	CMDBuild.WidgetBuilders.ReferenceAttribute.prototype.getFieldSetForFilter = function(attribute) {
+	CMDBuild.WidgetBuilders.ReferenceAttribute.prototype.getFieldSetForFilter = function(attribute, taskManager) {
 		var attributeCopy = Ext.apply({}, {
 			fieldmode : "write", // change the field mode because in the
 									// filter must write on this field
@@ -37,7 +37,7 @@
 		manageCalculatedValues(field, attribute);
 		var conditionCombo = this.getQueryCombo(attributeCopy);
 
-		return this.buildFieldsetForFilter(field, conditionCombo, attributeCopy);
+		return this.buildFieldsetForFilter(field, conditionCombo, attributeCopy, taskManager);
 	};
 
 	// Manage "calculated" values to filter by

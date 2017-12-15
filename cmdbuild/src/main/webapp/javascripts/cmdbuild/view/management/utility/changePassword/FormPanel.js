@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.management.utility.changePassword.FormPanel', {
 		extend: 'Ext.form.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy'
 		],
@@ -14,6 +14,8 @@
 		 * @cfg {CMDBuild.controller.management.utility.changePassword.ChangePassword}
 		 */
 		delegate: undefined,
+		
+		
 
 		bodyCls: 'cmdb-blue-panel',
 		border: false,
@@ -24,6 +26,9 @@
 			type: 'vbox',
 			align: 'stretch'
 		},
+		
+		disableCancelButton: false,
+		helper: undefined,
 
 		/**
 		 * @returns {Void}
@@ -31,6 +36,27 @@
 		 * @override
 		 */
 		initComponent: function () {
+			var _helper = undefined;
+			if (this.helper) {
+				_helper = Ext.Panel({
+				    border:false,
+				    padding: 10,
+				    bodyCls: 'cmdb-blue-panel',
+				    bodyBorder:false,
+				    hideBorders:true,
+				    html: this.helper
+				});	
+			}
+			
+			
+			var _abort = this.disableCancelButton ? undefined : Ext.create('CMDBuild.core.buttons.text.Abort', {
+																	scope: this,
+													
+																	handler: function (button, e) {
+																		this.delegate.cmfg('onUtilityChangePasswordAbortButtonClick');
+																	}
+																})
+			
 			Ext.apply(this, {
 				dockedItems: [
 					Ext.create('Ext.toolbar.Toolbar', {
@@ -52,17 +78,13 @@
 									this.delegate.cmfg('onUtilityChangePasswordSaveButtonClick');
 								}
 							}),
-							Ext.create('CMDBuild.core.buttons.text.Abort', {
-								scope: this,
+							_abort
 
-								handler: function (button, e) {
-									this.delegate.cmfg('onUtilityChangePasswordAbortButtonClick');
-								}
-							})
 						]
 					})
 				],
 				items: [
+		        	_helper,
 					Ext.create('Ext.form.field.Text', {
 						name: CMDBuild.core.constants.Proxy.OLD_PASSWORD,
 						fieldLabel: CMDBuild.Translation.oldPassword,

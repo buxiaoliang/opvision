@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.Session', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json'
 		],

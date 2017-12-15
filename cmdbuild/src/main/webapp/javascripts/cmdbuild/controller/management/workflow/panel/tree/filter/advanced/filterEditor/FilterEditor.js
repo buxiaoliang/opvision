@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.workflow.panel.tree.filter.advanced.filterEditor.FilterEditor', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.management.workflow.panel.tree.filter.advanced.Manager}

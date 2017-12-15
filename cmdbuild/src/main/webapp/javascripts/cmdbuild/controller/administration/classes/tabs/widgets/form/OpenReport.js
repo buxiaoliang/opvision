@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.administration.classes.tabs.widgets.form.OpenReport', {
 		extend: 'CMDBuild.controller.administration.classes.tabs.widgets.form.Abstract',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.administration.classes.tabs.widgets.OpenReport',
 			'CMDBuild.model.administration.classes.tabs.widgets.openReport.Definition'

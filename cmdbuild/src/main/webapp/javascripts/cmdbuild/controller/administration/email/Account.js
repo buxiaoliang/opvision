@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.administration.email.Account', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Message',
 			'CMDBuild.proxy.email.Account'

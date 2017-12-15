@@ -1,16 +1,15 @@
 (function() {
 
-	Ext.require([
-		'CMDBuild.core.constants.Proxy',
-		'CMDBuild.proxy.index.Json'
-	]);
-
 	/**
 	 * @deprecated new class (CMDBuild.view.common.field.filter.advanced.Advanced)
 	 */
 
 	Ext.define('Functions', {
 		extend: 'Ext.data.Model',
+		uses: [
+			'CMDBuild.core.constants.Proxy',
+			'CMDBuild.proxy.index.Json'
+		],
 		fields: [
 			{ name: 'name', type: 'string' }
 		]
@@ -18,6 +17,11 @@
 
 	Ext.define('CMDBuild.view.management.common.filter.CMFunctions', {
 		extend: 'Ext.panel.Panel',
+		
+		uses: [
+			'CMDBuild.core.constants.Proxy',
+			'CMDBuild.proxy.index.Json'
+		],
 
 		title: CMDBuild.Translation.functionLabel,
 		bodyCls: 'x-panel-body-default-framed cmdb-border-top',

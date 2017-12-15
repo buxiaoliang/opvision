@@ -1,6 +1,5 @@
 (function () {
 
-	Ext.require('CMDBuild.core.constants.Global');
 
 	var NO_SELECTION = 'No selection';
 
@@ -10,7 +9,8 @@
 	Ext.define('CMDBuild.view.management.classes.relations.CMEditRelationWindow', {
 		extend: 'CMDBuild.core.window.AbstractModal',
 
-		requires: [
+		uses: [
+			'CMDBuild.core.constants.Global',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Message'
 		],

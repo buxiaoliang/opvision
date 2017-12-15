@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.workflow.panel.form.tabs.activityNew.Tab', {
 		extend: 'CMDBuild.controller.common.panel.module.form.Tab',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Metadata',
 			'CMDBuild.core.constants.ModuleIdentifiers',
 			'CMDBuild.core.constants.Proxy',
@@ -82,9 +82,9 @@
 						switch (metadataObject[CMDBuild.core.constants.Proxy.NAME]) {
 							case CMDBuild.core.constants.Metadata.getSelectedAttributesGroup(): {
 								var markerAttribute = Ext.Array.findBy(attributes, function (item, i) {
-										return item[CMDBuild.core.constants.Proxy.NAME] == metadataObject[CMDBuild.core.constants.Proxy.VALUE];
+										return item.getData()[CMDBuild.core.constants.Proxy.NAME] == metadataObject[CMDBuild.core.constants.Proxy.VALUE];
 									}, this),
-									markerAttributeGroup = markerAttribute.get(CMDBuild.core.constants.Proxy.GROUP);
+								markerAttributeGroup = markerAttribute != null ? markerAttribute.get(CMDBuild.core.constants.Proxy.GROUP) : "";
 
 								if (Ext.isString(markerAttributeGroup) && !Ext.isEmpty(markerAttributeGroup))
 									attributeGroupId = Ext.String.trim(markerAttributeGroup).replace(/\s+/g, ''); // FIXME: waiting for refactor (attribute's group identifiers)

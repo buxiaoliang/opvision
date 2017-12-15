@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.administration.classes.tabs.widgets.OpenReport', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.configurations.Timeout',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.administration.classes.tabs.widgets.openReport.ReportCombo',
@@ -33,6 +33,7 @@
 		getStore: function () {
 			return CMDBuild.global.Cache.requestAsStore(CMDBuild.core.constants.Proxy.REPORT, {
 				autoLoad: true,
+				pageSize: '500',
 				model: 'CMDBuild.model.administration.classes.tabs.widgets.openReport.ReportCombo',
 				proxy: {
 					type: 'ajax',

@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.management.accordion.Menu', {
 		extend: 'CMDBuild.view.common.abstract.Accordion',
 
-		requires: ['CMDBuild.model.menu.accordion.Management'],
+		uses: ['CMDBuild.model.menu.accordion.Management'],
 
 		/**
 		 * @cfg {CMDBuild.controller.management.accordion.Menu}

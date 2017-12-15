@@ -7,7 +7,13 @@ import java.util.concurrent.ExecutionException;
 
 import javax.activation.DataHandler;
 
-import org.cmdbuild.services.cache.CachingService.Cacheable;
+import org.cmdbuild.common.cache.CacheEvictionPolicy;
+import org.cmdbuild.common.cache.ClusterEvent;
+import org.cmdbuild.common.cache.ClusterMessage;
+import org.cmdbuild.common.cache.ClusterMessageReceiver;
+import org.cmdbuild.common.cache.ClusterMessageSender;
+import org.cmdbuild.common.cache.ClusterTarget;
+import org.cmdbuild.services.cache.CachingService.ClusterAwareCacheable;
 import org.slf4j.Logger;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
@@ -16,15 +22,17 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
-public class CachedFileSystemFacade extends ForwardingFileSystemFacade implements Cacheable {
+//@Component
+public class CachedFileSystemFacade extends ForwardingFileSystemFacade implements ClusterAwareCacheable {
 
 	private static final Logger logger = FileLogic.logger;
 	private static final Marker MARKER = MarkerFactory.getMarker(CachedFileSystemFacade.class.getName());
 
 	private static final Object DUMMY_KEY = new Object();
-
+	
 	private final FileSystemFacade delegate;
 	private final LoadingCache<Object, Collection<File>> cache;
+	private ClusterMessageSender clusterMessageSender;
 
 	public CachedFileSystemFacade(final FileSystemFacade delegate, final CacheExpiration expiration) {
 		this.delegate = delegate;
@@ -66,8 +74,29 @@ public class CachedFileSystemFacade extends ForwardingFileSystemFacade implement
 	}
 
 	@Override
-	public void clearCache() {
+	public void clearCache(CacheEvictionPolicy policy) {
 		cache.invalidateAll();
+		if (policy.clusterPropagation()) {
+			ClusterMessage msg = new ClusterMessage(ClusterTarget.CachedFileSystemFacade.getTargetId(), ClusterEvent.CACHE_EVICT_CACHE);
+			clusterMessageSender.safeSend(msg);
+		}
 	}
 
+	@Override
+	public void update(ClusterMessage msg) {
+		if (ClusterEvent.CACHE_EVICT_CACHE.equals(msg.getEvent()))
+			cache.invalidateAll();
+	}
+
+	@Override
+	public void register(ClusterMessageReceiver receiver) {
+		receiver.register(this, ClusterTarget.CachedFileSystemFacade.getTargetId());
+	}
+
+	@Override
+	public void setClusterMessageSender(ClusterMessageSender sender) {
+		clusterMessageSender = sender;
+	}
+
+	
 }

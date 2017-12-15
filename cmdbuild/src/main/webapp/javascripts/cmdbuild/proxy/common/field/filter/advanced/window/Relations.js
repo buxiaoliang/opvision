@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.common.field.filter.advanced.window.Relations', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.common.field.filter.advanced.window.relations.DestinationEditorStore',
 			'CMDBuild.model.common.field.filter.advanced.window.relations.DomainGrid'

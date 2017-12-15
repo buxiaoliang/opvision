@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.common.field.trigger.cron.Cron', {
 		extend: 'Ext.form.field.Trigger',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @property {CMDBuild.controller.common.field.trigger.cron.Cron}

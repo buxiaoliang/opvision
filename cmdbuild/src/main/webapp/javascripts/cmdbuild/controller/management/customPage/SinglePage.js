@@ -8,7 +8,7 @@
 		 */
 		parentDelegate: undefined,
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.configurations.CustomPage'
 		],

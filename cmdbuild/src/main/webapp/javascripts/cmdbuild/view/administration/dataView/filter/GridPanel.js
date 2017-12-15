@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.dataView.filter.GridPanel', {
 		extend: 'Ext.grid.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Message',
 			'CMDBuild.proxy.dataView.Filter'

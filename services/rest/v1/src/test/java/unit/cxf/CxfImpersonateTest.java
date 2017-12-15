@@ -2,6 +2,7 @@ package unit.cxf;
 
 import static com.google.common.base.Predicates.alwaysFalse;
 import static com.google.common.base.Predicates.alwaysTrue;
+import static org.cmdbuild.auth.context.PrivilegeContexts.nullPrivilegeContext;
 import static org.cmdbuild.auth.user.AuthenticatedUserImpl.ANONYMOUS_USER;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
@@ -14,7 +15,6 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import javax.ws.rs.WebApplicationException;
 
 import org.cmdbuild.auth.acl.NullGroup;
-import org.cmdbuild.auth.context.NullPrivilegeContext;
 import org.cmdbuild.auth.user.AuthenticatedUser;
 import org.cmdbuild.auth.user.OperationUser;
 import org.cmdbuild.logic.auth.SessionLogic;
@@ -96,7 +96,7 @@ public class CxfImpersonateTest {
 		operationUserAllowed.setDelegate(alwaysFalse);
 		doReturn(true) //
 				.when(sessionLogic).exists(eq("token"));
-		doReturn(new OperationUser(ANONYMOUS_USER, new NullPrivilegeContext(), new NullGroup())) //
+		doReturn(new OperationUser(ANONYMOUS_USER, nullPrivilegeContext(), new NullGroup())) //
 				.when(sessionLogic).getUser(eq("token"));
 		doThrow(new WebApplicationException()) //
 				.when(errorHandler).notAuthorized();
@@ -110,7 +110,7 @@ public class CxfImpersonateTest {
 		// given
 		doReturn(true) //
 				.when(sessionLogic).exists(anyString());
-		final OperationUser actual = new OperationUser(mock(AuthenticatedUser.class), new NullPrivilegeContext(),
+		final OperationUser actual = new OperationUser(mock(AuthenticatedUser.class), nullPrivilegeContext(),
 				new NullGroup());
 		doReturn(actual) //
 				.when(sessionLogic).getUser(anyString());

@@ -5,7 +5,8 @@ public class BimDataModelCommandFactory {
 	private final BimPersistence dataPersistence;
 	private final BimDataModelManager dataModelManager;
 
-	public BimDataModelCommandFactory(final BimPersistence dataPersistence, final BimDataModelManager dataModelManager) {
+	public BimDataModelCommandFactory(final BimPersistence dataPersistence,
+			final BimDataModelManager dataModelManager) {
 		this.dataPersistence = dataPersistence;
 		this.dataModelManager = dataModelManager;
 	}
@@ -28,21 +29,7 @@ public class BimDataModelCommandFactory {
 					final BimDataModelManager dataModelManager) {
 				return new BimRootCommand(bimDataPersistence, dataModelManager);
 			}
-		}, //
-		export {
-			@Override
-			public BimDataModelCommand create(final BimPersistence bimDataPersistence,
-					final BimDataModelManager dataModelManager) {
-				return new BimExportCommand(bimDataPersistence, dataModelManager);
-			}
-		}, //
-		container {
-			@Override
-			public BimDataModelCommand create(final BimPersistence bimDataPersistence,
-					final BimDataModelManager dataModelManager) {
-				return new BimContainerCommand(bimDataPersistence, dataModelManager);
-			}
-		}, //
+		},
 		rootreference {
 			@Override
 			public BimDataModelCommand create(final BimPersistence bimDataPersistence,
@@ -74,7 +61,8 @@ public class BimDataModelCommandFactory {
 			return unknown;
 		}
 
-		public abstract BimDataModelCommand create(BimPersistence dataPersistence, BimDataModelManager dataModelManager);
+		public abstract BimDataModelCommand create(BimPersistence dataPersistence,
+				BimDataModelManager dataModelManager);
 	}
 
 }

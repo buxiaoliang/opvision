@@ -1,23 +1,7 @@
 package org.cmdbuild.bim.mapper.xml;
 
-import static org.cmdbuild.bim.utils.BimConstants.CONTAINER;
-import static org.cmdbuild.bim.utils.BimConstants.COORDINATES;
-import static org.cmdbuild.bim.utils.BimConstants.GEOMETRY;
-import static org.cmdbuild.bim.utils.BimConstants.IFC_GLOBALID;
-import static org.cmdbuild.bim.utils.BimConstants.IFC_RELATED_ELEMENTS;
-import static org.cmdbuild.bim.utils.BimConstants.IFC_RELATING_STRUCTURE;
-import static org.cmdbuild.bim.utils.BimConstants.IFC_REL_CONTAINED;
-import static org.cmdbuild.bim.utils.BimConstants.POINT_TEMPLATE;
-import static org.cmdbuild.bim.utils.BimConstants.SPACEGEOMETRY;
-import static org.cmdbuild.bim.utils.BimConstants.SPACEHEIGHT;
-
 import java.util.List;
-import java.util.Map;
 
-import javax.vecmath.Vector3d;
-
-import org.cmdbuild.bim.geometry.DefaultIfcGeometryHelper;
-import org.cmdbuild.bim.geometry.IfcGeometryHelper;
 import org.cmdbuild.bim.logging.LoggingSupport;
 import org.cmdbuild.bim.mapper.DefaultAttribute;
 import org.cmdbuild.bim.mapper.DefaultEntity;
@@ -26,8 +10,6 @@ import org.cmdbuild.bim.model.Attribute;
 import org.cmdbuild.bim.model.AttributeDefinition;
 import org.cmdbuild.bim.model.Entity;
 import org.cmdbuild.bim.model.EntityDefinition;
-import org.cmdbuild.bim.model.Position3d;
-import org.cmdbuild.bim.model.SpaceGeometry;
 import org.cmdbuild.bim.model.implementation.ListAttributeDefinition;
 import org.cmdbuild.bim.model.implementation.ReferenceAttributeDefinition;
 import org.cmdbuild.bim.model.implementation.SimpleAttributeDefinition;
@@ -40,23 +22,16 @@ import org.slf4j.Logger;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 public class BimReader implements Reader {
-	
+
 	private static final Logger logger = LoggingSupport.logger;
 
 	private final BimService service;
-	private IfcGeometryHelper geometryHelper;
-	private final Map<String, String> containersMap = Maps.newHashMap();
 	private String revisionId;
 
 	public BimReader(final BimService service) {
 		this.service = service;
-	}
-
-	private IfcGeometryHelper geometryHelper() {
-		return geometryHelper;
 	}
 
 	@Override
@@ -73,22 +48,20 @@ public class BimReader implements Reader {
 		return entities;
 	}
 
-	private void read(ReaderListener listener, EntityDefinition entityDefinition) {
+	private void read(final ReaderListener listener, final EntityDefinition entityDefinition) {
 
-		logger.debug("reading data for revision " + revisionId + " for class " + entityDefinition.getTypeName()
-				+ " corresponding to " + entityDefinition.getLabel());
-
-		geometryHelper = new DefaultIfcGeometryHelper(service, revisionId);
+		logger.debug("reading data for revision " + revisionId + " for class " + entityDefinition.getIfcType()
+				+ " corresponding to " + entityDefinition.getCmClass());
 		if (entityDefinition.isValid()) {
-			Iterable<Entity> entities = service.getEntitiesByType(entityDefinition.getTypeName(), revisionId);
+			final Iterable<Entity> entities = service.getEntitiesByType(entityDefinition.getIfcType(), revisionId);
 			if (Iterables.size(entities) == 0) {
-				throw new BimError("No entities of type " + entityDefinition.getTypeName() + " found in revision "
-						+ revisionId);
+				throw new BimError(
+						"No entities of type " + entityDefinition.getIfcType() + " found in revision " + revisionId);
 			}
 			logger.debug(Iterables.size(entities) + " entities found");
-			for (Entity entity : entities) {
-				final Entity entityToFill = DefaultEntity.withTypeAndKey(entityDefinition.getLabel(), entity.getAttributeByName(
-						IFC_GLOBALID).getValue());
+			for (final Entity entity : entities) {
+				final Entity entityToFill = DefaultEntity.withTypeAndKey(entityDefinition.getCmClass(),
+						entity.getKey());
 				if (!entityToFill.isValid()) {
 					continue;
 				}
@@ -100,175 +73,84 @@ public class BimReader implements Reader {
 		}
 	}
 
-	private boolean readEntityAttributes(Entity entity, EntityDefinition entityDefinition, String revisionId,
-			Entity retrievedEntity) {
-		Iterable<AttributeDefinition> attributesToRead = entityDefinition.getAttributes();
+	private boolean readEntityAttributes(final Entity entity, final EntityDefinition entityDefinition,
+			final String revisionId, final Entity retrievedEntity) {
+		final Iterable<AttributeDefinition> attributesToRead = entityDefinition.getAttributes();
 		boolean exit = false;
-		// fetch and store the attributes
-		for (AttributeDefinition attributeDefinition : attributesToRead) {
-			logger.debug("attribute " + attributeDefinition.getName() + " of entity " + entity.getTypeName());
+		for (final AttributeDefinition attributeDefinition : attributesToRead) {
+			logger.debug("attribute " + attributeDefinition.getIfcName() + " of entity " + entity.getTypeName());
 			if (!exit) {
-				String attributeName = attributeDefinition.getName();
-				if (attributeName.equals(COORDINATES)) {
-					fetchCoordinates(entity, revisionId, retrievedEntity);
-				} else if (attributeName.equals(GEOMETRY)) {
-					fetchGeometry(entity.getKey(), retrievedEntity);
-				} else if (attributeName.equals(CONTAINER)) {
-					fetchContainerKey(entity.getKey(), retrievedEntity, attributeDefinition.getLabel());
-				} else {
-					Attribute attribute = entity.getAttributeByName(attributeName);
-					if (attribute.isValid()) {
-						if (attributeDefinition instanceof SimpleAttributeDefinition) {
-							SimpleAttributeDefinition simpleAttributeDefinition = (SimpleAttributeDefinition) attributeDefinition;
-							if (simpleAttributeDefinition.getValue() != "") {
-								logger.debug(attributeName + " must have value "
-										+ simpleAttributeDefinition.getValue());
-								logger.debug("It has value " + attribute.getValue());
-								if (!simpleAttributeDefinition.getValue().equals(attribute.getValue())) {
-									logger.debug("skip this entity");
-									exit = true;
-									return false;
-								}
-							}
-							if (!exit) {
-								SimpleAttribute simpleAttribute = (SimpleAttribute) attribute;
-								logger.debug(attributeDefinition.getLabel() + ": "
-										+ simpleAttribute.getStringValue());
-								Attribute retrievedAttribute = DefaultAttribute.withNameAndValue(
-										attributeDefinition.getLabel(), simpleAttribute.getStringValue());
-								((DefaultEntity) retrievedEntity).addAttribute(retrievedAttribute);
-							}
-						} else if (attributeDefinition instanceof ReferenceAttributeDefinition) {
-							ReferenceAttribute referenceAttribute = (ReferenceAttribute) attribute;
-							Entity referencedEntity = service.getReferencedEntity(referenceAttribute, revisionId);
-							EntityDefinition referencedEntityDefinition = attributeDefinition.getReference();
-							if (referencedEntity.isValid() && referencedEntityDefinition.isValid()) {
-								readEntityAttributes(referencedEntity, referencedEntityDefinition, revisionId,
-										retrievedEntity);
-							} else {
-								logger.debug("referenced entity valid " + referencedEntity.isValid());
-							}
-						} else if (attributeDefinition instanceof ListAttributeDefinition) {
-							ListAttribute list = (ListAttribute) attribute;
-							int count = 1;
-							for (Attribute value : list.getValues()) {
-								if (value instanceof ReferenceAttribute) {
-									ReferenceAttribute referenceAttribute = (ReferenceAttribute) value;
-									Entity referencedEntity = service.getReferencedEntity(referenceAttribute,
-											revisionId);
-
-									for (EntityDefinition nestedEntityDefinition : ((ListAttributeDefinition) attributeDefinition)
-											.getAllReferences()) {
-										if (referencedEntity.isValid() && nestedEntityDefinition.isValid()) {
-											readEntityAttributes(referencedEntity, nestedEntityDefinition, revisionId,
-													retrievedEntity);
-										} else {
-
-										}
-									}
-								} else {
-									SimpleAttribute simpleAttribute = (SimpleAttribute) value;
-									if (list.getValues().size() > 1) {
-
-										Attribute retrievedAttribute = DefaultAttribute.withNameAndValue(
-												attributeDefinition.getLabel() + "" + count,
-												simpleAttribute.getStringValue());
-										((DefaultEntity) retrievedEntity).addAttribute(retrievedAttribute);
-									} else {
-
-										Attribute retrievedAttribute = DefaultAttribute.withNameAndValue(
-												attributeDefinition.getLabel(), simpleAttribute.getStringValue());
-										((DefaultEntity) retrievedEntity).addAttribute(retrievedAttribute);
-									}
-									count++;
-								}
+				final String attributeName = attributeDefinition.getIfcName();
+				final Attribute attribute = entity.getAttributeByName(attributeName);
+				if (attribute.isValid()) {
+					if (attributeDefinition instanceof SimpleAttributeDefinition) {
+						final SimpleAttributeDefinition simpleAttributeDefinition = (SimpleAttributeDefinition) attributeDefinition;
+						if (simpleAttributeDefinition.getValue() != "") {
+							logger.debug(attributeName + " must have value " + simpleAttributeDefinition.getValue());
+							logger.debug("It has value " + attribute.getValue());
+							if (!simpleAttributeDefinition.getValue().equals(attribute.getValue())) {
+								logger.debug("skip this entity");
+								exit = true;
+								return false;
 							}
 						}
-					} else {
+						if (!exit) {
+							logger.debug(attributeDefinition.getCmName() + ": " + attribute.getValue());
+							final Attribute retrievedAttribute = DefaultAttribute
+									.withNameAndValue(attributeDefinition.getCmName(), attribute.getValue());
+							((DefaultEntity) retrievedEntity).addAttribute(retrievedAttribute);
+						}
+					} else if (attributeDefinition instanceof ReferenceAttributeDefinition) {
+						final ReferenceAttribute referenceAttribute = (ReferenceAttribute) attribute;
+						final Entity referencedEntity = service.getReferencedEntity(referenceAttribute, revisionId);
+						final EntityDefinition referencedEntityDefinition = attributeDefinition.getReference();
 
+						if (referencedEntity.isValid() && referencedEntityDefinition.isValid()) {
+							readEntityAttributes(referencedEntity, referencedEntityDefinition, revisionId,
+									retrievedEntity);
+						} else {
+							logger.debug("referenced entity valid " + referencedEntity.isValid());
+						}
+					} else if (attributeDefinition instanceof ListAttributeDefinition) {
+						final ListAttribute list = (ListAttribute) attribute;
+						int count = 1;
+						for (final Attribute value : list.getValues()) {
+							if (value instanceof ReferenceAttribute) {
+
+								final ReferenceAttribute referenceAttribute = (ReferenceAttribute) value;
+								final Entity referencedEntity = service.getReferencedEntity(referenceAttribute,
+										revisionId);
+
+								for (final EntityDefinition nestedEntityDefinition : ((ListAttributeDefinition) attributeDefinition)
+										.getAllReferences()) {
+									if (referencedEntity.isValid() && nestedEntityDefinition.isValid()) {
+										readEntityAttributes(referencedEntity, nestedEntityDefinition, revisionId,
+												retrievedEntity);
+									} else {
+
+									}
+								}
+							} else {
+								final SimpleAttribute simpleAttribute = (SimpleAttribute) value;
+								if (list.getValues().size() > 1) {
+									final Attribute retrievedAttribute = DefaultAttribute.withNameAndValue(
+											attributeDefinition.getCmName() + "" + count,
+											simpleAttribute.getStringValue());
+									((DefaultEntity) retrievedEntity).addAttribute(retrievedAttribute);
+								} else {
+
+									final Attribute retrievedAttribute = DefaultAttribute.withNameAndValue(
+											attributeDefinition.getCmName(), simpleAttribute.getStringValue());
+									((DefaultEntity) retrievedEntity).addAttribute(retrievedAttribute);
+								}
+								count++;
+							}
+						}
 					}
 				}
 			}
 		}
 		return true;
-	}
-
-	private void fetchGeometry(String key, Entity retrievedEntity) {
-		SpaceGeometry geometry = geometryHelper.fetchGeometry(key);
-		if (geometry != null) {
-			mapGeometryIntoBimEntity(retrievedEntity, geometry);
-		}
-	}
-
-	private void fetchCoordinates(Entity entity, String revisionId, Entity retrievedEntity) {
-		Position3d position = geometryHelper().getAbsoluteObjectPlacement(entity);
-		String pgPoint = postgisFormat(position);
-
-		DefaultAttribute coordinatesAttribute = DefaultAttribute.withNameAndValue(COORDINATES, pgPoint);
-		retrievedEntity.getAttributes().put(coordinatesAttribute.getName(), coordinatesAttribute);
-	}
-
-	// If we decide to store coordinates as double[3], we will need to modify
-	// only this method.
-	private String postgisFormat(Position3d position) {
-		String x = Double.toString(position.getOrigin().x);
-		String y = Double.toString(position.getOrigin().y);
-		String z = Double.toString(position.getOrigin().z);
-		return String.format(POINT_TEMPLATE, x, y, z);
-	}
-
-	private void fetchContainerKey(String key, Entity retrivedEntity, String attributeName) {
-		Iterable<Entity> ifcRelations = service.getEntitiesByType(IFC_REL_CONTAINED, revisionId);
-		String containerKey = "";
-		boolean found = false;
-		if (containersMap.containsKey(key)) {
-			containerKey = containersMap.get(key);
-		} else {
-			for (Entity ifcRelation : ifcRelations) {
-				ReferenceAttribute container = (ReferenceAttribute) ifcRelation
-						.getAttributeByName(IFC_RELATING_STRUCTURE);
-				ListAttribute relatedElements = (ListAttribute) ifcRelation.getAttributeByName(IFC_RELATED_ELEMENTS);
-				for (Attribute relatedElementReference : relatedElements.getValues()) {
-					Entity relatedElement = service.getReferencedEntity((ReferenceAttribute) relatedElementReference,
-							revisionId);
-					containersMap.put(relatedElement.getKey(), container.getGlobalId());
-					if (relatedElement.getKey().equals(key)) {
-						found = true;
-						containerKey = container.getGlobalId();
-						break;
-					}
-				}
-				if (found) {
-					break;
-				}
-			}
-		}
-		if (!containerKey.isEmpty()) {
-			DefaultAttribute container = DefaultAttribute.withNameAndValue(attributeName, containerKey);
-			retrivedEntity.getAttributes().put(container.getName(), container);
-		}
-	}
-
-	public static void mapGeometryIntoBimEntity(Entity retrievedEntity, SpaceGeometry geometry) {
-
-		StringBuilder postgisLinestringBuilder = new StringBuilder("POLYGON((");
-		final String pointFormat = "%s %s %s";
-		for (Vector3d point : geometry.getVertexList()) {
-			postgisLinestringBuilder.append(String.format(pointFormat, point.x, point.y, point.z));
-			postgisLinestringBuilder.append(",");
-		}
-		Vector3d firstPoint = geometry.getVertexList().get(0);
-		postgisLinestringBuilder.append(String.format(pointFormat, firstPoint.x, firstPoint.y, firstPoint.z));
-		postgisLinestringBuilder.append(",");
-
-		int indexOfLastComma = postgisLinestringBuilder.lastIndexOf(",");
-		postgisLinestringBuilder.replace(indexOfLastComma, indexOfLastComma + 1, "))");
-
-		DefaultAttribute room_geometry = DefaultAttribute.withNameAndValue(SPACEGEOMETRY, postgisLinestringBuilder.toString());
-		retrievedEntity.getAttributes().put(room_geometry.getName(), room_geometry);
-
-		DefaultAttribute room_height = DefaultAttribute.withNameAndValue(SPACEHEIGHT, Double.toString(geometry.getZDim()));
-		retrievedEntity.getAttributes().put(room_height.getName(), room_height);
 	}
 
 }

@@ -11,7 +11,12 @@
 		 * @returns {Void}
 		 */
 		customLoadMethod: function (pageNum) {
-			return this.store.loadPage(pageNum);
+			var me = this;
+			this.mask();
+			this.store.currentPage = pageNum;
+			this.store.load({
+			    callback: function(){ me.unmask(); } 
+			});
 		},
 
 		/**

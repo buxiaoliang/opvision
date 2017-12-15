@@ -13,6 +13,7 @@ import org.cmdbuild.auth.AuthenticationService;
 import org.cmdbuild.auth.AuthenticationStore;
 import org.cmdbuild.auth.CasAuthenticator;
 import org.cmdbuild.auth.DefaultAuthenticationService;
+import org.cmdbuild.auth.ForwardingAuthenticationService;
 import org.cmdbuild.auth.HeaderAuthenticator;
 import org.cmdbuild.auth.LdapAuthenticator;
 import org.cmdbuild.auth.LegacyDBAuthenticator;
@@ -151,14 +152,48 @@ public class Authentication {
 		return authenticationService;
 	}
 
+	// TODO do in another way
+	@Deprecated
+	public static class SoapAuthenticationService extends ForwardingAuthenticationService {
+
+		private final AuthenticationService delegate;
+
+		private SoapAuthenticationService(final AuthenticationService delegate) {
+			this.delegate = delegate;
+		}
+
+		@Override
+		protected AuthenticationService delegate() {
+			return delegate;
+		}
+
+	}
+
 	@Bean
-	protected AuthenticationService soapAuthenticationService() {
+	protected SoapAuthenticationService soapAuthenticationService() {
 		final DefaultAuthenticationService authenticationService = new DefaultAuthenticationService(soapConfiguration,
 				data.systemDataView(), UserStoreSupplier.of(userStore));
 		authenticationService.setPasswordAuthenticators(soapPasswordAuthenticator());
 		authenticationService.setUserFetchers(dbAuthenticator(), notSystemUserFetcher());
 		authenticationService.setGroupFetcher(dbGroupFetcher());
-		return authenticationService;
+		return new SoapAuthenticationService(authenticationService);
+	}
+
+	// TODO do in another way
+	@Deprecated
+	public static class RestAuthenticationService extends ForwardingAuthenticationService {
+
+		private final AuthenticationService delegate;
+
+		private RestAuthenticationService(final AuthenticationService delegate) {
+			this.delegate = delegate;
+		}
+
+		@Override
+		protected AuthenticationService delegate() {
+			return delegate;
+		}
+
 	}
 
 	@Bean
@@ -169,7 +204,7 @@ public class Authentication {
 		authenticationService.setClientRequestAuthenticators(headerAuthenticator(), casAuthenticator());
 		authenticationService.setUserFetchers(dbAuthenticator(), notSystemUserFetcher());
 		authenticationService.setGroupFetcher(dbGroupFetcher());
-		return authenticationService;
+		return new RestAuthenticationService(authenticationService);
 	}
 
 	@Bean

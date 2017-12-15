@@ -7,7 +7,7 @@
 	 */
 	Ext.define('CMDBuild.view.management.classes.map.proxy.Functions', {
 
-		requires : [ 'CMDBuild.core.constants.Proxy', 'CMDBuild.core.interfaces.Rest', 'CMDBuild.proxy.index.Rest' ],
+		uses : [ 'CMDBuild.core.constants.Proxy', 'CMDBuild.core.interfaces.Rest', 'CMDBuild.proxy.index.Rest' ],
 
 		singleton : true,
 

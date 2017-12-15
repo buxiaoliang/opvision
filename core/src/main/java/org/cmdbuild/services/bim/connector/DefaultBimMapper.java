@@ -9,32 +9,32 @@ public class DefaultBimMapper implements Mapper {
 	private final BimDataView bimdataView;
 	private final ImportDifferListener listener;
 
-	public DefaultBimMapper(final CardDiffer cardDiffer, BimDataView bimDataView) {
+	public DefaultBimMapper(final CardDiffer cardDiffer, final BimDataView bimDataView) {
 		this.bimdataView = bimDataView;
 		this.listener = new ImportDifferListener() {
 
 			@Override
-			public void createTarget(Entity source) {
+			public void createTarget(final Entity source) {
 				cardDiffer.createCard(source);
 			}
 
 			@Override
-			public void updateTarget(Entity source, CMCard target) {
+			public void updateTarget(final Entity source, final CMCard target) {
 				cardDiffer.updateCard(source, target);
 			}
 
 			@Override
-			public void deleteTarget(CMCard target) {
-				new RuntimeException("Not implemented!");
+			public void deleteTarget(final CMCard target) {
+				new UnsupportedOperationException();
 			}
 		};
 	}
 
-
 	@Override
-	public void update(Iterable<Entity> source) {
-		for (Entity sourceEntity : source) {
-			final CMCard matchingCard = bimdataView.getCmCardFromGlobalId(sourceEntity.getKey(), sourceEntity.getTypeName());
+	public void update(final Iterable<Entity> source) {
+		for (final Entity sourceEntity : source) {
+			final CMCard matchingCard = bimdataView.getCmCardFromGlobalId(sourceEntity.getKey(),
+					sourceEntity.getTypeName());
 			if (matchingCard != null) {
 				listener.updateTarget(sourceEntity, matchingCard);
 			} else {

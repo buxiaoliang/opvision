@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.management.report.custom.CustomView', {
 		extend: 'Ext.panel.Panel',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.management.report.Custom}

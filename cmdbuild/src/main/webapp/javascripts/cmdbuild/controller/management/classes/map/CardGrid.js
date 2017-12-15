@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.classes.map.CardGrid', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.view.management.classes.map.CardGrid'
 		],
 

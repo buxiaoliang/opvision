@@ -15,7 +15,7 @@
 	 */
 	Ext.define('CMDBuild.view.common.PanelFunctions', {
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		mixins: ['CMDBuild.view.common.PanelFunctions2'],
 

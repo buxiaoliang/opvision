@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.workflow.tabs.properties.panel.BaseProperties', {
 		extend: 'Ext.form.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.administration.workflow.tabs.Properties'

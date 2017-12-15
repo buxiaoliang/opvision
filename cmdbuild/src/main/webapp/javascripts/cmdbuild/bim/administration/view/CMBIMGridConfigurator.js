@@ -1,8 +1,8 @@
 (function() {
 
-	Ext.require(['CMDBuild.bim.proxy.Bim']);
 
 	Ext.define("CMDBuild.delegate.administration.bim.CMBIMGridConfigurator", {
+		uses: ['CMDBuild.bim.proxy.Bim'],
 		extend: "CMDBuild.delegate.administration.common.basepanel.CMBaseGridConfigurator",
 
 		getStore: function() {

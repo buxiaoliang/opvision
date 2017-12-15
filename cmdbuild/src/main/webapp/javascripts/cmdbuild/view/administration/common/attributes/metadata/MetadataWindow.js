@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.common.attributes.metadata.MetadataWindow', {
 		extend: 'CMDBuild.core.window.AbstractModal',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.common.attributes.Metadata'
 		],

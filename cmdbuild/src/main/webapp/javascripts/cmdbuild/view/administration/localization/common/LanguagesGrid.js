@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.localization.common.LanguagesGrid', {
 		extend: 'Ext.container.Container',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy'
 		],

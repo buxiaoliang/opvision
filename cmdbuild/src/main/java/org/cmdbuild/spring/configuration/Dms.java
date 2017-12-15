@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import org.cmdbuild.auth.UserStore;
 import org.cmdbuild.common.collect.ChainablePutMap;
 import org.cmdbuild.data.store.lookup.LookupStore;
 import org.cmdbuild.data.store.lookup.LookupType;
@@ -61,10 +62,10 @@ public class Dms {
 	private Data data;
 
 	@Autowired
-	private PrivilegeManagement privilegeManagement;
+	private Properties properties;
 
 	@Autowired
-	private Properties properties;
+	private UserStore userStore;
 
 	@Bean
 	@Qualifier(DEFAULT)
@@ -95,7 +96,7 @@ public class Dms {
 		return new CmisDmsService(properties.dmsProperties(),
 				/*
 				 * Needed for cutting recursive dependency with "core" module.
-				 * 
+				 *
 				 * TODO do it better, move elsewhere
 				 */
 				new CategoryLookupConverter() {
@@ -150,7 +151,7 @@ public class Dms {
 	@Bean
 	@Scope(SCOPE_PROTOTYPE)
 	public DmsPrivileges defaultDmsPrivileges() {
-		return new DefaultDmsPrivileges(data.systemDataView(), privilegeManagement.userPrivilegeContext());
+		return new DefaultDmsPrivileges(data.systemDataView(), userStore.getUser().getPrivilegeContext());
 	}
 
 	@Bean

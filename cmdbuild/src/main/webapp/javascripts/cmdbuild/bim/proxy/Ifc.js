@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.bim.proxy.Ifc', {
 
-		requires: [
+		uses: [
 			'CMDBuild.bim.data.CMBimLayerModel',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json'

@@ -327,6 +327,14 @@ public class DefaultLogicAndStoreConverter implements LogicAndStoreConverter {
 
 	private static class DefaultLogicAsSourceConverter implements LogicAsSourceConverter, TaskVisitor {
 
+		private static Map<String, ? extends String> parameters(final String prefix,
+				final Map<String, String> parameters) {
+			final Map<String, String> output = newHashMap();
+			parameters.entrySet().stream() //
+					.forEach(input -> output.put(prefix.concat(input.getKey()), input.getValue()));
+			return output;
+		}
+
 		private final Task source;
 
 		private org.cmdbuild.data.store.task.Task target;
@@ -357,6 +365,10 @@ public class DefaultLogicAndStoreConverter implements LogicAndStoreConverter {
 							Boolean.toString(task.isNotificationActive())) //
 					.withParameter(AsynchronousEvent.EMAIL_ACCOUNT, task.getNotificationAccount()) //
 					.withParameter(AsynchronousEvent.EMAIL_TEMPLATE, task.getNotificationTemplate()) //
+					.withParameter(AsynchronousEvent.REPORT_ACTIVE, Boolean.toString(task.isReportActive())) //
+					.withParameter(AsynchronousEvent.REPORT_NAME, task.getReportName()) //
+					.withParameter(AsynchronousEvent.REPORT_EXTENSION, task.getReportExtension()) //
+					.withParameters(parameters(AsynchronousEvent.REPORT_PARAMETERS_PREFIX, task.getReportParameters())) //
 					.build();
 		}
 
@@ -379,13 +391,13 @@ public class DefaultLogicAndStoreConverter implements LogicAndStoreConverter {
 									.join( //
 											FluentIterable.from(task.getClassMappings()) //
 													.transform(CLASS_MAPPING_TO_STRING)) //
-			) //
+					) //
 					.withParameter(Connector.MAPPING_ATTRIBUTES,
 							Joiner.on(SPECIAL_SEPARATOR) //
 									.join( //
 											FluentIterable.from(task.getAttributeMappings()) //
 													.transform(ATTRIBUTE_MAPPING_TO_STRING)) //
-			) //
+					) //
 					.build();
 		}
 
@@ -430,7 +442,7 @@ public class DefaultLogicAndStoreConverter implements LogicAndStoreConverter {
 					.withParameter(Generic.REPORT_ACTIVE, Boolean.toString(task.isReportActive())) //
 					.withParameter(Generic.REPORT_NAME, task.getReportName()) //
 					.withParameter(Generic.REPORT_EXTENSION, task.getReportExtension()) //
-					.withParameters(reportParameters(task)) //
+					.withParameters(parameters(Generic.REPORT_PARAMETERS_PREFIX, task.getReportParameters())) //
 					.build();
 		}
 
@@ -442,13 +454,6 @@ public class DefaultLogicAndStoreConverter implements LogicAndStoreConverter {
 									_input.getValue()))
 
 			);
-			return output;
-		}
-
-		private Map<String, ? extends String> reportParameters(final GenericTask task) {
-			final Map<String, String> output = newHashMap();
-			task.getReportParameters().entrySet().stream() //
-					.forEach(input -> output.put(Generic.REPORT_PARAMETERS_PREFIX + input.getKey(), input.getValue()));
 			return output;
 		}
 
@@ -557,6 +562,14 @@ public class DefaultLogicAndStoreConverter implements LogicAndStoreConverter {
 		private static final Iterable<String> EMPTY_FILTERS = Collections.emptyList();
 		private static final Map<String, String> EMPTY_PARAMETERS = Collections.emptyMap();
 
+		private static Map<String, String> parameters(final Map<String, String> parameters, final String prefix) {
+			final Map<String, String> output = newHashMap();
+			parameters.entrySet().stream() //
+					.filter(input -> input.getKey().startsWith(prefix)) //
+					.forEach(input -> output.put(input.getKey().substring(prefix.length()), input.getValue()));
+			return output;
+		}
+
 		private final org.cmdbuild.data.store.task.Task source;
 
 		private Task target;
@@ -587,6 +600,10 @@ public class DefaultLogicAndStoreConverter implements LogicAndStoreConverter {
 							Boolean.valueOf(task.getParameter(AsynchronousEvent.EMAIL_ACTIVE))) //
 					.withNotificationAccount(task.getParameter(AsynchronousEvent.EMAIL_ACCOUNT)) //
 					.withNotificationErrorTemplate(task.getParameter(AsynchronousEvent.EMAIL_TEMPLATE)) //
+					.withReportActive(Boolean.valueOf(task.getParameter(AsynchronousEvent.REPORT_ACTIVE))) //
+					.withReportName(task.getParameter(AsynchronousEvent.REPORT_NAME)) //
+					.withReportExtension(task.getParameter(AsynchronousEvent.REPORT_EXTENSION)) //
+					.withReportParameters(parameters(task.getParameters(), AsynchronousEvent.REPORT_PARAMETERS_PREFIX)) //
 					.build();
 		}
 
@@ -660,7 +677,7 @@ public class DefaultLogicAndStoreConverter implements LogicAndStoreConverter {
 					.withReportActive(Boolean.valueOf(task.getParameter(Generic.REPORT_ACTIVE))) //
 					.withReportName(task.getParameter(Generic.REPORT_NAME)) //
 					.withReportExtension(task.getParameter(Generic.REPORT_EXTENSION)) //
-					.withReportParameters(reportParameters(task)) //
+					.withReportParameters(parameters(task.getParameters(), Generic.REPORT_PARAMETERS_PREFIX)) //
 					.build();
 		}
 
@@ -682,15 +699,6 @@ public class DefaultLogicAndStoreConverter implements LogicAndStoreConverter {
 						}
 						sub.put(key, input.getValue());
 					});
-			return output;
-		}
-
-		private Map<String, String> reportParameters(final org.cmdbuild.data.store.task.GenericTask task) {
-			final Map<String, String> output = newHashMap();
-			task.getParameters().entrySet().stream() //
-					.filter(input -> input.getKey().startsWith(Generic.REPORT_PARAMETERS_PREFIX)) //
-					.forEach(input -> output.put(input.getKey().substring(Generic.REPORT_PARAMETERS_PREFIX.length()),
-							input.getValue()));
 			return output;
 		}
 

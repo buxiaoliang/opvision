@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.common.panel.module.attachment.window.modify.ContainerFieldsCommon', {
 		extend: 'Ext.container.Container',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Utils',

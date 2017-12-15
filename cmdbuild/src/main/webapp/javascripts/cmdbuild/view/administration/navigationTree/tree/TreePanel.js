@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.navigationTree.tree.TreePanel', {
 		extend: 'Ext.tree.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.navigationTree.TreeNode'
 		],

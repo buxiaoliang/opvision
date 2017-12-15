@@ -12,7 +12,7 @@
 	Ext.define('CMDBuild.controller.common.panel.module.form.panel.FieldsTab', {
 		extend: 'CMDBuild.controller.common.panel.gridAndForm.panel.tab.Tab',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.common.panel.module.form.panel.Panel}

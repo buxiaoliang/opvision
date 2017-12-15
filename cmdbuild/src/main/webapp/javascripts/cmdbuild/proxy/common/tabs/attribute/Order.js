@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.common.tabs.attribute.Order', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json',
 			'CMDBuild.model.common.tabs.attribute.OrderGridRecord'

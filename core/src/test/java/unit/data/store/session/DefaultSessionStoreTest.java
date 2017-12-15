@@ -1,5 +1,6 @@
 package unit.data.store.session;
 
+import static org.cmdbuild.auth.context.PrivilegeContexts.nullPrivilegeContext;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
@@ -9,7 +10,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import org.cmdbuild.auth.acl.NullGroup;
-import org.cmdbuild.auth.context.NullPrivilegeContext;
 import org.cmdbuild.auth.user.AuthenticatedUser;
 import org.cmdbuild.auth.user.OperationUser;
 import org.cmdbuild.data.store.Store;
@@ -48,7 +48,7 @@ public class DefaultSessionStoreTest {
 	public void mainUserReturnedWhenImpersonatedIsMissing() throws Exception {
 		// given
 		final AuthenticatedUser authenticatedUser = mock(AuthenticatedUser.class);
-		final OperationUser operationUser = new OperationUser(authenticatedUser, new NullPrivilegeContext(),
+		final OperationUser operationUser = new OperationUser(authenticatedUser, nullPrivilegeContext(),
 				new NullGroup());
 		final Session session = mock(Session.class);
 		doReturn(operationUser) //
@@ -69,7 +69,7 @@ public class DefaultSessionStoreTest {
 	public void impersonatedUserReturnedIfPresent() throws Exception {
 		// given
 		final AuthenticatedUser authenticatedUser = mock(AuthenticatedUser.class);
-		final OperationUser operationUser = new OperationUser(authenticatedUser, new NullPrivilegeContext(),
+		final OperationUser operationUser = new OperationUser(authenticatedUser, nullPrivilegeContext(),
 				new NullGroup());
 		final Session session = mock(Session.class);
 		doReturn(operationUser) //

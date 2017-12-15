@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.management.common.tabs.email.emailWindow.ViewWindow', {
 		extend: 'CMDBuild.core.window.AbstractModal',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy'
 		],

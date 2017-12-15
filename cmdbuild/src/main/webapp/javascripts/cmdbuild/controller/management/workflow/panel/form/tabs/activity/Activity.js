@@ -15,7 +15,7 @@
 	 */
 	Ext.define("CMDBuild.controller.management.workflow.panel.form.tabs.activity.Activity", {
 
-		requires: [
+		uses: [
 			'CMDBuild.controller.management.workflow.panel.form.tabs.activity.StaticsController',
 			'CMDBuild.core.constants.Global',
 			'CMDBuild.core.constants.Metadata',

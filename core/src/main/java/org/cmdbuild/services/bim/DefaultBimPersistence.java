@@ -44,8 +44,8 @@ public class DefaultBimPersistence implements BimPersistence {
 		final StorableProject storableProject = storeManager.read(projectId);
 		final StorableLayer rootLayer = findRoot();
 		if (isValidLayer(rootLayer)) {
-			final ProjectRelations relations =
-					relationPersistenceManager.readRelations(storableProject.getCardId(), rootLayer.getClassName());
+			final ProjectRelations relations = relationPersistenceManager.readRelations(storableProject.getCardId(),
+					rootLayer.getClassName());
 			return from(storableProject, relations);
 		} else {
 			return from(storableProject, null);
@@ -61,8 +61,8 @@ public class DefaultBimPersistence implements BimPersistence {
 		if (storedProject != null) {
 			final String rootClassName = findRoot().getClassName();
 			final Long cardId = storedProject.getCardId();
-			final Iterable<String> oldRelatedId =
-					relationPersistenceManager.readRelations(cardId, rootClassName).getBindedCards();
+			final Iterable<String> oldRelatedId = relationPersistenceManager.readRelations(cardId, rootClassName)
+					.getBindedCards();
 			final Iterable<String> newRelatedId = project.getCardBinding();
 
 			final Function<String, String> keyForMap = Functions.identity();
@@ -72,7 +72,6 @@ public class DefaultBimPersistence implements BimPersistence {
 			if (!difference.areEqual()) {
 				relationPersistenceManager.writeRelations(cardId, newRelatedId, rootClassName);
 			}
-
 		}
 	}
 
@@ -97,37 +96,24 @@ public class DefaultBimPersistence implements BimPersistence {
 		return null;
 	}
 
-	@Override
-	public Long getCardIdFromProjectId(final String projectId) {
-		Long cardId = new Long("-1");
-		final PersistenceProject project = read(projectId);
-		if (project != null) {
-			cardId = project.getCmId();
-		}
-		return cardId;
-	}
-
 	private static PersistenceProject from(final StorableProject storableProject, final ProjectRelations relations) {
 		return new StorableAndRelations(storableProject, relations);
 	}
 
-	private static Function<PersistenceProject, StorableProject> PROJECT_TO_STORABLE =
-			new Function<PersistenceProject, StorableProject>() {
+	private static Function<PersistenceProject, StorableProject> PROJECT_TO_STORABLE = new Function<PersistenceProject, StorableProject>() {
 
-				@Override
-				public StorableProject apply(final PersistenceProject input) {
-					final StorableProject storableProject = new StorableProject();
-					storableProject.setActive(input.isActive());
-					storableProject.setDescription(input.getDescription());
-					storableProject.setName(input.getName());
-					storableProject.setLastCheckin(input.getLastCheckin());
-					storableProject.setImportMapping(input.getImportMapping());
-					storableProject.setExportMapping(input.getExportMapping());
-					storableProject.setExportProjectId(input.getExportProjectId());
-					storableProject.setProjectId(input.getProjectId());
-					return storableProject;
-				}
-			};
+		@Override
+		public StorableProject apply(final PersistenceProject input) {
+			final StorableProject storableProject = new StorableProject();
+			storableProject.setActive(input.isActive());
+			storableProject.setDescription(input.getDescription());
+			storableProject.setName(input.getName());
+			storableProject.setLastCheckin(input.getLastCheckin());
+			storableProject.setImportMapping(input.getImportMapping());
+			storableProject.setProjectId(input.getProjectId());
+			return storableProject;
+		}
+	};
 
 	private static class StorableAndRelations implements PersistenceProject {
 
@@ -167,11 +153,6 @@ public class DefaultBimPersistence implements BimPersistence {
 		}
 
 		@Override
-		public boolean isSynch() {
-			return delegate.isSynch();
-		}
-
-		@Override
 		public String getImportMapping() {
 			return delegate.getImportMapping();
 		}
@@ -182,16 +163,6 @@ public class DefaultBimPersistence implements BimPersistence {
 		}
 
 		@Override
-		public String getExportMapping() {
-			return delegate.getExportMapping();
-		}
-
-		@Override
-		public String getShapeProjectId() {
-			return delegate.getShapeProjectId();
-		}
-
-		@Override
 		public DateTime getLastCheckin() {
 			return delegate.getLastCheckin();
 		}
@@ -199,16 +170,6 @@ public class DefaultBimPersistence implements BimPersistence {
 		@Override
 		public Iterable<String> getCardBinding() {
 			return cardBinding;
-		}
-
-		@Override
-		public String getExportProjectId() {
-			return delegate.getExportProjectId();
-		}
-
-		@Override
-		public void setSynch(final boolean synch) {
-			throw new UnsupportedOperationException();
 		}
 
 		@Override
@@ -241,11 +202,6 @@ public class DefaultBimPersistence implements BimPersistence {
 			throw new UnsupportedOperationException();
 		}
 
-		@Override
-		public void setExportProjectId(final String projectId) {
-			throw new UnsupportedOperationException();
-		}
-
 	}
 
 	@Override
@@ -256,16 +212,6 @@ public class DefaultBimPersistence implements BimPersistence {
 	@Override
 	public void saveActiveFlag(final String className, final String value) {
 		storeManager.saveActiveStatus(className, value);
-	}
-
-	@Override
-	public void saveExportFlag(final String className, final String value) {
-		storeManager.saveExportStatus(className, value);
-	}
-
-	@Override
-	public void saveContainerFlag(final String className, final String value) {
-		storeManager.saveContainerStatus(className, value);
 	}
 
 	@Override
@@ -284,23 +230,18 @@ public class DefaultBimPersistence implements BimPersistence {
 	}
 
 	@Override
-	public StorableLayer findContainer() {
-		return storeManager.findContainer();
-	}
-
-	@Override
 	public boolean isActiveLayer(final String classname) {
 		return storeManager.isActive(classname);
 	}
 
 	@Override
-	public String getContainerClassName() {
-		return storeManager.getContainerClassName();
+	public StorableLayer readLayer(final String className) {
+		return storeManager.readLayer(className);
 	}
 
 	@Override
-	public StorableLayer readLayer(final String className) {
-		return storeManager.readLayer(className);
+	public String getMapping(PersistenceProject project) {
+		return storeManager.getMapping(project.getProjectId());
 	}
 
 }

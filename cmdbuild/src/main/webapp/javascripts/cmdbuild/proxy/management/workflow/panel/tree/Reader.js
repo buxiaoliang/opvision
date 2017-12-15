@@ -15,7 +15,7 @@
 		extend: 'Ext.data.reader.Json',
 		alias: 'reader.workflowstore',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Metadata',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Utils'

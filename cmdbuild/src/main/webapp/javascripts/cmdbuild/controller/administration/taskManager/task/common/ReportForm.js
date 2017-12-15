@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.administration.taskManager.task.common.ReportForm', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.administration.taskManager.task.common.ReportForm'
 		],
@@ -214,7 +214,7 @@
 			merge = Ext.isBoolean(merge) ? merge : false;
 
 			var records = [];
-
+			
 			Ext.Object.each(this.attributesGet(), function (name, attribute, myself) {
 				if (Ext.isObject(attribute) && !Ext.Object.isEmpty(attribute)) {
 					var attributeModelObject = {};
@@ -222,7 +222,14 @@
 					var name = attribute[CMDBuild.core.constants.Proxy.NAME];
 					attributeModelObject[CMDBuild.core.constants.Proxy.NAME] = name;
 					attributeModelObject[CMDBuild.core.constants.Proxy.TYPE] = attribute.type;
-					attributeModelObject[CMDBuild.core.constants.Proxy.EDITING_MODE] = (this.cqlFields.indexOf(name) !== -1);
+					
+					if (this.getValueGrid()[CQLFIELDS]) {
+						attributeModelObject[CMDBuild.core.constants.Proxy.EDITING_MODE] = (this.getValueGrid()[CQLFIELDS].indexOf(name) !== -1);
+					} else {
+						attributeModelObject[CMDBuild.core.constants.Proxy.EDITING_MODE] = false;
+						_warning('gridStoreFill(): Unexpected "CMDBuildCqlFields" property undefined ');
+					}
+					
 					if (merge) {
 						var gridRecord =  this.view.grid.getStore().findRecord(CMDBuild.core.constants.Proxy.NAME, attribute[CMDBuild.core.constants.Proxy.NAME]);
 
@@ -405,7 +412,7 @@
 		 */
 		setValueGrid: function (values) {
 			this.view.grid.getStore().removeAll();
-			this.cqlFields = eval(values[CQLFIELDS]) || [];
+			this.cqlFields = (values && values[CQLFIELDS]) ? values[CQLFIELDS] : [];
 			if (Ext.isObject(values) && !Ext.Object.isEmpty(values)) {
 				var records = [];
 

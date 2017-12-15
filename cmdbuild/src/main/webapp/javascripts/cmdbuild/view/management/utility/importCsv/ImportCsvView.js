@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.management.utility.importCsv.ImportCsvView', {
 		extend: 'Ext.panel.Panel',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.management.utility.importCsv.ImportCsv}

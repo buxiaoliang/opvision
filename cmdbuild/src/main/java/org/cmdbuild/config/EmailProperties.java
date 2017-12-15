@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.cmdbuild.services.Settings;
 
-public class EmailProperties extends DefaultProperties implements EmailConfiguration {
+public final class EmailProperties extends DefaultProperties implements EmailConfiguration {
 
 	private static final long serialVersionUID = 1L;
 
@@ -13,8 +13,8 @@ public class EmailProperties extends DefaultProperties implements EmailConfigura
 	private static final String QUEUE_ENABLED = "email.queue.enabled";
 	private static final String QUEUE_TIME = "email.queue.time";
 
-	public EmailProperties() {
-		super();
+	public EmailProperties(PropertyContainer propertyContainer) {
+		super(propertyContainer);
 		setEnabled(false);
 		setQueueTime(0L);
 	}

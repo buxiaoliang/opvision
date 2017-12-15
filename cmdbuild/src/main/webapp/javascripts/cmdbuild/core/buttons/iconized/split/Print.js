@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.core.buttons.iconized.split.Print', {
 		extend: 'Ext.button.Split',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {Object}

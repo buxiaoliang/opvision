@@ -29,6 +29,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -73,6 +75,7 @@ import com.google.common.collect.Iterables;
 public class EntryTypeCommands implements LoggingSupport {
 
 	private static final String DEFAULT_SCHEMA = "public";
+	private static final String HIDE_COLUMN_METADATA_DESCRIPTION = "system.function.hideColumn";
 
 	private static String SEPARATOR = "|";
 	private static String KEY_VALUE_SEPARATOR = ": ";
@@ -716,6 +719,8 @@ public class EntryTypeCommands implements LoggingSupport {
 	}
 
 	public List<DBFunction> findAllFunctions() {
+		
+		populateHiddenParametersForFunctions();;
 		final List<DBFunction> functionList = jdbcTemplate.query("SELECT * FROM _cm_function_list()",
 				new RowMapper<DBFunction>() {
 					@Override
@@ -747,22 +752,67 @@ public class EntryTypeCommands implements LoggingSupport {
 								function.addInputParameter(name, type);
 								break;
 							case o:
-								function.addOutputParameter(name, type);
+								function.addOutputParameter(name, type, isBasedsp(name, function.getIdentifier().getLocalName()));
 								break;
 							case io:
 								function.addInputParameter(name, type);
-								function.addOutputParameter(name, type);
+								function.addOutputParameter(name, type, isBasedsp(name, function.getIdentifier().getLocalName()));
 								break;
 							}
 						}
 					}
+
+					
 				});
 		return functionList;
 	}
 
+	
+	
 	/*
 	 * Utils
 	 */
+	
+	//TODO use Set instead of list
+	private  ConcurrentHashMap<String, List<String> > hiddenParameters = new ConcurrentHashMap<>();
+	
+	private  Boolean isBasedsp(String parameterName, String functionName) {
+		List<String> hiddenFunctionParameters = hiddenParameters.get(functionName);
+		if (hiddenFunctionParameters != null && hiddenFunctionParameters.contains(parameterName))
+			return false;
+		return true;
+	}
+	
+	private void populateHiddenParametersForFunctions() {
+		
+		//TODO FILTER BY STATUS IN WHERE CLAUSE
+		List<String> hpList = jdbcTemplate.queryForList("select \"Code\" from \"Metadata\" where \"Description\" = ? and \"Status\" = 'A' and \"Notes\" = ? order by \"Code\" " , String.class, HIDE_COLUMN_METADATA_DESCRIPTION, Boolean.TRUE.toString());
+		hiddenParameters.clear();
+		for (String hp : hpList) {
+			if (hp == null)
+				continue;
+			//String[] tokens = hp.split("."); not working
+//			if (tokens.length == 2) {
+//				String function = tokens[0].trim();
+//				String parameter = tokens[1].trim();
+			String function = null;
+			String parameter = null;
+			StringTokenizer st = new StringTokenizer(hp, ".");
+			if (st.hasMoreTokens())
+				function = st.nextToken().trim();
+			if (st.hasMoreTokens())
+				parameter = st.nextToken();
+			if (parameter != null) {
+				List<String> hiddenParameters4Function  = hiddenParameters.get(function);
+				if (hiddenParameters4Function == null) {
+					hiddenParameters4Function = new ArrayList<>();
+					hiddenParameters.put(function, hiddenParameters4Function);
+				}
+				if (!hiddenParameters4Function.contains(parameter))
+					hiddenParameters4Function.add(parameter);
+			}
+		}
+	}
 
 	private static String nameFrom(final CMEntryType entryType) {
 		return nameFrom(entryType.getIdentifier());

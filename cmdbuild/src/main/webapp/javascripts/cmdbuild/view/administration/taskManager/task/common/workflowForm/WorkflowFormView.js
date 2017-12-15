@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.taskManager.task.common.workflowForm.WorkflowFormView', {
 		extend: 'Ext.form.FieldContainer',
 
-		requires: ['CMDBuild.core.constants.FieldWidths'],
+		uses: ['CMDBuild.core.constants.FieldWidths'],
 
 		/**
 		 * @cfg {CMDBuild.controller.administration.taskManager.task.common.WorkflowForm}

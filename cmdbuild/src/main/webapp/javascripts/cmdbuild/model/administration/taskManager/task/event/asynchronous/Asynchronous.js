@@ -14,7 +14,11 @@
 			{ name: CMDBuild.core.constants.Proxy.ID, type: 'int', useNull: true },
 			{ name: CMDBuild.core.constants.Proxy.NOTIFICATION_ACTIVE, type: 'boolean' },
 			{ name: CMDBuild.core.constants.Proxy.NOTIFICATION_EMAIL_ACCOUNT, type: 'string' },
-			{ name: CMDBuild.core.constants.Proxy.NOTIFICATION_EMAIL_TEMPLATE, type: 'string' }
+			{ name: CMDBuild.core.constants.Proxy.NOTIFICATION_EMAIL_TEMPLATE, type: 'string' },
+			{ name: CMDBuild.core.constants.Proxy.REPORT_PARAMETERS, type: 'auto', defaultValue: {} },
+			{ name: CMDBuild.core.constants.Proxy.REPORT_NAME, type: 'string' },
+			{ name: CMDBuild.core.constants.Proxy.REPORT_EXTENSION, type: 'string' },
+			{ name: CMDBuild.core.constants.Proxy.REPORT_ACTIVE, type: 'boolean' }
 		]
 	});
 

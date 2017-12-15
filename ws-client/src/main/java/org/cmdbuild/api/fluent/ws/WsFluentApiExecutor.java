@@ -31,6 +31,7 @@ import javax.activation.URLDataSource;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 import org.cmdbuild.api.fluent.Attachment;
 import org.cmdbuild.api.fluent.AttachmentDescriptor;
 import org.cmdbuild.api.fluent.Card;
@@ -474,8 +475,9 @@ public class WsFluentApiExecutor implements FluentApiExecutor, LoggingSupport {
 			for (final Attachment attachment : attachments) {
 				final DataSource dataSource = new URLDataSource(new URL(attachment.getUrl()));
 				final DataHandler dataHandler = new DataHandler(dataSource);
-				proxy.uploadAttachment(source.getClassName(), source.getId(), dataHandler, attachment.getName(),
+				boolean success = proxy.uploadAttachment(source.getClassName(), source.getId(), dataHandler, attachment.getName(),
 						attachment.getCategory(), attachment.getDescription());
+				Validate.isTrue(success, "uploadAttachment failed (server error)");
 			}
 		} catch (final Exception e) {
 			logger.error(marker, "error uploading attachments", e);

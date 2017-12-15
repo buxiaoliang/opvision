@@ -12,7 +12,7 @@
 	Ext.define('CMDBuild.controller.common.field.filter.cql.Cql', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {Array}

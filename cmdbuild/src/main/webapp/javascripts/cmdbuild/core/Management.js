@@ -3,9 +3,10 @@
 	/**
 	 * Call sequence: init() -> buildConfiguration() -> buildCache() -> buildUserInterface()
 	 */
+
 	Ext.define('CMDBuild.core.Management', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.configurations.Timeout',
 			'CMDBuild.core.constants.ModuleIdentifiers',
 			'CMDBuild.core.constants.Proxy',
@@ -15,7 +16,8 @@
 			'CMDBuild.proxy.dashboard.Dashboard',
 			'CMDBuild.proxy.lookup.Type',
 			'CMDBuild.proxy.Menu',
-			'CMDBuild.proxy.widget.Widget'
+			'CMDBuild.proxy.widget.Widget',
+			'CMDBuild.view.management.classes.CMModCard'
 		],
 
 		singleton: true,

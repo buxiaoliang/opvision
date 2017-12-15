@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.email.Template', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json',
 			'CMDBuild.model.email.template.Store'

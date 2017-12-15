@@ -10,6 +10,10 @@ public interface BimProject {
 
 	String getIdentifier();
 
+	String getIfcVersion();
+
+	String getDescription();
+
 	boolean isActive();
 
 	boolean isValid();
@@ -18,6 +22,8 @@ public interface BimProject {
 	String toString();
 
 	DateTime getLastCheckin();
+
+	void setDescription(String decription);
 
 	void setLastCheckin(DateTime lastCheckin);
 
@@ -41,7 +47,7 @@ public interface BimProject {
 
 		@Override
 		public String toString() {
-			return "NULL_PROJECT";
+			return getName();
 		}
 
 		@Override
@@ -56,6 +62,21 @@ public interface BimProject {
 
 		@Override
 		public void setLastCheckin(final DateTime lastCheckin) {
+			throw new UnsupportedOperationException();
+		}
+
+		@Override
+		public String getDescription() {
+			return getName();
+		}
+
+		@Override
+		public String getIfcVersion() {
+			return null;
+		}
+
+		@Override
+		public void setDescription(final String description) {
 			throw new UnsupportedOperationException();
 		}
 

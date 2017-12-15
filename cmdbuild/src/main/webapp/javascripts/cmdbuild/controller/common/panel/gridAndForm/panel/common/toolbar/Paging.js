@@ -15,7 +15,7 @@
 	Ext.define('CMDBuild.controller.common.panel.gridAndForm.panel.common.toolbar.Paging', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {Object}

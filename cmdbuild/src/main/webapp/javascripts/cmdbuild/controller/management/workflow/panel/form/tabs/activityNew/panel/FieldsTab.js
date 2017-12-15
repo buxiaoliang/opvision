@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.workflow.panel.form.tabs.activityNew.panel.FieldsTab', {
 		extend: 'CMDBuild.controller.common.panel.module.form.panel.FieldsTab',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.management.workflow.panel.form.tabs.activityNew.panel.Panel}

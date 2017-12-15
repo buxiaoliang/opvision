@@ -6,7 +6,7 @@
 	Ext.define('CMDBuild.controller.common.field.translatable.NoFieldWindow', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Message',

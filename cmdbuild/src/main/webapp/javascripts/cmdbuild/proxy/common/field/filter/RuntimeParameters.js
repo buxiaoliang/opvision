@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.common.field.filter.RuntimeParameters', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json'
 		],

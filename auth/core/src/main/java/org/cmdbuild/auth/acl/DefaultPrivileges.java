@@ -30,7 +30,7 @@ public class DefaultPrivileges {
 	};
 
 	/**
-	 * Write access implies read access
+	 * No privileges
 	 */
 	public static final CMPrivilege NONE = new SimplePrivilege() {
 
@@ -63,5 +63,30 @@ public class DefaultPrivileges {
 	 */
 	public static final CMPrivilege ADMINISTRATOR = new SimplePrivilege();
 
-	public static final String GLOBAL_PRIVILEGE_ID = null;
+	public static final String GLOBAL_PRIVILEGE_ID = "GLOBAL";
+
+	/**
+	 * dump privilege const name; useful to show prvileges in logs<br>
+	 * TODO this can be written better refactoring the CMPrivilege framework, and including a 'name' property in privileges
+	 * @param privilege
+	 * @return 
+	 */
+	public static String privilegeToString(CMPrivilege privilege) {
+		if (privilege == READ) {
+			return "READ";
+		} else if (privilege == WRITE) {
+			return "WRITE";
+		} else if (privilege == NONE) {
+			return "NONE";
+		} else if (privilege == GOD) {
+			return "GOD";
+		} else if (privilege == DATABASE_DESIGNER) {
+			return "DATABASE_DESIGNER";
+		} else if (privilege == ADMINISTRATOR) {
+			return "ADMINISTRATOR";
+		} else {
+			return "unknown[" + privilege + "]";
+		}
+	}
+	
 }

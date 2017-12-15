@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.Card', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json'
 		],

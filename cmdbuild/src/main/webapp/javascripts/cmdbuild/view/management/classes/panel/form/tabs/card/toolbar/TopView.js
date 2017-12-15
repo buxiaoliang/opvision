@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.management.classes.panel.form.tabs.card.toolbar.TopView', {
 		extend: 'CMDBuild.view.common.panel.module.form.toolbar.TopView',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.management.classes.panel.form.tabs.card.toolbar.Top}

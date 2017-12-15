@@ -1,121 +1,121 @@
-Ext.define('CMDBuild.bim.management.view.CMBimTreeDelegate', {
-	onNodeCheckChange: function(node, check) {},
-	onOpenCardIconClick: function(classId, cardId) {},
-	onNodeSelect: function(node) {}
-});
+(function() {
 
-Ext.define('CMDBuild.bim.management.view.CMBimTree', {
-	extend: 'Ext.tree.Panel',
+	Ext.define('CMDBuild.bim.management.view.CMBimTree', {
+		extend : 'Ext.tree.Panel',
 
-	rootVisible: false,
-	useArrows: true,
-	frame: true,
+		oldCard : undefined,
+		initialized : false,
+		active : undefined,
+		/**
+		 * 
+		 * @property {CMDBuild.controller.management.classes.map.NavigationTreeDelegate}
+		 * 
+		 */
+		delegate : undefined,
 
-	// configuration
-	delegate: undefined,
-	// configuration
+		constructor : function() {
+			this.callParent(arguments);
+		},
 
-	initComponent: function() {
+		initComponent : function() {
+			this.activationCount = 0;
+			var me = this;
+			var SHOW_ICON = 'images/icons/bullet_go.png';
+			var HIDE_ICON = 'images/icons/cancel.png';
 
-		Ext.apply(this, {
-			hideHeaders: true,
-			store: new Ext.data.TreeStore(),
-			listeners: {
-				checkchange: function(node, checked) {
-					this.delegate.onNodeCheckChange(node, checked);
+			this.columns = [ {
+				xtype : 'treecolumn',
+				flex : 2,
+				sortable : false,
+				dataIndex : 'text',
+				menuDisabled : true
+			}, {
+				width : 40,
+				menuDisabled : true,
+				xtype : 'actioncolumn',
+				tooltip : CMDBuild.Translation.management.modcard.open_relation,
+				align : 'center',
+				sortable : false,
+				icon : 'images/icons/bullet_go.png',
+				handler : function(grid, rowIndex, colIndex, actionItem, event, record, row) {
+					var className = record.get("className");
+					if (className !== "") {
+						me.navigateOnCard(record);
+					}
 				},
-				select: function(treePanel, node, index, eOpts) {
-					this.delegate.onNodeSelect(node, this.fromViewer);
+			    renderer: function (value, metadata, record) {
+			        if (record.get('leaf')) {
+			            this.icon = 'images/icons/bullet_go.png';
+			        } else {
+			            this.icon = 'images/icons/add_filter.png';
+			        }
+			    },
+			}, {
+				width : 40,
+				menuDisabled : true,
+				xtype : 'actioncolumn',
+				tooltip : CMDBuild.Translation.management.modcard.open_relation,
+				align : 'center',
+				sortable : false,
+				handler : function(grid, rowIndex, colIndex, actionItem, event, record, row) {
+					var className = record.get("className");
+					if (className !== "") {
+						me.showCmdbuildCard(record);
+					}
 				},
-				beforecellclick: function(treePanel, td, cellIndex, record, tr, rowIndex, e, eOpts) {
-					if (cellIndex == 1) {
-						var cmData = record.raw.cmdbuild_data;
-						this.delegate.onOpenCardIconClick(cmData.classid, cmData.id);
+			    renderer: function (value, metadata, record) {
+			        if (record.get('leaf')) {
+			            this.icon = 'images/icons/userInterface.png';
+			        } 
+			    },
+			} ];
+			this.callParent(arguments);
+		},
+		loaded : function(rootNode) {
+			Ext.suspendLayouts();
+			this.setRootNode(rootNode);
+			Ext.resumeLayouts();
+		},
+		addDelegate : function(delegate) {
+			this.delegate = delegate;
+		},
+		navigateOnCard : function(record) {
+			this.delegate.selectNode(record.get("id"), record.get("leaf"));
+		},
+		showCmdbuildCard : function(record) {
+			var objectId = record.get("id");
+			var me = this;
+			CMDBuild.bim.proxy.Bim.fetchCardFromViewewId({
+				params : {
+					revisionId : me.delegate.getCurrentRoid(),
+					objectId : objectId
+				},
+
+				success : function(fp, request, response) {
+					if (response.card) {
+						me.delegate.openCardDataWindow(response.card);
+					}
+					else {
+						//console.log("! found");
 					}
 				}
-			},
-			columns: [{
-				xtype: 'treecolumn', //this is so we know which column will show the tree
-				header: '&nbsp',
-				flex: 2,
-				sortable: true,
-				dataIndex: 'text'
-			}, {
-				header: '&nbsp',
-				fixed: true,
-				width: 30,
-				sortable: false, 
-				renderer: function(value, metadata, record) {
-					if (record.raw.cmdbuild_data.id) {
-						return '<img style="cursor:pointer" class="follow-card" src="images/icons/bullet_go.png"/>';
-					} else {
-						return "";
-					}
-				},
-				align: 'center', 
-				tdCls: 'grid-button', 
-				dataIndex: 'Fake',
-				menuDisabled: true,
-				hideable: false
-			}]
-		});
-
-		this.delegate = this.delegate
-				|| new CMDBuild.bim.management.view.CMBimTreeDelegate();
-		this.callParent();
-	},
-
-	selectNodeByOid: function(oid) {
-		var node = this.findNodeByOid(oid);
-		var me = this;
-		if (node && ! me.inSelection) {
-			me.inSelection = true;
-			this.expandPreviousNodes(node.parentNode,
-				Ext.Function.createDelayed(function() {
-					var sm = me.getSelectionModel();
-					me.fromViewer = true;
-					sm.select([node]);
-					me.fromViewer = false;
-					me.inSelection = false;
-				}, 500)
-			);
-		}
-	},
-
-	expandPreviousNodes: function(node, cb) {
-		if (node) {
-			var me = this;
-			var parent = node.parentNode;
-
-			if (parent) {
-				node.expand(false, function() {
-					me.expandPreviousNodes(parent, cb);
-				});
-			} else {
-				node.expand(false, cb);
+			});
+		},
+		populatePath : function(path, callback, callbackScope) {
+			if (path.length === 0) {
+				callback.apply(callbackScope, []);
+				return;
 			}
+			var card = path.pop();
+			var node = this.getFromCache(card.className, card.cardId);
+			if (!node) {
+				callback.apply(callbackScope, []);
+				return;
+			}
+		},
+		selectNode : function(nodeOid) {
+			var record = this.store.getNodeById(nodeOid);
+            this.getSelectionModel().select(record)	;
 		}
-	},
-
-	findNodeByOid: function(oid) {
-		var rootNode = this.getRootNode();
-		return rootNode.findChildBy(function(aNode) {
-			return aNode.raw.oid == oid;
-		}, null, true);
-	},
-
-	setNodeCheckbox: function(oid, check) {
-		var nodeToCheck = this.findNodeByOid(oid);
-		if (nodeToCheck) {
-			nodeToCheck.set("checked", check);
-		}
-	},
-
-	checkNode: function(oid) {
-		this.setNodeCheckbox(oid, true);
-	},
-
-	uncheckNode: function(oid) {
-		this.setNodeCheckbox(oid, false);
-	}
-});
+	});
+})();

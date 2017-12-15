@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.taskManager.task.email.Step1', {
 		extend: 'Ext.panel.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.administration.taskManager.task.Email'

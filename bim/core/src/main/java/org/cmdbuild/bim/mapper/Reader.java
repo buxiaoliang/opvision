@@ -14,7 +14,6 @@ public interface Reader {
 
 	}
 
-	List<Entity> readEntities(String revisionId,
-			EntityDefinition entityDefinition);
+	List<Entity> readEntities(String revisionId, EntityDefinition entityDefinition);
 
 }

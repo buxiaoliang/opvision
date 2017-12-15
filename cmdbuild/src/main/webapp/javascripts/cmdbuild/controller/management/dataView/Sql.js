@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.dataView.Sql', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Message',
@@ -74,17 +74,35 @@
 		 */
 		dataViewSqlBuildColumns: function() {
 			var columns = [];
-
+			
 			Ext.Array.forEach(this.cmfg('dataViewSelectedGet', CMDBuild.core.constants.Proxy.OUTPUT), function(columnObject, i, allColumnObjects) {
 				columns.push({
 					text: columnObject[CMDBuild.core.constants.Proxy.NAME],
 					dataIndex: columnObject[CMDBuild.core.constants.Proxy.NAME],
 					renderer: 'stripTags',
-					flex: 1
+					flex: 1,
+					hidden: !this.dataViewSqlColumnIsBasedsp(columnObject)
 				});
 			}, this);
 
 			return columns;
+		},
+		
+		/**
+		 *  @param {Object} columnObject 
+		 *  
+		 *  @returns {Boolean}
+		 */
+		dataViewSqlColumnIsBasedsp: function(columnObject) {
+			if (Ext.isObject(columnObject) && !Ext.isEmpty(columnObject)) {
+				if (typeof columnObject[CMDBuild.core.constants.Proxy.BASE_DSP] == 'undefined') {
+					return true;
+				} else {
+					return columnObject[CMDBuild.core.constants.Proxy.BASE_DSP];
+				}
+			} else {
+				return false;
+			}
 		},
 
 		/**

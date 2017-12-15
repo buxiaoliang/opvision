@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.localization.common.AdvancedTableGrid', {
 		extend: 'Ext.tree.Panel',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.administration.localizations.AdvancedTranslationsTable}

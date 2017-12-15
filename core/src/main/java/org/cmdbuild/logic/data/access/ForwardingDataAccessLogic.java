@@ -178,7 +178,7 @@ public abstract class ForwardingDataAccessLogic extends ForwardingObject impleme
 	}
 
 	@Override
-	public Card fetchCard(final String className, final Long cardId) {
+	public CardWithMetadata fetchCard(final String className, final Long cardId) {
 		return delegate().fetchCard(className, cardId);
 	}
 

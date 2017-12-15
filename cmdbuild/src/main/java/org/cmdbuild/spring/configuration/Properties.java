@@ -14,16 +14,28 @@ import org.cmdbuild.config.GisConfiguration;
 import org.cmdbuild.config.GisProperties;
 import org.cmdbuild.config.GraphProperties;
 import org.cmdbuild.config.NotificationProperties;
+import org.cmdbuild.config.PasswordProperties;
+import org.cmdbuild.config.SchedulerProperties;
 import org.cmdbuild.config.WorkflowConfiguration;
 import org.cmdbuild.config.WorkflowProperties;
 import org.cmdbuild.services.soap.security.SoapConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 @Configuration
+//@PropertySources({
+//	@PropertySource(ignoreResourceNotFound=true, value="file:WEB-INF/conf/cluster.properties")
+//})
 public class Properties {
 
+	@Autowired
+	PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer;
+	
 	@Bean
 	public AuthProperties authConf() {
 		return AuthProperties.getInstance();
@@ -73,6 +85,21 @@ public class Properties {
 	@Bean
 	public WorkflowConfiguration workflowProperties() {
 		return WorkflowProperties.getInstance();
+	}
+	
+	@Bean (name = {"schedulerProperties" ,"scheduler-properties"})
+	public SchedulerProperties schedulerProperties() {
+		return SchedulerProperties.getInstance();
+	}
+	
+	@Bean //(name = {"passwordProperties" ,"password-properties"})
+	public PasswordProperties passwordProperties() {
+		return PasswordProperties.getInstance();
+	}
+	
+	@Bean
+	public PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
+		 return new PropertySourcesPlaceholderConfigurer();
 	}
 
 }

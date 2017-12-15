@@ -1,6 +1,7 @@
 package org.cmdbuild.spring.configuration;
 
 import org.cmdbuild.auth.LanguageStore;
+import org.cmdbuild.auth.UserStore;
 import org.cmdbuild.auth.acl.ForwardingPrivilegeContext;
 import org.cmdbuild.auth.acl.PrivilegeContext;
 import org.cmdbuild.logic.setup.DefaultModulesHandler;
@@ -22,10 +23,10 @@ public class Setup {
 	private LanguageStore languageStore;
 
 	@Autowired
-	private PrivilegeManagement privilegeManagement;
+	private Properties properties;
 
 	@Autowired
-	private Properties properties;
+	private UserStore userStore;
 
 	@Bean
 	public SetupLogic setupLogic() {
@@ -44,7 +45,7 @@ public class Setup {
 
 			@Override
 			protected PrivilegeContext delegate() {
-				return privilegeManagement.userPrivilegeContext();
+				return userStore.getUser().getPrivilegeContext();
 			}
 
 		};

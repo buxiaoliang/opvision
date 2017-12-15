@@ -6,7 +6,7 @@
 	Ext.define('CMDBuild.view.common.field.filter.advanced.window.GridPanel', {
 		extend: 'Ext.grid.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.common.field.filter.advanced.window.Window'
 		],

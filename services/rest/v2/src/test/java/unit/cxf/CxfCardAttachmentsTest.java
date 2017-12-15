@@ -4,11 +4,13 @@ import static java.util.Arrays.asList;
 import static org.cmdbuild.service.rest.v2.model.Models.newAttachment;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Answers.RETURNS_MOCKS;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.isNull;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
@@ -25,7 +27,6 @@ import javax.ws.rs.WebApplicationException;
 
 import org.cmdbuild.dao.entrytype.CMClass;
 import org.cmdbuild.logic.data.access.DataAccessLogic;
-import org.cmdbuild.model.data.Card;
 import org.cmdbuild.service.rest.v2.cxf.AttachmentsHelper;
 import org.cmdbuild.service.rest.v2.cxf.CxfCardAttachments;
 import org.cmdbuild.service.rest.v2.cxf.ErrorHandler;
@@ -78,7 +79,7 @@ public class CxfCardAttachmentsTest {
 		doReturn(targetClass) //
 				.when(dataAccessLogic).findClass(anyString());
 		doThrow(new NoSuchElementException()) //
-				.when(dataAccessLogic).fetchCard(eq("foo"), eq(123L));
+				.when(dataAccessLogic).fetchCMCard(eq("foo"), eq(123L));
 		doThrow(new WebApplicationException()) //
 				.when(errorHandler).cardNotFound(eq(123L));
 		final Attachment attachment = newAttachment().build();
@@ -94,8 +95,8 @@ public class CxfCardAttachmentsTest {
 		final CMClass targetClass = mockClass("bar");
 		doReturn(targetClass) //
 				.when(dataAccessLogic).findClass(anyString());
-		doReturn(Card.newInstance(targetClass).build()) //
-				.when(dataAccessLogic).fetchCard(anyString(), anyLong());
+		doAnswer(RETURNS_MOCKS.get()) //
+				.when(dataAccessLogic).fetchCMCard(anyString(), anyLong());
 		doThrow(new WebApplicationException()) //
 				.when(errorHandler).missingFile();
 		final Attachment attachment = newAttachment().build();
@@ -110,8 +111,8 @@ public class CxfCardAttachmentsTest {
 		final CMClass targetClass = mockClass("bar");
 		doReturn(targetClass) //
 				.when(dataAccessLogic).findClass(anyString());
-		doReturn(Card.newInstance(targetClass).build()) //
-				.when(dataAccessLogic).fetchCard(anyString(), anyLong());
+		doAnswer(RETURNS_MOCKS.get()) //
+				.when(dataAccessLogic).fetchCMCard(anyString(), anyLong());
 		final DataHandler dataHandler = dataHandler("already existing");
 		doReturn(asList( //
 				newAttachment() //
@@ -134,8 +135,8 @@ public class CxfCardAttachmentsTest {
 		final CMClass targetClass = mockClass("bar");
 		doReturn(targetClass) //
 				.when(dataAccessLogic).findClass(anyString());
-		doReturn(Card.newInstance(targetClass).build()) //
-				.when(dataAccessLogic).fetchCard(anyString(), anyLong());
+		doAnswer(RETURNS_MOCKS.get()) //
+				.when(dataAccessLogic).fetchCMCard(anyString(), anyLong());
 		final Attachment attachment = newAttachment() //
 				.withCategory("the category") //
 				.withDescription("the description") //
@@ -157,7 +158,7 @@ public class CxfCardAttachmentsTest {
 		assertThat(response.getElement(), equalTo("bar"));
 		final InOrder inOrder = inOrder(errorHandler, dataAccessLogic, attachmentsHelper);
 		inOrder.verify(dataAccessLogic).findClass(eq("foo"));
-		inOrder.verify(dataAccessLogic).fetchCard(eq("foo"), eq(123L));
+		inOrder.verify(dataAccessLogic).fetchCMCard(eq("foo"), eq(123L));
 		inOrder.verify(attachmentsHelper).search(eq("foo"), eq(123L));
 		inOrder.verify(attachmentsHelper).create(eq("foo"), eq(123L), eq("file name"), eq(attachment), eq(dataHandler));
 		inOrder.verifyNoMoreInteractions();
@@ -169,8 +170,8 @@ public class CxfCardAttachmentsTest {
 		final CMClass targetClass = mockClass("bar");
 		doReturn(targetClass) //
 				.when(dataAccessLogic).findClass(anyString());
-		doReturn(Card.newInstance(targetClass).build()) //
-				.when(dataAccessLogic).fetchCard(anyString(), anyLong());
+		doAnswer(RETURNS_MOCKS.get()) //
+				.when(dataAccessLogic).fetchCMCard(anyString(), anyLong());
 		final DataHandler dataHandler = dataHandler("file name");
 		doReturn(asList( //
 				newAttachment() //
@@ -188,7 +189,7 @@ public class CxfCardAttachmentsTest {
 		assertThat(response.getElement(), equalTo("bar"));
 		final InOrder inOrder = inOrder(errorHandler, dataAccessLogic, attachmentsHelper);
 		inOrder.verify(dataAccessLogic).findClass(eq("foo"));
-		inOrder.verify(dataAccessLogic).fetchCard(eq("foo"), eq(123L));
+		inOrder.verify(dataAccessLogic).fetchCMCard(eq("foo"), eq(123L));
 		inOrder.verify(attachmentsHelper).search(eq("foo"), eq(123L));
 		inOrder.verify(attachmentsHelper).create(eq("foo"), eq(123L), eq("file name"), isNull(Attachment.class),
 				eq(dataHandler));
@@ -214,7 +215,7 @@ public class CxfCardAttachmentsTest {
 		doReturn(targetClass) //
 				.when(dataAccessLogic).findClass(anyString());
 		doThrow(new NoSuchElementException()) //
-				.when(dataAccessLogic).fetchCard(eq("foo"), eq(123L));
+				.when(dataAccessLogic).fetchCMCard(eq("foo"), eq(123L));
 		doThrow(new WebApplicationException()) //
 				.when(errorHandler).cardNotFound(eq(123L));
 
@@ -228,8 +229,8 @@ public class CxfCardAttachmentsTest {
 		final CMClass targetClass = mockClass("bar");
 		doReturn(targetClass) //
 				.when(dataAccessLogic).findClass(anyString());
-		doReturn(Card.newInstance(targetClass).build()) //
-				.when(dataAccessLogic).fetchCard(anyString(), anyLong());
+		doAnswer(RETURNS_MOCKS.get()) //
+				.when(dataAccessLogic).fetchCMCard(anyString(), anyLong());
 		final Collection<Attachment> attachments = asList( //
 				newAttachment() //
 						.withId("foo").build(), //
@@ -245,7 +246,7 @@ public class CxfCardAttachmentsTest {
 		assertThat(response.getElements(), equalTo(attachments));
 		final InOrder inOrder = inOrder(errorHandler, dataAccessLogic, attachmentsHelper);
 		inOrder.verify(dataAccessLogic).findClass(eq("foo"));
-		inOrder.verify(dataAccessLogic).fetchCard(eq("foo"), eq(123L));
+		inOrder.verify(dataAccessLogic).fetchCMCard(eq("foo"), eq(123L));
 		inOrder.verify(attachmentsHelper).search(eq("foo"), eq(123L));
 		inOrder.verifyNoMoreInteractions();
 	}
@@ -269,7 +270,7 @@ public class CxfCardAttachmentsTest {
 		doReturn(targetClass) //
 				.when(dataAccessLogic).findClass(anyString());
 		doThrow(new NoSuchElementException()) //
-				.when(dataAccessLogic).fetchCard(eq("foo"), eq(123L));
+				.when(dataAccessLogic).fetchCMCard(eq("foo"), eq(123L));
 		doThrow(new WebApplicationException()) //
 				.when(errorHandler).cardNotFound(eq(123L));
 
@@ -283,8 +284,8 @@ public class CxfCardAttachmentsTest {
 		final CMClass targetClass = mockClass("bar");
 		doReturn(targetClass) //
 				.when(dataAccessLogic).findClass(anyString());
-		doReturn(Card.newInstance(targetClass).build()) //
-				.when(dataAccessLogic).fetchCard(anyString(), anyLong());
+		doAnswer(RETURNS_MOCKS.get()) //
+				.when(dataAccessLogic).fetchCMCard(anyString(), anyLong());
 		final DataHandler dataHandler = dataHandler();
 		doReturn(dataHandler) //
 				.when(attachmentsHelper).download(anyString(), anyLong(), anyString());
@@ -296,7 +297,7 @@ public class CxfCardAttachmentsTest {
 		assertThat(response, equalTo(dataHandler));
 		final InOrder inOrder = inOrder(errorHandler, dataAccessLogic, attachmentsHelper);
 		inOrder.verify(dataAccessLogic).findClass(eq("foo"));
-		inOrder.verify(dataAccessLogic).fetchCard(eq("foo"), eq(123L));
+		inOrder.verify(dataAccessLogic).fetchCMCard(eq("foo"), eq(123L));
 		inOrder.verify(attachmentsHelper).download(eq("foo"), eq(123L), eq("bar"));
 		inOrder.verifyNoMoreInteractions();
 	}
@@ -322,7 +323,7 @@ public class CxfCardAttachmentsTest {
 		doReturn(targetClass) //
 				.when(dataAccessLogic).findClass(anyString());
 		doThrow(new NoSuchElementException()) //
-				.when(dataAccessLogic).fetchCard(eq("foo"), eq(123L));
+				.when(dataAccessLogic).fetchCMCard(eq("foo"), eq(123L));
 		doThrow(new WebApplicationException()) //
 				.when(errorHandler).cardNotFound(eq(123L));
 		final Attachment attachment = newAttachment().build();
@@ -338,8 +339,8 @@ public class CxfCardAttachmentsTest {
 		final CMClass targetClass = mockClass("bar");
 		doReturn(targetClass) //
 				.when(dataAccessLogic).findClass(anyString());
-		doReturn(Card.newInstance(targetClass).build()) //
-				.when(dataAccessLogic).fetchCard(anyString(), anyLong());
+		doAnswer(RETURNS_MOCKS.get()) //
+				.when(dataAccessLogic).fetchCMCard(anyString(), anyLong());
 		doThrow(new WebApplicationException()) //
 				.when(errorHandler).missingAttachmentId();
 		final Attachment attachment = newAttachment().build();
@@ -355,8 +356,8 @@ public class CxfCardAttachmentsTest {
 		final CMClass targetClass = mockClass("baz");
 		doReturn(targetClass) //
 				.when(dataAccessLogic).findClass(anyString());
-		doReturn(Card.newInstance(targetClass).build()) //
-				.when(dataAccessLogic).fetchCard(anyString(), anyLong());
+		doAnswer(RETURNS_MOCKS.get()) //
+				.when(dataAccessLogic).fetchCMCard(anyString(), anyLong());
 		final DataHandler dataHandler = dataHandler("different name");
 		doReturn(asList( //
 				newAttachment() //
@@ -379,8 +380,8 @@ public class CxfCardAttachmentsTest {
 		final CMClass targetClass = mockClass("baz");
 		doReturn(targetClass) //
 				.when(dataAccessLogic).findClass(anyString());
-		doReturn(Card.newInstance(targetClass).build()) //
-				.when(dataAccessLogic).fetchCard(anyString(), anyLong());
+		doAnswer(RETURNS_MOCKS.get()) //
+				.when(dataAccessLogic).fetchCMCard(anyString(), anyLong());
 		final Attachment attachment = newAttachment() //
 				.withCategory("the new category") //
 				.withDescription("the new description") //
@@ -398,7 +399,7 @@ public class CxfCardAttachmentsTest {
 		// then
 		final InOrder inOrder = inOrder(errorHandler, dataAccessLogic, attachmentsHelper);
 		inOrder.verify(dataAccessLogic).findClass(eq("foo"));
-		inOrder.verify(dataAccessLogic).fetchCard(eq("foo"), eq(123L));
+		inOrder.verify(dataAccessLogic).fetchCMCard(eq("foo"), eq(123L));
 		inOrder.verify(attachmentsHelper).search(eq("foo"), eq(123L));
 		inOrder.verify(attachmentsHelper).update(eq("foo"), eq(123L), eq("bar"), eq(attachment), eq(dataHandler));
 		inOrder.verifyNoMoreInteractions();
@@ -410,8 +411,8 @@ public class CxfCardAttachmentsTest {
 		final CMClass targetClass = mockClass("baz");
 		doReturn(targetClass) //
 				.when(dataAccessLogic).findClass(anyString());
-		doReturn(Card.newInstance(targetClass).build()) //
-				.when(dataAccessLogic).fetchCard(anyString(), anyLong());
+		doAnswer(RETURNS_MOCKS.get()) //
+				.when(dataAccessLogic).fetchCMCard(anyString(), anyLong());
 		final DataHandler dataHandler = dataHandler("existing");
 		doReturn(asList( //
 				newAttachment() //
@@ -425,7 +426,7 @@ public class CxfCardAttachmentsTest {
 		// then
 		final InOrder inOrder = inOrder(errorHandler, dataAccessLogic, attachmentsHelper);
 		inOrder.verify(dataAccessLogic).findClass(eq("foo"));
-		inOrder.verify(dataAccessLogic).fetchCard(eq("foo"), eq(123L));
+		inOrder.verify(dataAccessLogic).fetchCMCard(eq("foo"), eq(123L));
 		inOrder.verify(attachmentsHelper).search(eq("foo"), eq(123L));
 		inOrder.verify(attachmentsHelper).update(eq("foo"), eq(123L), eq("bar"), isNull(Attachment.class),
 				eq(dataHandler));
@@ -438,8 +439,8 @@ public class CxfCardAttachmentsTest {
 		final CMClass targetClass = mockClass("baz");
 		doReturn(targetClass) //
 				.when(dataAccessLogic).findClass(anyString());
-		doReturn(Card.newInstance(targetClass).build()) //
-				.when(dataAccessLogic).fetchCard(anyString(), anyLong());
+		doAnswer(RETURNS_MOCKS.get()) //
+				.when(dataAccessLogic).fetchCMCard(anyString(), anyLong());
 		final Attachment attachment = newAttachment() //
 				.withCategory("the new category") //
 				.withDescription("the new description") //
@@ -451,7 +452,7 @@ public class CxfCardAttachmentsTest {
 		// then
 		final InOrder inOrder = inOrder(errorHandler, dataAccessLogic, attachmentsHelper);
 		inOrder.verify(dataAccessLogic).findClass(eq("foo"));
-		inOrder.verify(dataAccessLogic).fetchCard(eq("foo"), eq(123L));
+		inOrder.verify(dataAccessLogic).fetchCMCard(eq("foo"), eq(123L));
 		inOrder.verify(attachmentsHelper).update(eq("foo"), eq(123L), eq("bar"), eq(attachment),
 				isNull(DataHandler.class));
 		inOrder.verifyNoMoreInteractions();
@@ -463,8 +464,8 @@ public class CxfCardAttachmentsTest {
 		final CMClass targetClass = mockClass("baz");
 		doReturn(targetClass) //
 				.when(dataAccessLogic).findClass(anyString());
-		doReturn(Card.newInstance(targetClass).build()) //
-				.when(dataAccessLogic).fetchCard(anyString(), anyLong());
+		doAnswer(RETURNS_MOCKS.get()) //
+				.when(dataAccessLogic).fetchCMCard(anyString(), anyLong());
 
 		// when
 		attachmentsService.update("foo", 123L, "bar", null, null);
@@ -472,7 +473,7 @@ public class CxfCardAttachmentsTest {
 		// then
 		final InOrder inOrder = inOrder(errorHandler, dataAccessLogic, attachmentsHelper);
 		inOrder.verify(dataAccessLogic).findClass(eq("foo"));
-		inOrder.verify(dataAccessLogic).fetchCard(eq("foo"), eq(123L));
+		inOrder.verify(dataAccessLogic).fetchCMCard(eq("foo"), eq(123L));
 		inOrder.verify(attachmentsHelper).update(eq("foo"), eq(123L), eq("bar"), isNull(Attachment.class),
 				isNull(DataHandler.class));
 		inOrder.verifyNoMoreInteractions();
@@ -497,7 +498,7 @@ public class CxfCardAttachmentsTest {
 		doReturn(targetClass) //
 				.when(dataAccessLogic).findClass(anyString());
 		doThrow(new NoSuchElementException()) //
-				.when(dataAccessLogic).fetchCard(eq("foo"), eq(123L));
+				.when(dataAccessLogic).fetchCMCard(eq("foo"), eq(123L));
 		doThrow(new WebApplicationException()) //
 				.when(errorHandler).cardNotFound(eq(123L));
 
@@ -513,8 +514,8 @@ public class CxfCardAttachmentsTest {
 				.when(targetClass).getName();
 		doReturn(targetClass) //
 				.when(dataAccessLogic).findClass(anyString());
-		doReturn(Card.newInstance(targetClass).build()) //
-				.when(dataAccessLogic).fetchCard(anyString(), anyLong());
+		doAnswer(RETURNS_MOCKS.get()) //
+				.when(dataAccessLogic).fetchCMCard(anyString(), anyLong());
 
 		// when
 		attachmentsService.delete("foo", 123L, "bar");
@@ -522,7 +523,7 @@ public class CxfCardAttachmentsTest {
 		// then
 		final InOrder inOrder = inOrder(errorHandler, dataAccessLogic, attachmentsHelper);
 		inOrder.verify(dataAccessLogic).findClass(eq("foo"));
-		inOrder.verify(dataAccessLogic).fetchCard(eq("foo"), eq(123L));
+		inOrder.verify(dataAccessLogic).fetchCMCard(eq("foo"), eq(123L));
 		inOrder.verify(attachmentsHelper).delete(eq("foo"), eq(123L), eq("bar"));
 		inOrder.verifyNoMoreInteractions();
 	}

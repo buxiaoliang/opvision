@@ -1,6 +1,7 @@
 package unit.logic.auth;
 
 import static com.google.common.reflect.Reflection.newProxy;
+import static org.cmdbuild.auth.context.PrivilegeContexts.nullPrivilegeContext;
 import static org.cmdbuild.common.utils.Reflection.unsupported;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
@@ -25,7 +26,7 @@ import org.cmdbuild.auth.UserStore;
 import org.cmdbuild.auth.acl.CMGroup;
 import org.cmdbuild.auth.acl.NullGroup;
 import org.cmdbuild.auth.acl.PrivilegeContext;
-import org.cmdbuild.auth.context.NullPrivilegeContext;
+import org.cmdbuild.auth.context.PrivilegeContexts.NullPrivilegeContext;
 import org.cmdbuild.auth.user.AnonymousUser;
 import org.cmdbuild.auth.user.AuthenticatedUser;
 import org.cmdbuild.auth.user.OperationUser;
@@ -100,8 +101,8 @@ public class DefaultSessionLogicTest {
 		final AuthenticatedUser authenticatedUser = mock(AuthenticatedUser.class);
 		doReturn("foo") //
 				.when(authenticatedUser).getUsername();
-		final OperationUser operationUser =
-				new OperationUser(authenticatedUser, new NullPrivilegeContext(), new NullGroup());
+		final OperationUser operationUser = new OperationUser(authenticatedUser, nullPrivilegeContext(),
+				new NullGroup());
 		doAnswer(new Answer<Response>() {
 
 			@Override
@@ -162,8 +163,8 @@ public class DefaultSessionLogicTest {
 		final AuthenticatedUser authenticatedUser = mock(AuthenticatedUser.class);
 		doReturn("foo") //
 				.when(authenticatedUser).getUsername();
-		final OperationUser operationUser =
-				new OperationUser(authenticatedUser, new NullPrivilegeContext(), new NullGroup());
+		final OperationUser operationUser = new OperationUser(authenticatedUser, nullPrivilegeContext(),
+				new NullGroup());
 		final ClientAuthenticationResponse expectedResponse = mock(ClientAuthenticationResponse.class);
 		doAnswer(new Answer<ClientAuthenticationResponse>() {
 
@@ -325,8 +326,8 @@ public class DefaultSessionLogicTest {
 		final AuthenticatedUser authenticatedUser = mock(AuthenticatedUser.class);
 		doReturn("foo") //
 				.when(authenticatedUser).getUsername();
-		final OperationUser operationUser =
-				new OperationUser(authenticatedUser, new NullPrivilegeContext(), new NullGroup());
+		final OperationUser operationUser = new OperationUser(authenticatedUser, nullPrivilegeContext(),
+				new NullGroup());
 		doAnswer(new Answer<Response>() {
 
 			@Override
@@ -422,8 +423,8 @@ public class DefaultSessionLogicTest {
 	public void cannotImpersonate() throws Exception {
 		// given
 		final AuthenticatedUser authenticatedUser = mock(AuthenticatedUser.class);
-		final OperationUser operationUser =
-				new OperationUser(authenticatedUser, new NullPrivilegeContext(), new NullGroup());
+		final OperationUser operationUser = new OperationUser(authenticatedUser, nullPrivilegeContext(),
+				new NullGroup());
 		final Session session = mock(Session.class);
 		doReturn(operationUser) //
 				.when(session).getUser();
@@ -452,8 +453,8 @@ public class DefaultSessionLogicTest {
 	public void impersonate() throws Exception {
 		// given
 		final AuthenticatedUser authenticatedUser = mock(AuthenticatedUser.class);
-		final OperationUser operationUser =
-				new OperationUser(authenticatedUser, new NullPrivilegeContext(), new NullGroup());
+		final OperationUser operationUser = new OperationUser(authenticatedUser, nullPrivilegeContext(),
+				new NullGroup());
 		final Session session = mock(Session.class);
 		doReturn("bar") //
 				.when(session).getIdentifier();
@@ -463,8 +464,8 @@ public class DefaultSessionLogicTest {
 				.when(sessionStore).read(any(Storable.class));
 		doReturn(true) //
 				.when(canImpersonate).test(any(OperationUser.class));
-		final OperationUser anotherOperationUser =
-				new OperationUser(authenticatedUser, new NullPrivilegeContext(), new NullGroup());
+		final OperationUser anotherOperationUser = new OperationUser(authenticatedUser, nullPrivilegeContext(),
+				new NullGroup());
 		doAnswer(new Answer<Response>() {
 
 			@Override
@@ -528,8 +529,8 @@ public class DefaultSessionLogicTest {
 		final AuthenticatedUser authenticatedUser = mock(AuthenticatedUser.class);
 		doReturn("foo") //
 				.when(authenticatedUser).getUsername();
-		final OperationUser operationUser =
-				new OperationUser(authenticatedUser, new NullPrivilegeContext(), new NullGroup());
+		final OperationUser operationUser = new OperationUser(authenticatedUser, nullPrivilegeContext(),
+				new NullGroup());
 		final Session session = mock(Session.class);
 		doReturn("bar") //
 				.when(session).getIdentifier();
@@ -625,8 +626,8 @@ public class DefaultSessionLogicTest {
 		doReturn(session) //
 				.when(sessionStore).read(any(Storable.class));
 		final AuthenticatedUser authenticatedUser = mock(AuthenticatedUser.class);
-		final OperationUser operationUser =
-				new OperationUser(authenticatedUser, new NullPrivilegeContext(), new NullGroup());
+		final OperationUser operationUser = new OperationUser(authenticatedUser, nullPrivilegeContext(),
+				new NullGroup());
 		doReturn(operationUser) //
 				.when(sessionStore).selectUserOrImpersonated(any(Session.class));
 
@@ -691,8 +692,8 @@ public class DefaultSessionLogicTest {
 		final Session session = mock(Session.class);
 		doReturn(session) //
 				.when(sessionStore).read(any(Session.class));
-		final OperationUser operationUser =
-				new OperationUser(authenticatedUser, new NullPrivilegeContext(), new NullGroup());
+		final OperationUser operationUser = new OperationUser(authenticatedUser, nullPrivilegeContext(),
+				new NullGroup());
 		doReturn(operationUser) //
 				.when(sessionStore).selectUserOrImpersonated(any(Session.class));
 
@@ -723,7 +724,7 @@ public class DefaultSessionLogicTest {
 		doReturn(session) //
 				.when(sessionStore).read(any(Session.class));
 		final CMGroup group = mock(CMGroup.class);
-		final OperationUser operationUser = new OperationUser(authenticatedUser, new NullPrivilegeContext(), group);
+		final OperationUser operationUser = new OperationUser(authenticatedUser, nullPrivilegeContext(), group);
 		doReturn(operationUser) //
 				.when(sessionStore).selectUserOrImpersonated(any(Session.class));
 

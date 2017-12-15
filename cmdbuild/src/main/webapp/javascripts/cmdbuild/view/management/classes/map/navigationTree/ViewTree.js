@@ -247,25 +247,7 @@
 						loaded : function() {
 							this.interactionDocument.setStarted(true);
 						},
-/*						appendChildren : function(node, children) {
-							Ext.suspendLayouts();
-							for (var i = 0; i < children.length; i++) {
-								var child = children[i];
-								var newNode = this.getFromCache(child.get("className"), child.get("cardId"));
-								if (newNode) {
-									newNode.parentNode.removeChild(newNode);
-								}
-								newNode = node.appendChild(child);
-								var isLeaf = newNode.get("leaf");
-								if (!isLeaf) {
-									newNode.appendChild(this.concreteTree.getEmptyNode());
-								}
-							}
-							var children = this.orderChildren(node.childNodes)
-							node.childNodes = children;
-							Ext.resumeLayouts();
-						},
-*/						appendChildren : function(node, children) {
+						appendChildren : function(node, children) {
 							var children = this.orderChildren(children);
 							Ext.suspendLayouts();
 							this.removeAllChildren(node);
@@ -447,8 +429,10 @@
 								leafCount++;
 							});
 							return leafCount;
+						},
+						changeTransparency : function(transparency) {
+							
 						}
-
 					});
 	function selectNode(tree, node) {
 		if (node.parentNode && node.parentNode.childNodes.length > CMDBuild.gis.constants.navigation.LIMIT_SELECTION) {

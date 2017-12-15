@@ -38,18 +38,11 @@ import org.cmdbuild.services.bim.DefaultBimFacade;
 import org.cmdbuild.services.bim.DefaultBimPersistence;
 import org.cmdbuild.services.bim.DefaultBimStoreManager;
 import org.cmdbuild.services.bim.DefaultRelationPersistence;
-import org.cmdbuild.services.bim.DefaultTransactionManager;
 import org.cmdbuild.services.bim.RelationPersistence;
-import org.cmdbuild.services.bim.TransactionManager;
 import org.cmdbuild.services.bim.connector.BimCardDiffer;
 import org.cmdbuild.services.bim.connector.CardDiffer;
 import org.cmdbuild.services.bim.connector.DefaultBimMapper;
 import org.cmdbuild.services.bim.connector.Mapper;
-import org.cmdbuild.services.bim.connector.export.ConnectorFramework;
-import org.cmdbuild.services.bim.connector.export.DoNotForceUpdate;
-import org.cmdbuild.services.bim.connector.export.ExportConnectorFramework;
-import org.cmdbuild.services.bim.connector.export.ExportPolicy;
-import org.cmdbuild.services.bim.connector.export.MergeOnlyBeforeExport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -88,7 +81,7 @@ public class Bim {
 
 	@Bean
 	public ProjectLogic projectLogic() {
-		return new DefaultProjectLogic(bimServiceFacade(), bimDataPersistence(), exportPolicy());
+		return new DefaultProjectLogic(bimServiceFacade(), bimDataPersistence());
 	}
 
 	@Bean
@@ -98,32 +91,17 @@ public class Bim {
 
 	@Bean
 	public SynchronizationLogic synchronizationLogic() {
-		return new DefaultSynchronizationLogic(bimServiceFacade(), bimDataPersistence(), mapper(), exportPolicy(),
-				connectorFramework());
+		return new DefaultSynchronizationLogic(bimServiceFacade(), bimDataPersistence(), mapper());
 	}
 
 	@Bean
 	public ViewerLogic viewerLogic() {
-		return new DefaultViewerLogic(bimServiceFacade(), bimDataPersistence(), bimDataView(), exportPolicy(),
-				layerLogic(), synchronizationLogic(), connectorFramework());
-	}
-
-	@Bean
-	public ExportPolicy exportPolicy() {
-		return new MergeOnlyBeforeExport(bimServiceFacade(), new DoNotForceUpdate());
+		return new DefaultViewerLogic(bimServiceFacade(), bimDataPersistence(), bimDataView());
 	}
 
 	@Bean
 	protected BimFacade bimServiceFacade() {
-		return new DefaultBimFacade(bimService(), transactionManager());
-	}
-
-	private ConnectorFramework connectorFramework() {
-		return new ExportConnectorFramework(bimDataView(), bimServiceFacade(), bimDataPersistence(), exportPolicy());
-	}
-
-	private TransactionManager transactionManager() {
-		return new DefaultTransactionManager(bimService());
+		return new DefaultBimFacade(bimService());
 	}
 
 	@Bean
@@ -163,11 +141,11 @@ public class Bim {
 
 	@Bean
 	protected Store<StorableProject> projectStore() {
-		return Stores.nullOnNotFoundRead(DataViewStore.newInstance(systemDataView, storbaleProjectConverter()));
+		return Stores.nullOnNotFoundRead(DataViewStore.newInstance(systemDataView, storableProjectConverter()));
 	}
 
 	@Bean
-	protected StorableConverter<StorableProject> storbaleProjectConverter() {
+	protected StorableConverter<StorableProject> storableProjectConverter() {
 		return new StorableProjectConverter();
 	}
 

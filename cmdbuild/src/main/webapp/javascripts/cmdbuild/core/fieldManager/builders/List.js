@@ -7,7 +7,7 @@
 	Ext.define('CMDBuild.core.fieldManager.builders.List', {
 		extend: 'CMDBuild.core.fieldManager.builders.Abstract',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.core.fieldManager.builders.List'

@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.common.field.delay.Delay', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {Array}

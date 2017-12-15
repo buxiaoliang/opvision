@@ -10,7 +10,7 @@
 		extend: 'Ext.data.reader.Json',
 		alias: 'reader.lookupstore',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @param {Object} rowObject

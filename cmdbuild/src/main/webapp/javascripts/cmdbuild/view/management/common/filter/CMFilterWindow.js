@@ -6,36 +6,6 @@
 
 	var titleTemplate = '{0} - {1} - {2}';
 
-	Ext.define('CMDBuild.view.management.common.filter.CMFilterWindowDelegate', {
-		/**
-		 * The filter window that call the delegate
-		 *
-		 * @params {CMDBuild.view.management.common.filter.CMFilterWindow} filterWindow
-		 */
-		onCMFilterWindowApplyButtonClick: Ext.emptyFn,
-
-		/**
-		 * The filter window that call the delegate
-		 *
-		 * @params {CMDBuild.view.management.common.filter.CMFilterWindow} filterWindow
-		 */
-		onCMFilterWindowSaveButtonClick: Ext.emptyFn,
-
-		/**
-		 * The filter window that call the delegate
-		 *
-		 * @params {CMDBuild.view.management.common.filter.CMFilterWindow} filterWindow
-		 */
-		onCMFilterWindowSaveAndApplyButtonClick: Ext.emptyFn,
-
-		/**
-		 * The filter window that call the delegate
-		 *
-		 * @params {CMDBuild.view.management.common.filter.CMFilterWindow} filterWindow
-		 */
-		onCMFilterWindowAbortButtonClick: Ext.emptyFn
-	});
-
 	Ext.define('CMDBuild.view.management.common.filter.CMFilterWindow', {
 		extend: 'CMDBuild.core.window.AbstractModal',
 
@@ -213,88 +183,5 @@
 		return true;
 	}
 
-	Ext.define('CMDBuild.view.management.common.filter.CMSaveFilterWindowDelegate', {
-		/**
-		 * @param {CMDBuild.view.management.common.filter.CMSaveFilterWindow} window - the window that calls the delegate
-		 * @param {CMDBuild.model.CMFilterModel} filter - the filter to save
-		 * @param {String} name - the name set in the form
-		 * @param {String} the description set in the form
-		 */
-		onSaveFilterWindowConfirm: Ext.emptyFn
-	});
-
-	Ext.define('CMDBuild.view.management.common.filter.CMSaveFilterWindow', {
-		extend: 'Ext.window.Window',
-
-		mixins: {
-			delegable: 'CMDBuild.core.CMDelegable'
-		},
-
-		bodyPadding: '5 5 1 5',
-		buttonAlign: 'center',
-		modal: true,
-
-		// Configuration
-			/**
-			 * a CMDBuild.model.CMFilterModel
-			 */
-			filter: undefined,
-
-			/**
-			 * a CMFilterWindow, used outside to know the referred filter window and close it
-			 */
-			referredFilterWindow: undefined,
-		// END: Configuration
-
-		constructor: function() {
-			this.mixins.delegable.constructor.call(this, 'CMDBuild.view.management.common.filter.CMSaveFilterWindowDelegate');
-
-			this.callParent(arguments);
-		},
-
-		initComponent: function() {
-			var me = this;
-			var canEditTheName = this.filter.isLocal();
-
-			this.nameField = Ext.create('Ext.form.field.Text', {
-				name: CMDBuild.core.constants.Proxy.NAME,
-				fieldLabel: CMDBuild.Translation.administration.modClass.attributeProperties.name,
-				value: this.filter.getName(),
-				disabled: !canEditTheName,
-				width: CMDBuild.core.constants.FieldWidths.STANDARD_BIG,
-				allowBlank: false // Requires a non-empty value
-			});
-
-			this.descriptionField = Ext.create('Ext.form.field.TextArea', {
-				name: CMDBuild.core.constants.Proxy.DESCRIPTION,
-				fieldLabel: CMDBuild.Translation.administration.modClass.attributeProperties.description,
-				value: this.filter.getDescription(),
-				width: CMDBuild.core.constants.FieldWidths.STANDARD_BIG,
-				allowBlank: false // Requires a non-empty value
-			});
-
-			this.items = [this.nameField, this.descriptionField];
-
-			this.buttons = [
-				{
-					text: CMDBuild.Translation.save,
-					handler: function() {
-						var name = me.nameField.getValue();
-						var description = me.descriptionField.getValue();
-
-						me.callDelegates('onSaveFilterWindowConfirm', [me, me.filter, name, description]);
-					}
-				},
-				{
-					text: CMDBuild.Translation.cancel,
-					handler: function() {
-						me.destroy();
-					}
-				}
-			];
-
-			this.callParent(arguments);
-		}
-	});
 
 })();

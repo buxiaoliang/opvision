@@ -1,8 +1,8 @@
 (function() {
 
-	Ext.require('CMDBuild.proxy.Cache');
 
 Ext.define("CMDBuild.view.common.field.LookupField", {
+	uses: ['CMDBuild.proxy.Cache'],
 	extend: "CMDBuild.view.common.field.CMErasableCombo",
 	plugins: new CMDBuild.SetValueOnLoadPlugin(),
 	parentId: '',
@@ -118,6 +118,7 @@ Ext.define("CMDBuild.view.common.field.LookupField", {
 });
 
 Ext.define("CMDBuild.field.MultiLevelLookupPanel", {
+	uses: ['CMDBuild.proxy.Cache'],
 	extend: "Ext.panel.Panel",
 	hiddenField: undefined,
 	initComponent: function() {
@@ -166,6 +167,7 @@ Ext.define("CMDBuild.field.MultiLevelLookupPanel", {
 });
 
 Ext.define("CMDBuild.Management.LookupCombo", {
+	uses: ['CMDBuild.proxy.Cache'],
 	statics: {
 		build: function(attribute) {
 			var field;
@@ -198,6 +200,7 @@ function canBeBlank(attribute) {
 };
 
 Ext.define("CMDBuild.Management.LookupHiddenField", {
+	uses: ['CMDBuild.proxy.Cache'],
 	extend: "Ext.form.Hidden",
 
 	updateParentsIfLoaded: function() {

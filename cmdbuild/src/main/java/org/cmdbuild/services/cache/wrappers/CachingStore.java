@@ -7,16 +7,25 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.cmdbuild.common.cache.CacheEvictionPolicy;
+import org.cmdbuild.common.cache.ClusterEvent;
+import org.cmdbuild.common.cache.ClusterMessage;
+import org.cmdbuild.common.cache.ClusterMessageReceiver;
+import org.cmdbuild.common.cache.ClusterMessageSender;
+import org.cmdbuild.common.cache.ClusterTarget;
 import org.cmdbuild.data.store.ForwardingStore;
 import org.cmdbuild.data.store.Storable;
 import org.cmdbuild.data.store.Store;
 import org.cmdbuild.services.cache.CachingService.Cacheable;
+import org.cmdbuild.services.cache.CachingService.ClusterAwareCacheable;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
 
-public class CachingStore<T extends Storable> extends ForwardingStore<T> implements Cacheable {
+public class CachingStore<T extends Storable> extends ForwardingStore<T> implements ClusterAwareCacheable {
 
 	private static final Marker marker = MarkerFactory.getMarker(CachingStore.class.getName());
+	
+	private ClusterMessageSender clusterMessageSender;
 
 	private static class Cache<T extends Storable> {
 
@@ -113,8 +122,32 @@ public class CachingStore<T extends Storable> extends ForwardingStore<T> impleme
 	}
 
 	@Override
-	public void clearCache() {
-		cache.clear();
+	public void update(ClusterMessage msg) {
+		if (ClusterEvent.CACHE_EVICT_CACHE.equals(msg.getEvent()))
+			clearCache(CacheEvictionPolicy.NON_PROPAGATING);
 	}
+
+	@Override
+	public void register(ClusterMessageReceiver receiver) {
+		receiver.register(this, ClusterTarget.CachingStore.getTargetId());
+	}
+
+	@Override
+	public void setClusterMessageSender(ClusterMessageSender sender) {
+		clusterMessageSender = sender;
+	}
+
+	@Override
+	public void clearCache(CacheEvictionPolicy policy) {
+		cache.clear();
+		if (policy.clusterPropagation()) {
+			ClusterMessage msg = new ClusterMessage(ClusterTarget.CachingStore.getTargetId(), ClusterEvent.CACHE_EVICT_CACHE);
+			clusterMessageSender.safeSend(msg);
+		}
+		
+	}
+
+	
+	
 
 }

@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.workflow.tabs.taskManager.TaskManagerView', {
 		extend: 'Ext.panel.Panel',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		mixins: ['CMDBuild.view.common.PanelFunctions'],
 

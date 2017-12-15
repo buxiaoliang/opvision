@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.common.field.comboBox.Language', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.localization.Localization',
 			'CMDBuild.proxy.index.Json'

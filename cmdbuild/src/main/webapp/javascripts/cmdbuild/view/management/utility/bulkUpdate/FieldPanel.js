@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.management.utility.bulkUpdate.FieldPanel', {
 		extend: 'Ext.panel.Panel',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @property {Ext.form.field.Checkbox}

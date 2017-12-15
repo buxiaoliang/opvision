@@ -82,7 +82,7 @@ public class DBFunction extends DBTypeObject implements CMFunction {
 			this.name = name;
 			this.type = type;
 		}
-
+		
 		@Override
 		public String getName() {
 			return name;
@@ -94,15 +94,35 @@ public class DBFunction extends DBTypeObject implements CMFunction {
 		}
 
 	}
+	
+	private static class DBFunctionOutputParameter extends DBFunctionParameter implements CMFunctionOutputParameter {
+		
+		/**
+		 * defaults to true if not explicitly set to false via Metadata
+		 */
+		Boolean basedsp = true;
+
+		DBFunctionOutputParameter(final String name, final CMAttributeType<?> type, final Boolean basedsp) {
+			super(name,type);
+			if (Boolean.FALSE.equals(basedsp))
+				this.basedsp = false;
+		}
+		
+		@Override
+		public Boolean getBasedsp() {
+			return basedsp;
+		}
+	
+	}
 
 	private static final Iterable<Category> NO_CATEGORIES = emptyList();
 	private static final Map<String, Object> NO_METADATA = emptyMap();
 
 	private final List<CMFunctionParameter> inputParameters;
-	private final List<CMFunctionParameter> outputParameters;
+	private final List<CMFunctionOutputParameter> outputParameters;
 
 	private final List<CMFunctionParameter> unmodifiableInputParameters;
-	private final List<CMFunctionParameter> unmodifiableOutputParameters;
+	private final List<CMFunctionOutputParameter> unmodifiableOutputParameters;
 
 	private final boolean returnsSet;
 
@@ -135,7 +155,7 @@ public class DBFunction extends DBTypeObject implements CMFunction {
 	}
 
 	@Override
-	public List<CMFunctionParameter> getOutputParameters() {
+	public List<CMFunctionOutputParameter> getOutputParameters() {
 		return unmodifiableOutputParameters;
 	}
 
@@ -143,8 +163,8 @@ public class DBFunction extends DBTypeObject implements CMFunction {
 		inputParameters.add(new DBFunctionParameter(name, type));
 	}
 
-	public void addOutputParameter(final String name, final CMAttributeType<?> type) {
-		outputParameters.add(new DBFunctionParameter(name, type));
+	public void addOutputParameter(final String name, final CMAttributeType<?> type, Boolean basedsp) {
+		outputParameters.add(new DBFunctionOutputParameter(name, type , basedsp));
 	}
 
 	@Override

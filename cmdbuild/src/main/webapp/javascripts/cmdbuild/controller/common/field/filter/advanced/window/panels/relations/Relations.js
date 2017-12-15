@@ -6,7 +6,7 @@
 	Ext.define('CMDBuild.controller.common.field.filter.advanced.window.panels.relations.Relations', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Global',
 			'CMDBuild.core.constants.Proxy'
 		],

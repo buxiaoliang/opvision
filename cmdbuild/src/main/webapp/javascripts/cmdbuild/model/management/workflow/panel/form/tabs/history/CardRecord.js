@@ -1,13 +1,11 @@
 (function () {
 
-	Ext.require([
-		'CMDBuild.core.configurations.DataFormat',
-		'CMDBuild.core.constants.Proxy'
-	]);
-
 	Ext.define('CMDBuild.model.management.workflow.panel.form.tabs.history.CardRecord', {
 		extend: 'Ext.data.Model',
-
+		uses: [
+			'CMDBuild.core.configurations.DataFormat',
+			'CMDBuild.core.constants.Proxy'
+		],
 		fields: [
 			{ name: CMDBuild.core.constants.Proxy.ACTIVITY_NAME, type: 'string' },
 			{ name: CMDBuild.core.constants.Proxy.BEGIN_DATE, type: 'date', dateFormat: CMDBuild.core.configurations.DataFormat.getDateTime() },

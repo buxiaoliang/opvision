@@ -59,6 +59,12 @@
 
 					this.view.buttonClone.setDisabled(this.cmfg('panelGridAndFormSelectedEntityGet', [CMDBuild.core.constants.Proxy.CAPABILITIES, CMDBuild.core.constants.Proxy.CLONE_DISABLED]));
 					this.view.buttonModify.setDisabled(this.cmfg('panelGridAndFormSelectedEntityGet', [CMDBuild.core.constants.Proxy.CAPABILITIES, CMDBuild.core.constants.Proxy.MODIFY_DISABLED]));
+			
+					var isWritable = this.cmfg('classesFormTabCardSelectedItemIsWritable');
+					if (!isWritable) {
+						this.view.buttonModify.setDisabled(true);
+					}
+
 					this.view.buttonRelationGraph.setDisabled(!CMDBuild.configuration.graph.get(CMDBuild.core.constants.Proxy.ENABLED));
 					this.view.buttonRemove.setDisabled(this.cmfg('panelGridAndFormSelectedEntityGet', [CMDBuild.core.constants.Proxy.CAPABILITIES, CMDBuild.core.constants.Proxy.DELETE_DISABLED]));
 				}

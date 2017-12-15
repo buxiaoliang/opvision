@@ -1,5 +1,6 @@
 package org.cmdbuild.services.database;
 
+import com.google.common.collect.Ordering;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -7,13 +8,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.sql.DataSource;
+import org.apache.commons.io.FileUtils;
 
 import org.cmdbuild.config.DatabaseConfiguration;
 import org.cmdbuild.config.DatabaseProperties;
 import org.cmdbuild.exception.ORMException.ORMExceptionType;
 import org.cmdbuild.logger.Log;
 import org.cmdbuild.services.PatchManager;
-import org.cmdbuild.utils.FileUtils;
 import org.postgresql.ds.PGSimpleDataSource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -56,13 +57,13 @@ public class DatabaseConfigurator {
 	private static final String SHARK_USERNAME = "shark";
 	private static final String SHARK_SCHEMA = "shark";
 
-	private static String CREATE_LANGUAGE = "CREATE LANGUAGE plpgsql";
-	private static String CREATE_DATABASE = "CREATE DATABASE \"%s\" ENCODING = 'UTF8'";
-	private static String CREATE_ROLE = "CREATE ROLE \"%s\" NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN ENCRYPTED PASSWORD '%s'";
-	private static String CREATE_SCHEMA = "CREATE SCHEMA %s";
-	private static String ALTER_DATABASE_OWNER = "ALTER DATABASE \"%s\" OWNER TO \"%s\"";
-	private static String GRANT_SCHEMA_PRIVILEGES = "GRANT ALL ON SCHEMA \"%s\" TO \"%s\"";
-	private static String ALTER_ROLE_PATH = "ALTER ROLE \"%s\" SET search_path=%s";
+	private static final String CREATE_LANGUAGE = "CREATE LANGUAGE plpgsql";
+	private static final String CREATE_DATABASE = "CREATE DATABASE \"%s\" ENCODING = 'UTF8'";
+	private static final String CREATE_ROLE = "CREATE ROLE \"%s\" NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN ENCRYPTED PASSWORD '%s'";
+	private static final String CREATE_SCHEMA = "CREATE SCHEMA %s";
+	private static final String ALTER_DATABASE_OWNER = "ALTER DATABASE \"%s\" OWNER TO \"%s\"";
+	private static final String GRANT_SCHEMA_PRIVILEGES = "GRANT ALL ON SCHEMA \"%s\" TO \"%s\"";
+	private static final String ALTER_ROLE_PATH = "ALTER ROLE \"%s\" SET search_path=%s";
 
 	private static final String DROP_DATABASE = "DROP DATABASE \"%s\"";
 
@@ -166,6 +167,7 @@ public class DatabaseConfigurator {
 					"Error while configuring the database. Exception message is {}",
 					e.getMessage());
 			Log.SQL.error("Caused by {}", e.getCause().getMessage());
+			Log.SQL.error("Error while configuring the database", e); // new error, full stack trace
 			throw ORMExceptionType.ORM_GENERIC_ERROR.createException();
 		}
 	}
@@ -227,17 +229,22 @@ public class DatabaseConfigurator {
 	}
 
 	private void restoreSampleDB() {
-		Log.CMDBUILD.info("Restoring demo structure");
-		final String filename = sampleSqlPath + configuration.getDatabaseType()
-				+ "_schema.sql";
-		final String sql = FileUtils.getContents(filename);
-		new JdbcTemplate(systemDataSource()).execute(sql);
+		try {
+			Log.CMDBUILD.info("Restoring demo structure");
+			final String sql = FileUtils.readFileToString(new File(sampleSqlPath, configuration.getDatabaseType() + "_schema.sql"));
+			new JdbcTemplate(systemDataSource()).execute(sql);
+		} catch (IOException ex) {
+			throw new RuntimeException(ex);
+		}
 	}
 
 	private void createSharkTables() {
-		Log.CMDBUILD.info("Creating shark tables");
-		new JdbcTemplate(sharkDataSource()).execute(FileUtils
-				.getContents(sharkSqlPath + "02_shark_emptydb.sql"));
+		try {
+			Log.CMDBUILD.info("Creating shark tables");
+			new JdbcTemplate(sharkDataSource()).execute(FileUtils.readFileToString(new File(sharkSqlPath, "02_shark_emptydb.sql")));
+		} catch (IOException ex) {
+			throw new RuntimeException(ex);
+		}
 	}
 
 	private void createSchema(final String schema) {
@@ -246,27 +253,18 @@ public class DatabaseConfigurator {
 	}
 
 	private void createCmdbuildStructure() {
-		Log.CMDBUILD.info("Creating CMDBuild structure");
-		final List<String> sqlFiles = Arrays.asList( //
-				baseSqlPath + "01_system_functions_base.sql", //
-				baseSqlPath + "02_system_functions_class.sql", //
-				baseSqlPath + "03_system_functions_attribute.sql", //
-				baseSqlPath + "04_system_functions_domain.sql", //
-				baseSqlPath + "05_base_tables.sql", //
-				baseSqlPath + "06_system_views_base.sql", //
-				baseSqlPath + "07_support_tables.sql", //
-				baseSqlPath + "08_user_tables.sql", //
-				baseSqlPath + "09_system_views_extras.sql", //
-				baseSqlPath + "10_system_functions_extras.sql", //
-				baseSqlPath + "11_workflow.sql", //
-				baseSqlPath + "12_tecnoteca_extras.sql", //
-				baseSqlPath + "13_bim.sql", //
-				baseSqlPath + "14_graph.sql"
-		);
-		for (final String file : sqlFiles) {
-			Log.CMDBUILD.info("applying '{}'", file);
-			final String content = FileUtils.getContents(file);
-			new JdbcTemplate(systemDataSource()).execute(content);
+		try {
+			Log.CMDBUILD.info("Creating CMDBuild structure");
+			List<File> sqlFiles = Ordering.usingToString().sortedCopy(Arrays.asList(new File(baseSqlPath).listFiles((File dir, String name) -> {
+				return name.toLowerCase().endsWith(".sql");
+			})));
+			for (File file : sqlFiles) {
+				Log.CMDBUILD.info("applying '{}'", file);
+				final String content = FileUtils.readFileToString(file);
+				new JdbcTemplate(systemDataSource()).execute(content);
+			}
+		} catch (IOException ex) {
+			throw new RuntimeException(ex);
 		}
 	}
 

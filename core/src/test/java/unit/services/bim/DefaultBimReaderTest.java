@@ -38,12 +38,12 @@ public class DefaultBimReaderTest {
 		// given
 		String revisionId = "123";
 		EntityDefinition entityDefinition = mock(EntityDefinition.class);
-		when(entityDefinition.getTypeName()).thenReturn(IFC_TYPE);
-		when(entityDefinition.getLabel()).thenReturn(CM_CLASS);
+		when(entityDefinition.getIfcType()).thenReturn(IFC_TYPE);
+		when(entityDefinition.getCmClass()).thenReturn(CM_CLASS);
 		when(entityDefinition.isValid()).thenReturn(true);
 
 		List<Entity> bimEntityList = Lists.newArrayList();
-		when(service.getEntitiesByType(entityDefinition.getTypeName(), revisionId)).thenReturn(bimEntityList);
+		when(service.getEntitiesByType(entityDefinition.getIfcType(), revisionId)).thenReturn(bimEntityList);
 
 		// when
 		try {
@@ -64,8 +64,8 @@ public class DefaultBimReaderTest {
 		// given
 		String revisionId = "123";
 		EntityDefinition entityDefinition = mock(EntityDefinition.class);
-		when(entityDefinition.getTypeName()).thenReturn(IFC_TYPE);
-		when(entityDefinition.getLabel()).thenReturn(CM_CLASS);
+		when(entityDefinition.getIfcType()).thenReturn(IFC_TYPE);
+		when(entityDefinition.getCmClass()).thenReturn(CM_CLASS);
 		when(entityDefinition.isValid()).thenReturn(true);
 
 		List<Entity> bimEntityList = Lists.newArrayList();
@@ -75,7 +75,7 @@ public class DefaultBimReaderTest {
 		when(guid.getStringValue()).thenReturn("GuidValue");
 		when(entity.getAttributeByName("GlobalId")).thenReturn(guid);
 		bimEntityList.add(entity);
-		when(service.getEntitiesByType(entityDefinition.getTypeName(), revisionId)).thenReturn(bimEntityList);
+		when(service.getEntitiesByType(entityDefinition.getIfcType(), revisionId)).thenReturn(bimEntityList);
 
 		// when
 		reader.readEntities(revisionId, entityDefinition);

@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.common.tabs.email.Attachment', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Global',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.interfaces.FormSubmit',

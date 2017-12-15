@@ -1,68 +1,58 @@
 package utils;
 
-import static com.google.common.reflect.Reflection.newProxy;
+import static java.io.File.separator;
 import static java.lang.String.format;
-import static org.cmdbuild.common.utils.Reflection.defaultValues;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.lang3.SystemUtils;
+import static org.apache.commons.lang3.SystemUtils.USER_DIR;
 import org.cmdbuild.config.DatabaseConfiguration;
 import org.cmdbuild.config.DatabaseProperties;
 import org.cmdbuild.dao.driver.AbstractDBDriver.DefaultTypeObjectCache;
 import org.cmdbuild.dao.driver.DBDriver;
 import org.cmdbuild.dao.driver.postgres.PostgresDriver;
-import org.cmdbuild.services.ForwardingPatchManager;
+import org.cmdbuild.dao.view.DBDataView;
+import org.cmdbuild.logic.data.DefaultDataDefinitionLogic;
+import org.cmdbuild.services.DefaultFilesStore;
+import org.cmdbuild.services.DefaultPatchManager;
+import org.cmdbuild.services.FilesStoreRepository;
 import org.cmdbuild.services.PatchManager;
 import org.cmdbuild.services.Settings;
+import org.cmdbuild.services.Settings.NullStoragePropertyContainer;
 import org.cmdbuild.services.database.DatabaseConfigurator;
+import org.mockito.Mockito;
+import static org.mockito.Mockito.mock;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class DBInitializer implements LoggingSupport {
+public class DBInitializer {
 
-	private static class FakePatchManager extends ForwardingPatchManager {
-
-		private static final PatchManager DELEGATE = newProxy(PatchManager.class, defaultValues());
-
-		@Override
-		protected PatchManager delegate() {
-			return DELEGATE;
-		}
-
-		@Override
-		public Iterable<Patch> getAvaiblePatch() {
-			return Collections.emptyList();
-		}
-
-		@Override
-		public boolean isUpdated() {
-			return true;
-		}
-
-	}
-
-	private static final PatchManager FAKE_PATCH_MANAGER = new FakePatchManager();
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	private static final String DATABASE_PROPERTIES = "database.properties";
 	// TODO it's a little ugly, at the moment is ok
-	private static final String SQL_PATH = "/../../cmdbuild/src/main/webapp/WEB-INF/sql/";
+	private static final String WEB_INF_PATH = USER_DIR + "/../../cmdbuild/src/main/webapp/WEB-INF/";
+	private static final String SQL_PATH = WEB_INF_PATH + "sql/";
 
 	private final DatabaseConfigurator.Configuration dbConfiguration;
 	private final DatabaseConfigurator dbConfigurator;
 	private final PostgresDriver pgDriver;
-	private final PatchManager patchManager;
+	private PatchManager patchManager = null;
 
 	public DBInitializer() {
 		final Properties properties = readDatabaseProperties();
-		final String webRoot = SystemUtils.USER_DIR.concat(SQL_PATH);
+		final String webRoot = SQL_PATH;
 		// FIXME needed for PatchManager... no comment
-		Settings.getInstance().setRootPath(SystemUtils.USER_DIR.concat("/../../cmdbuild/src/main/webapp/"));
+		Settings.getInstance().setRootPath(USER_DIR + separator + "../../cmdbuild/src/main/webapp/"); //TODO check if still necessary
 		dbConfiguration = new DatabaseConfigurator.Configuration() {
 
 			@Override
@@ -121,10 +111,19 @@ public class DBInitializer implements LoggingSupport {
 			}
 
 		};
-		patchManager = FAKE_PATCH_MANAGER;
-		final DatabaseConfiguration databaseConfiguration = new DatabaseProperties();
-		dbConfigurator = new DatabaseConfigurator(dbConfiguration, databaseConfiguration, patchManager);
+
+		PatchManager fakePatchManager = mock(PatchManager.class);
+		final DatabaseConfiguration databaseConfiguration = new DatabaseProperties(new NullStoragePropertyContainer());
+		dbConfigurator = new DatabaseConfigurator(dbConfiguration, databaseConfiguration, fakePatchManager);
 		pgDriver = new PostgresDriver(dbConfigurator.systemDataSource(), new DefaultTypeObjectCache());
+		Mockito.doAnswer((Answer<Void>) (InvocationOnMock invocation) -> {
+			patchManager.createLastPatch();
+			return null;
+		}).when(fakePatchManager).createLastPatch();
+	}
+
+	private Iterable<DefaultPatchManager.Repository> patchRepositories() {
+		return Arrays.asList(new FilesStoreRepository(new DefaultFilesStore(WEB_INF_PATH, "./patches/"), null));
 	}
 
 	private Properties readDatabaseProperties() {
@@ -152,6 +151,8 @@ public class DBInitializer implements LoggingSupport {
 	public void initialize() {
 		logger.info("initializing database (if needed)");
 		setupDatabaseProperties();
+		DBDataView dataView = new DBDataView(pgDriver);
+		patchManager = new DefaultPatchManager(dbConfigurator.systemDataSource(), dataView, new DefaultDataDefinitionLogic(dataView), patchRepositories());
 		if (!databaseExists()) {
 			logger.info("database not found");
 			createDatabase();
@@ -173,13 +174,18 @@ public class DBInitializer implements LoggingSupport {
 				dbConfiguration.getHost(), //
 				dbConfiguration.getPort(), //
 				dbConfiguration.getDatabaseName()));
+		logger.info("using database = {}", dp.getDatabaseUrl());
 		dp.setDatabaseUser(dbConfiguration.getUser());
 		dp.setDatabasePassword(dbConfiguration.getPassword());
 	}
 
 	private void updateWithPatches() {
+		logger.info("check database for required patches");
 		if (!patchManager.isUpdated()) {
+			logger.info("database is NOT up-to-date, applying patches");
 			patchManager.applyPatchList();
+		} else {
+			logger.info("database is up-to-date, no patching necessary");
 		}
 	}
 

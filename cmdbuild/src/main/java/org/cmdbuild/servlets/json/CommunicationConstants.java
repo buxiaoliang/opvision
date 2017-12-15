@@ -153,6 +153,7 @@ public class CommunicationConstants {
 			HOST = "host", //
 			ICONNAME = "iconName", //
 			ID_CLASS = "idClass", //
+			IFC_VERSION = "ifcVersion", //
 			IMAP_PORT = "imapPort", //
 			IMAP_SERVER = "imapServer", //
 			IMAP_SSL = "imapSsl", //
@@ -199,6 +200,7 @@ public class CommunicationConstants {
 			MENU_ITEM_UUID = "uuid", //
 			MENU = "menu", //
 			META = "meta", //
+			METADATA = "metadata", //
 			MODE = "mode", //
 			MODIFICATION = "modification", //
 			MYSQL_LABEL = "MySQL", //

@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.workflow.panel.form.tabs.Note', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.constants.WidgetType',
 			'CMDBuild.core.Message',

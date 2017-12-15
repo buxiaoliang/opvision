@@ -9,6 +9,7 @@ import static org.cmdbuild.auth.user.Predicates.privileged;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Set;
 
@@ -85,6 +86,26 @@ public class OperationUserInterceptor extends AbstractSoapInterceptor implements
 			return String.format(FORMAT, SYSTEM, username);
 		}
 
+		@Override
+		public boolean isPasswordExpired() {
+			return authenticatedUser.isPasswordExpired();
+		}
+
+		@Override
+		public LocalDateTime getPasswordExpirationTimestamp() {
+			return authenticatedUser.getPasswordExpirationTimestamp();
+		}
+
+		@Override
+		public LocalDateTime getLastPasswordChangeTimestamp() {
+			return authenticatedUser.getLastPasswordChangeTimestamp();
+		}
+
+		@Override
+		public LocalDateTime getLastExpiringNotificationTimestamp() {
+			return authenticatedUser.getLastExpiringNotificationTimestamp();
+		}
+
 	}
 
 	private static final class AuthenticatedUserWithOtherGroups extends ForwardingAuthenticatedUser {
@@ -116,6 +137,26 @@ public class OperationUserInterceptor extends AbstractSoapInterceptor implements
 		@Override
 		public Collection<String> getGroupDescriptions() {
 			return userForGroups.getGroupDescriptions();
+		}
+
+		@Override
+		public boolean isPasswordExpired() {
+			return authenticatedUser.isPasswordExpired();
+		}
+
+		@Override
+		public LocalDateTime getPasswordExpirationTimestamp() {
+			return authenticatedUser.getPasswordExpirationTimestamp();
+		}
+
+		@Override
+		public LocalDateTime getLastPasswordChangeTimestamp() {
+			return authenticatedUser.getLastPasswordChangeTimestamp();
+		}
+
+		@Override
+		public LocalDateTime getLastExpiringNotificationTimestamp() {
+			return authenticatedUser.getLastExpiringNotificationTimestamp();
 		}
 
 	}

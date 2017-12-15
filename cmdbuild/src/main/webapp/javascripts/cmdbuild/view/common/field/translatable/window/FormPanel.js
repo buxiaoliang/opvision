@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.common.field.translatable.window.FormPanel', {
 		extend: 'Ext.form.Panel',
 
-		requires: ['CMDBuild.core.constants.FieldWidths'],
+		uses: ['CMDBuild.core.constants.FieldWidths'],
 
 		mixins: ['CMDBuild.view.common.PanelFunctions'],
 

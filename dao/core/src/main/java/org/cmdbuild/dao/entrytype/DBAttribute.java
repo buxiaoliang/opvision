@@ -1,5 +1,6 @@
 package org.cmdbuild.dao.entrytype;
 
+import static com.google.common.base.Objects.equal;
 import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 
 import org.apache.commons.lang3.Validate;
@@ -39,7 +40,7 @@ public class DBAttribute implements CMAttribute {
 
 		@Override
 		public final boolean isLookup() {
-			return getLookupType() != NOT_LOOKUP_TYPE;
+			return !equal(getLookupType(), NOT_LOOKUP_TYPE);
 		}
 
 		@Override
@@ -49,7 +50,7 @@ public class DBAttribute implements CMAttribute {
 
 		@Override
 		public boolean isReference() {
-			return getDomain() != NOT_REFERENCE_TYPE;
+			return !equal(getDomain(), NOT_REFERENCE_TYPE);
 		}
 
 		@Override

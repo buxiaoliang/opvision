@@ -1,13 +1,11 @@
 (function () {
 
-	Ext.require([
-		'CMDBuild.core.constants.Global',
-		'CMDBuild.core.constants.Proxy'
-	]);
-
 	Ext.define('CMDBuild.model.classes.tabs.history.SelectedClass', { // TODO: waiting for refactor (rename and structure)
 		extend: 'Ext.data.Model',
-
+		uses: [
+			'CMDBuild.core.constants.Global',
+			'CMDBuild.core.constants.Proxy'
+		],
 		fields: [
 			{ name: CMDBuild.core.constants.Proxy.DESCRIPTION, type: 'string' },
 			{ name: CMDBuild.core.constants.Proxy.ID, type: 'int', useNull: true },

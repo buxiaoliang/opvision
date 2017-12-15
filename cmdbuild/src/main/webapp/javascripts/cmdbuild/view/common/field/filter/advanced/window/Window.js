@@ -6,7 +6,7 @@
 	Ext.define('CMDBuild.view.common.field.filter.advanced.window.Window', {
 		extend: 'CMDBuild.core.window.AbstractModal',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.common.field.filter.advanced.window.Window}

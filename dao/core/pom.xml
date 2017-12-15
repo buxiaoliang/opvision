@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.cmdbuild</groupId>
 		<artifactId>cmdbuild-parent</artifactId>
-		<version>2.4.4-SNAPSHOT</version>
+		<version>2.5.1-SNAPSHOT</version>
 		<relativePath>../../parent</relativePath>
 	</parent>
 	<artifactId>cmdbuild-dao-core</artifactId>
@@ -25,12 +25,6 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>cmdbuild-auth-core</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
-			<version>${slf4j.version}</version>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

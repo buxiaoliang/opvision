@@ -1,12 +1,12 @@
 (function() {
 
-	Ext.require([
-		'CMDBuild.core.Message',
-		'CMDBuild.proxy.Relation'
-	]);
-
 	Ext.define('CMDBuild.controller.management.classes.CMCardRelationsController', {
 		extend: 'CMDBuild.controller.management.classes.CMModCardSubController',
+
+		uses: [
+			'CMDBuild.core.Message',
+			'CMDBuild.proxy.Relation'
+		],
 
 		/**
 		 * @property {CMDBuild.controller.management.classes.common.attachment.Window}

@@ -6,12 +6,16 @@ import static org.cmdbuild.servlets.json.CommunicationConstants.CLASS_NAME;
 import static org.cmdbuild.servlets.json.CommunicationConstants.DESCRIPTION;
 import static org.cmdbuild.servlets.json.CommunicationConstants.ID;
 import static org.cmdbuild.servlets.json.CommunicationConstants.ID_CAPITAL;
+import static org.cmdbuild.servlets.json.CommunicationConstants.METADATA;
 import static org.cmdbuild.servlets.json.CommunicationConstants.RESULTS;
 import static org.cmdbuild.servlets.json.CommunicationConstants.ROWS;
 import static org.cmdbuild.servlets.json.CommunicationConstants.USER;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import org.cmdbuild.common.collect.ChainablePutMap;
 import org.cmdbuild.dao.constants.Cardinality;
 import org.cmdbuild.dao.entry.IdAndDescription;
 import org.cmdbuild.dao.entry.LookupValue;
@@ -23,6 +27,7 @@ import org.cmdbuild.logic.commands.AbstractGetRelation.RelationInfo;
 import org.cmdbuild.logic.commands.GetRelationList.DomainInfo;
 import org.cmdbuild.logic.commands.GetRelationList.DomainWithSource;
 import org.cmdbuild.logic.commands.GetRelationList.GetRelationListResponse;
+import org.cmdbuild.logic.data.access.CardWithMetadata;
 import org.cmdbuild.logic.data.access.DataAccessLogic;
 import org.cmdbuild.model.data.Card;
 import org.json.JSONArray;
@@ -32,6 +37,14 @@ import org.json.JSONObject;
 import com.google.common.collect.Maps;
 
 public class CardSerializer extends AbstractJsonResponseSerializer {
+
+	private static JSONObject json(final Map<String, ?> map) throws JSONException {
+		final JSONObject output = new JSONObject();
+		for (final Entry<String, ?> element : map.entrySet()) {
+			output.put(element.getKey(), element.getValue());
+		}
+		return output;
+	}
 
 	private final DataAccessLogic dataAccessLogic;
 	private final RelationAttributeSerializer relationAttributeSerializer;
@@ -48,7 +61,32 @@ public class CardSerializer extends AbstractJsonResponseSerializer {
 	 * TODO continue the implementation, pay attention to lookup and references
 	 */
 
+	public JSONObject toClient(final CardWithMetadata card, final String wrapperLabel) throws JSONException {
+		final JSONObject output;
+		if (wrapperLabel != null) {
+			output = json(ChainablePutMap.of(new HashMap<String, Object>()) //
+					.chainablePut(wrapperLabel, json(card)) //
+					.chainablePut(METADATA, json(card.getMetadata())) //
+					.chainablePut("referenceAttributes", getReferenceAttributes(card)));
+		} else {
+			output = json(card);
+		}
+		return output;
+	}
+
 	public JSONObject toClient(final Card card, final String wrapperLabel) throws JSONException {
+		final JSONObject output;
+		if (wrapperLabel != null) {
+			output = json(ChainablePutMap.of(new HashMap<String, Object>()) //
+					.chainablePut(wrapperLabel, json(card)) //
+					.chainablePut("referenceAttributes", getReferenceAttributes(card)));
+		} else {
+			output = json(card);
+		}
+		return output;
+	}
+
+	private JSONObject json(final Card card) throws JSONException {
 		final JSONObject json = new JSONObject();
 
 		// add the attributes
@@ -90,18 +128,7 @@ public class CardSerializer extends AbstractJsonResponseSerializer {
 		 * key is driven by backward compatibility
 		 */
 		json.put("IdClass_value", card.getClassDescription());
-
-		// wrap in a JSON object if required
-		final JSONObject output;
-		if (wrapperLabel != null) {
-			final JSONObject wrapper = new JSONObject();
-			wrapper.put(wrapperLabel, json);
-			wrapper.put("referenceAttributes", getReferenceAttributes(card));
-			output = wrapper;
-		} else {
-			output = json;
-		}
-		return output;
+		return json;
 	}
 
 	/*

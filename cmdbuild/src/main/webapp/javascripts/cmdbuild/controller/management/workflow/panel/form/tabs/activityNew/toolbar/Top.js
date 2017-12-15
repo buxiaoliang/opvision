@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.workflow.panel.form.tabs.activityNew.toolbar.Top', {
 		extend: 'CMDBuild.controller.common.panel.module.form.toolbar.Top',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.constants.WorkflowStates'
 		],

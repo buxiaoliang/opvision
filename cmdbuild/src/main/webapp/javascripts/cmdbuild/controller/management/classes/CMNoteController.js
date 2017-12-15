@@ -1,16 +1,15 @@
 (function() {
 
-	Ext.require([
-		'CMDBuild.proxy.Card',
-		'CMDBuild.proxy.management.classes.tabs.Note'
-	]);
 
 	/**
 	 * @link CMDBuild.controller.management.workflow.panel.form.tabs.Note
 	 */
 	Ext.define("CMDBuild.controller.management.classes.CMNoteController", {
 		extend: "CMDBuild.controller.management.classes.CMModCardSubController",
-
+		uses: [
+			'CMDBuild.proxy.Card',
+			'CMDBuild.proxy.management.classes.tabs.Note'
+		],
 		constructor: function(view, supercontroller) {
 
 			this.mixins.observable.constructor.call(this, arguments);

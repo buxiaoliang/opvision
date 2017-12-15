@@ -43,7 +43,6 @@ import org.cmdbuild.logic.ForwardingGisLogic;
 import org.cmdbuild.logic.GISLogic;
 import org.cmdbuild.model.data.Card;
 import org.cmdbuild.model.gis.LayerMetadata;
-import org.cmdbuild.service.rest.v2.Geometries;
 import org.cmdbuild.service.rest.v2.model.Attribute2;
 import org.cmdbuild.service.rest.v2.model.Geometry;
 import org.cmdbuild.service.rest.v2.model.ResponseMultiple;
@@ -58,8 +57,10 @@ import org.postgis.Polygon;
 
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
+import org.cmdbuild.service.rest.v2.GeoAttributes;
+import org.cmdbuild.service.rest.v2.GeoCards;
 
-public class CxfGeometries implements Geometries {
+public class CxfGeometries implements GeoAttributes, GeoCards {
 
 	/**
 	 * It's not the right moment for review {@link GISLogic} definition, so that

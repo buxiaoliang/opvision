@@ -1,5 +1,6 @@
 package org.cmdbuild.spring.configuration;
 
+import static org.cmdbuild.auth.context.PrivilegeContexts.systemPrivilegeContext;
 import static org.cmdbuild.spring.util.Constants.PROTOTYPE;
 import static org.cmdbuild.spring.util.Constants.SYSTEM;
 
@@ -15,9 +16,6 @@ import org.springframework.context.annotation.Scope;
 public class SystemUser {
 
 	@Autowired
-	private PrivilegeManagement privilegeManagement;
-
-	@Autowired
 	private UserStore userStore;
 
 	@Bean
@@ -27,7 +25,7 @@ public class SystemUser {
 		final OperationUser operationUser = userStore.getUser();
 		return new OperationUser( //
 				operationUser.getAuthenticatedUser(), //
-				privilegeManagement.systemPrivilegeContext(), //
+				systemPrivilegeContext(), //
 				operationUser.getPreferredGroup() //
 		);
 	}

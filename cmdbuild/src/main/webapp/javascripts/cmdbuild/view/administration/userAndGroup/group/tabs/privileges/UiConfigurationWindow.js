@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.userAndGroup.group.tabs.privileges.UiConfigurationWindow', {
 		extend: 'CMDBuild.core.window.AbstractModal',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy'
 		],

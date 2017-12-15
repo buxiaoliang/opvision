@@ -5,7 +5,7 @@
 	 */
 	Ext.define('CMDBuild.proxy.report.Report', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.configurations.Timeout',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.interfaces.FormSubmit',

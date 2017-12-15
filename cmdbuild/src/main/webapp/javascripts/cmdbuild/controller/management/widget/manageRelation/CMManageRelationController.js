@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.controller.management.widget.manageRelation.CMManageRelationController', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Global',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.management.widget.ManageRelation'

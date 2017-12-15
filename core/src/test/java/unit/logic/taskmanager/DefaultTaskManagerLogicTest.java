@@ -114,9 +114,9 @@ public class DefaultTaskManagerLogicTest {
 		synchronousEventFacade = mock(SynchronousEventFacade.class);
 
 		emailLogic = mock(EmailLogic.class);
-
-		taskManagerLogic =
-				new DefaultTaskManagerLogic(converter, store, scheduledTaskFacade, synchronousEventFacade, emailLogic);
+		
+		//TODO DINO this will fail, please pass an instance of ObserverCOllectionUpdater
+		taskManagerLogic =	new DefaultTaskManagerLogic(converter, store, scheduledTaskFacade, synchronousEventFacade, emailLogic, null);
 	}
 
 	@Test(expected = IllegalArgumentException.class)

@@ -12,12 +12,24 @@
 		style: { // Emulation of spacer
 			margin: '0 5px 0 0'
 		},
+		
+		/**
+		 * @returns {Void}
+		 *
+		 * @override
+		 */
+		initComponent: function () {
+			Ext.apply(this, {
+				menu: Ext.create('Ext.menu.Menu',{
+					items: [
+						CMDBuild.global.navigation.Chronology.cmfg('navigationChronologyItemConfigurationGet')
+					]
+				})
+			});
+			
+			this.callParent(arguments);
+		}
 
-		menu: Ext.create('Ext.menu.Menu',{
-			items: [
-				CMDBuild.global.navigation.Chronology.cmfg('navigationChronologyItemConfigurationGet')
-			]
-		})
 	});
 
 })();

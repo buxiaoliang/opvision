@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.management.dataView.sql.FormPanel', {
 		extend: 'Ext.tab.Panel',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.management.dataView.Sql}

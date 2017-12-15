@@ -1,11 +1,10 @@
 (function() {
 
-	Ext.require([
-		'CMDBuild.core.constants.Proxy',
-		'CMDBuild.proxy.index.Json'
-	]);
-
 	Ext.define("CMDBuild.view.management.common.CMCardGridDelegate", {
+		uses: [
+			'CMDBuild.core.constants.Proxy',
+			'CMDBuild.proxy.index.Json'
+		],
 		/**
 		 *
 		 * @param {CMDBuild.view.management.common.CMCardGrid} grid
@@ -49,6 +48,11 @@
 	Ext.define("CMDBuild.view.management.common.CMCardGridPagingBar", {
 		extend: "Ext.toolbar.Paging",
 
+		uses: [
+			'CMDBuild.core.constants.Proxy',
+			'CMDBuild.proxy.index.Json'
+		],
+
 		// configuration
 		grid: undefined,
 		// configuration
@@ -68,7 +72,11 @@
 	Ext.define("CMDBuild.view.management.common.CMCardGrid", {
 		extend: "Ext.grid.Panel",
 
-		requires: ['CMDBuild.core.constants.Global'],
+		uses: [
+			'CMDBuild.core.constants.Proxy',
+			'CMDBuild.proxy.index.Json',
+			'CMDBuild.core.constants.Global'
+		],
 
 		mixins: {
 			delegable: "CMDBuild.core.CMDelegable"

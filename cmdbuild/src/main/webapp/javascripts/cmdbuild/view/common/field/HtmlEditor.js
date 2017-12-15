@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.common.field.HtmlEditor', {
 		extend: 'Ext.ux.form.field.TinyMCE',
 
-		requires: ['CMDBuild.core.Utils'],
+		uses: ['CMDBuild.core.Utils'],
 
 		/**
 		 * Custom CMDBuild buttons configurations to use

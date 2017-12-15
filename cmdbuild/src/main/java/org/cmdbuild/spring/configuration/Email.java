@@ -24,6 +24,7 @@ import org.cmdbuild.data.store.email.StoreBasedEmailAccountFacade;
 import org.cmdbuild.dms.ConfigurationAwareDmsService;
 import org.cmdbuild.dms.DmsConfiguration;
 import org.cmdbuild.logic.email.ConfigurationAwareEmailAttachmentsLogic;
+import org.cmdbuild.logic.email.DefaultClusteringEmailQueueLogic;
 import org.cmdbuild.logic.email.DefaultEmailAccountLogic;
 import org.cmdbuild.logic.email.DefaultEmailAttachmentsLogic;
 import org.cmdbuild.logic.email.DefaultEmailLogic;
@@ -46,6 +47,7 @@ import org.cmdbuild.logic.email.SubjectHandler;
 import org.cmdbuild.logic.email.TimeBasedSilence;
 import org.cmdbuild.logic.email.TransactionalEmailTemplateLogic;
 import org.cmdbuild.scheduler.command.Command;
+import org.cmdbuild.scheduler.quartz.QuartzJob;
 import org.cmdbuild.services.email.ConfigurableEmailServiceFactory;
 import org.cmdbuild.services.email.EmailServiceFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -181,8 +183,16 @@ public class Email {
 
 	@Bean
 	public EmailQueueLogic emailQueue() {
-		return new DefaultEmailQueueLogic(properties.emailProperties(), scheduler.defaultSchedulerService(),
+		if (properties.cmdbuildProperties().isClustered()) {
+			DefaultClusteringEmailQueueLogic emailQueue = new DefaultClusteringEmailQueueLogic(properties.emailProperties(), scheduler.defaultSchedulerService(),
+					emailQueueCommand());
+			//TODO refactor
+			QuartzJob.setEmailQueueLogic(emailQueue);
+			return emailQueue;
+		} else {
+			return new DefaultEmailQueueLogic(properties.emailProperties(), scheduler.defaultSchedulerService(),
 				emailQueueCommand());
+		}
 	}
 
 	@Bean

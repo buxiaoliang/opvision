@@ -5,12 +5,13 @@
 	<parent>
 		<groupId>org.cmdbuild</groupId>
 		<artifactId>cmdbuild-main</artifactId>
-		<version>2.4.4-SNAPSHOT</version>
+		<version>2.5.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>cmdbuild-parent</artifactId>
 	<packaging>pom</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<axis.version>1.4</axis.version>
 		<beanshell.version>2.0b4</beanshell.version>
@@ -149,6 +150,16 @@
 				<version>${guava.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>com.google.code.findbugs</groupId>
+				<artifactId>jsr305</artifactId>
+				<version>3.0.2</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.code.gson</groupId>
+				<artifactId>gson</artifactId>
+				<version>2.8.2</version>
+			</dependency>
+			<dependency>
 				<groupId>joda-time</groupId>
 				<artifactId>joda-time</artifactId>
 				<version>${joda-time.version}</version>
@@ -272,6 +283,13 @@
 			<artifactId>commons-logging</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.2.3</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -285,6 +303,7 @@
 						<includes>
 							<include>unit/**</include>
 						</includes>
+						<trimStackTrace>false</trimStackTrace>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -348,7 +367,7 @@
 	<repositories>
 		<repository>
 			<id>codehaus</id>
-			<url>https://repository-master.mulesoft.org/nexus/content/groups/public/</url>
+			<url>http://central.maven.org/maven2/</url>
 		</repository>
 		<repository>
 			<id>cukes</id>

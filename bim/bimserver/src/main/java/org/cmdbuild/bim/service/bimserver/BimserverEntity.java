@@ -1,20 +1,27 @@
 package org.cmdbuild.bim.service.bimserver;
 
-import java.util.List;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+
+import java.lang.reflect.Method;
 import java.util.Map;
 
-import org.bimserver.interfaces.objects.SDataObject;
-import org.bimserver.interfaces.objects.SDataValue;
+import org.apache.commons.lang.StringUtils;
+import org.bimserver.emf.IdEObject;
 import org.cmdbuild.bim.model.Attribute;
 import org.cmdbuild.bim.model.Entity;
-
-import com.google.common.collect.Maps;
+import org.cmdbuild.bim.service.BimError;
+import org.eclipse.emf.common.util.EList;
 
 public class BimserverEntity implements Entity {
 
-	private final SDataObject bimserverDataObject;
+	private static final String IFC_LABEL = "IfcLabel";
+	private static final String IFC_VALUE = "IfcValue";
+	private static final String ORG_BIMSERVER_MODELS_IFC4 = "org.bimserver.models.ifc4";
+	private static final String ORG_BIMSERVER_MODELS_IFC2X3TC1 = "org.bimserver.models.ifc2x3tc1";
+	private static final String WRAPPED_VALUE = "getWrappedValue";
+	private final IdEObject bimserverDataObject;
 
-	protected BimserverEntity(final SDataObject object) {
+	public BimserverEntity(final IdEObject object) {
 		this.bimserverDataObject = object;
 	}
 
@@ -25,30 +32,75 @@ public class BimserverEntity implements Entity {
 
 	@Override
 	public Map<String, Attribute> getAttributes() {
-		final List<SDataValue> values = bimserverDataObject.getValues();
-		final Map<String, Attribute> attributes = Maps.newHashMap();
-		for (final SDataValue datavalue : values) {
-			final BimserverAttributeFactory attributeFactory = new BimserverAttributeFactory(datavalue);
-			final Attribute attribute = attributeFactory.create();
-			attributes.put(datavalue.getFieldName(), attribute);
+		throw new UnsupportedOperationException();
+	}
+
+	private String packageName() {
+		if (bimserverDataObject.getClass().getPackage().getName().equals("org.bimserver.models.ifc2x3tc1.impl")) {
+			return ORG_BIMSERVER_MODELS_IFC2X3TC1;
+		} else if (bimserverDataObject.getClass().getPackage().getName().equals("org.bimserver.models.ifc4.impl")) {
+			return ORG_BIMSERVER_MODELS_IFC4;
+		} else {
+			throw new UnsupportedOperationException();
 		}
-		return attributes;
+	}
+
+	private boolean ifc2x3() {
+		return packageName().equals(ORG_BIMSERVER_MODELS_IFC2X3TC1);
+	}
+
+	private boolean ifc4() {
+		return packageName().equals(ORG_BIMSERVER_MODELS_IFC4);
 	}
 
 	@Override
 	public Attribute getAttributeByName(final String attributeName) {
+
 		Attribute attribute = Attribute.NULL_ATTRIBUTE;
-		Map<String, Attribute> attributes = getAttributes(); 
-		
-		if(attributes.containsKey(attributeName)){
-			attribute = attributes.get(attributeName);
+
+		try {
+			final String[] split = StringUtils.split(attributeName, "_");
+			final String callerClass = String.format("%s.%s", packageName(), split[0]);
+			final String methodName = String.format("get%s", split[1]);
+			final Class<?> ifcEntityClass = Class.forName(callerClass);
+			final Method method = ifcEntityClass.getDeclaredMethod(methodName);
+
+			if (!ifcEntityClass.isInstance(bimserverDataObject)) {
+				return attribute;
+			}
+
+			Object response = method.invoke(bimserverDataObject);
+
+			if (Class.forName(packageName() + "." + IFC_VALUE).isInstance(response)
+					|| Class.forName(packageName() + "." + IFC_LABEL).isInstance(response)) {
+				final Method declaredMethod = response.getClass().getDeclaredMethod(WRAPPED_VALUE);
+				response = declaredMethod.invoke(response);
+			}
+
+			if (response != null) {
+				if (response instanceof IdEObject) {
+					attribute = new BimserverReferenceAttribute(attributeName, IdEObject.class.cast(response));
+				} else if (response instanceof EList) {
+					attribute = new BimserverListAttribute(attributeName, EList.class.cast(response));
+				} else {
+					attribute = new BimserverSimpleAttribute(attributeName, response);
+				}
+			}
+		} catch (final Throwable t) {
+			throw new BimError("error getting attribute " + attributeName + " of " + getTypeName(), t);
 		}
 		return attribute;
 	}
 
 	@Override
 	public String getKey() {
-		return (bimserverDataObject.getGuid() != null && !bimserverDataObject.getGuid().isEmpty()) ? bimserverDataObject.getGuid() : String.valueOf(bimserverDataObject.getOid());
+		String key = String.valueOf(bimserverDataObject.getOid());
+		if (ifc2x3() && bimserverDataObject instanceof org.bimserver.models.ifc2x3tc1.IfcRoot) {
+			key = org.bimserver.models.ifc2x3tc1.IfcRoot.class.cast(bimserverDataObject).getGlobalId();
+		} else if (ifc4() && bimserverDataObject instanceof org.bimserver.models.ifc4.IfcRoot) {
+			key = org.bimserver.models.ifc4.IfcRoot.class.cast(bimserverDataObject).getGlobalId();
+		}
+		return key;
 	}
 
 	public Long getOid() {
@@ -57,12 +109,23 @@ public class BimserverEntity implements Entity {
 
 	@Override
 	public String getTypeName() {
-		return bimserverDataObject.getType();
+		return bimserverDataObject.getClass().getSimpleName();
 	}
 
 	@Override
 	public String toString() {
-		return bimserverDataObject.getType() + " " + getKey();
+		return bimserverDataObject.getClass().getSimpleName() + " " + getKey();
+	}
+
+	@Override
+	public String getGlobalId() {
+		String key = EMPTY;
+		if (ifc2x3() && bimserverDataObject instanceof org.bimserver.models.ifc2x3tc1.IfcRoot) {
+			key = org.bimserver.models.ifc2x3tc1.IfcRoot.class.cast(bimserverDataObject).getGlobalId();
+		} else if (ifc4() && bimserverDataObject instanceof org.bimserver.models.ifc4.IfcRoot) {
+			key = org.bimserver.models.ifc4.IfcRoot.class.cast(bimserverDataObject).getGlobalId();
+		}
+		return key;
 	}
 
 }

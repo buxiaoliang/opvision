@@ -10,7 +10,7 @@
 	Ext.define('CMDBuild.controller.common.panel.module.attachment.Window', {
 		extend: 'CMDBuild.controller.common.panel.module.attachment.Grid',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.LoadMask',
 			'CMDBuild.proxy.common.panel.module.attachment.Window'

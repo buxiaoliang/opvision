@@ -1,8 +1,7 @@
 (function() {
 
-	Ext.require(['CMDBuild.proxy.Card']);
-
 	Ext.define("CMDBuild.state.CMWorkflowStateDelegate", {
+		uses: ['CMDBuild.proxy.Card'],
 		onProcessClassRefChange: Ext.emptyFn,
 		onProcessInstanceChange: Ext.emptyFn,
 		onActivityInstanceChange: Ext.emptyFn
@@ -10,6 +9,7 @@
 
 	Ext.define("CMDBuild.model.CMActivityInstance", {
 		extend: 'Ext.data.Model',
+		uses: ['CMDBuild.proxy.Card'],
 
 		constructor: function(data) {
 			if (data) {
@@ -66,6 +66,8 @@
 
 	Ext.define("CMDBuild.model.CMProcessInstance", {
 		extend: "Ext.data.Model",
+
+		uses: ['CMDBuild.proxy.Card'],
 
 		fields: [
 			"beginDate",
@@ -182,6 +184,7 @@
 	});
 
 	Ext.define("CMDBuild.state.CMWorkflowState", {
+		uses: ['CMDBuild.proxy.Card'],
 		constructor: function() {
 			var processClassRef = null,
 				activityInstance = null,

@@ -11,7 +11,7 @@
 	Ext.define('CMDBuild.core.fieldManager.builders.Decimal', {
 		extend: 'CMDBuild.core.fieldManager.builders.Abstract',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy'
 		],

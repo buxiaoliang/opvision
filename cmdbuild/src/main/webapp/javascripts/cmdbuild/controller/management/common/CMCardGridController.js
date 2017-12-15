@@ -1,19 +1,19 @@
 (function() {
 	var ROWCHANGETIME = 150;
 
-	Ext.require([
-		'CMDBuild.core.Message',
-		'CMDBuild.core.templateResolver.Utils',
-		'CMDBuild.proxy.Card',
-		'CMDBuild.core.Utils'
-	]);
 
 	/**
 	 * @link CMDBuild.controller.common.panel.gridAndForm.panel.common.filter.advanced.filterEditor.relations.CMCardGridController
 	 * @link CMDBuild.controller.management.workflow.panel.tree.filter.advanced.filterEditor.relations.CMCardGridController
 	 */
 	Ext.define("CMDBuild.controller.management.common.CMCardGridController", {
-
+		uses: [
+			'CMDBuild.core.Message',
+			'CMDBuild.core.templateResolver.Utils',
+			'CMDBuild.proxy.Card',
+			'CMDBuild.core.Utils',
+			'CMDBuild.view.management.common.filter.CMRuntimeParameterWindow'
+		],
 		mixins: {
 			observable: "Ext.util.Observable",
 			filterWindow: "CMDBuild.view.management.common.filter.CMFilterWindowDelegate",

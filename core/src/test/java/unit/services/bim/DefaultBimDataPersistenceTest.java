@@ -36,7 +36,6 @@ public class DefaultBimDataPersistenceTest {
 	private static final String c1 = "11";
 	private static final long CMID = 666;
 	private static final String IMPORT = "import";
-	private static final String EXPORT = "export";
 	private static final String ROOT = "root";
 	private BimPersistence dataPersistence;
 	private BimStoreManager storeManager;
@@ -52,9 +51,9 @@ public class DefaultBimDataPersistenceTest {
 	@Test
 	public void newProjectSavedWithoutCardBinding() throws Exception {
 		// given
-		ArgumentCaptor<StorableProject> storableCaptor = ArgumentCaptor.forClass(StorableProject.class);
-		
-		PersistenceProject project = mock(PersistenceProject.class);
+		final ArgumentCaptor<StorableProject> storableCaptor = ArgumentCaptor.forClass(StorableProject.class);
+
+		final PersistenceProject project = mock(PersistenceProject.class);
 		when(project.getProjectId()).thenReturn(PROJECTID);
 		when(project.getName()).thenReturn(NAME);
 		when(project.getDescription()).thenReturn(DESCRIPTION);
@@ -64,143 +63,140 @@ public class DefaultBimDataPersistenceTest {
 		dataPersistence.saveProject(project);
 
 		// then
-		InOrder inOrder = inOrder(storeManager, relationPersistence);
+		final InOrder inOrder = inOrder(storeManager, relationPersistence);
 		inOrder.verify(storeManager).write(storableCaptor.capture());
 		inOrder.verify(storeManager).read(PROJECTID);
-		
-		StorableProject projectToStore = storableCaptor.getValue();
+
+		final StorableProject projectToStore = storableCaptor.getValue();
 		assertTrue(projectToStore.getProjectId().equals(PROJECTID));
 		assertTrue(projectToStore.getName().equals(NAME));
 		assertTrue(projectToStore.getDescription().equals(DESCRIPTION));
 		assertTrue(projectToStore.isActive() == STATUS);
-		
+
 		verifyNoMoreInteractions(storeManager);
 		verifyZeroInteractions(relationPersistence);
 	}
-	
-	
+
 	@Test
 	public void newProjectSavedWithCardBinding() throws Exception {
 		// given
-		ArgumentCaptor<StorableProject> storableCaptor = ArgumentCaptor.forClass(StorableProject.class);
-		
-		PersistenceProject project = mock(PersistenceProject.class);
+		final ArgumentCaptor<StorableProject> storableCaptor = ArgumentCaptor.forClass(StorableProject.class);
+
+		final PersistenceProject project = mock(PersistenceProject.class);
 		when(project.getProjectId()).thenReturn(PROJECTID);
 		when(project.getName()).thenReturn(NAME);
 		when(project.getDescription()).thenReturn(DESCRIPTION);
 		when(project.isActive()).thenReturn(STATUS);
-		
-		Iterable<String> cardsToBind = Lists.newArrayList(c1, c2);
+
+		final Iterable<String> cardsToBind = Lists.newArrayList(c1, c2);
 		when(project.getCardBinding()).thenReturn(cardsToBind);
-		
-		StorableProject stored = new StorableProject();
+
+		final StorableProject stored = new StorableProject();
 		stored.setCardId(CMID);
-		
-		ProjectRelations relations = new ProjectRelations() {
-			
+
+		final ProjectRelations relations = new ProjectRelations() {
+
 			@Override
 			public Long getProjectCardId() {
 				return CMID;
 			}
-			
+
 			@Override
 			public Iterable<String> getBindedCards() {
 				return Lists.newArrayList();
 			}
 		};
-		when(relationPersistence.readRelations(CMID, ROOT)).thenReturn(relations );
-		
+		when(relationPersistence.readRelations(CMID, ROOT)).thenReturn(relations);
+
 		when(storeManager.read(PROJECTID)).thenReturn(stored);
-		
-		StorableLayer rootLayer = mock(StorableLayer.class);
+
+		final StorableLayer rootLayer = mock(StorableLayer.class);
 		when(rootLayer.getClassName()).thenReturn(ROOT);
 		when(storeManager.findRoot()).thenReturn(rootLayer);
-	
+
 		// when
 		dataPersistence.saveProject(project);
 
 		// then
-		InOrder inOrder = inOrder(storeManager, relationPersistence);
+		final InOrder inOrder = inOrder(storeManager, relationPersistence);
 		inOrder.verify(storeManager).write(storableCaptor.capture());
 		inOrder.verify(storeManager).read(PROJECTID);
 		inOrder.verify(storeManager).findRoot();
 		inOrder.verify(relationPersistence).readRelations(CMID, ROOT);
 		inOrder.verify(relationPersistence).writeRelations(CMID, cardsToBind, rootLayer.getClassName());
-		
-		StorableProject projectToStore = storableCaptor.getValue();
+
+		final StorableProject projectToStore = storableCaptor.getValue();
 		assertTrue(projectToStore.getProjectId().equals(PROJECTID));
 		assertTrue(projectToStore.getName().equals(NAME));
 		assertTrue(projectToStore.getDescription().equals(DESCRIPTION));
 		assertTrue(projectToStore.isActive() == STATUS);
-		
+
 		verifyNoMoreInteractions(storeManager);
 		verifyZeroInteractions(relationPersistence);
 	}
-	
+
 	@Test
 	public void disableProjectForwardToStoreManager() throws Exception {
 		// given
-		PersistenceProject projectToDisable = mock(PersistenceProject.class);
+		final PersistenceProject projectToDisable = mock(PersistenceProject.class);
 		when(projectToDisable.getProjectId()).thenReturn(PROJECTID);
 
 		// when
 		dataPersistence.disableProject(projectToDisable);
 
 		// then
-		InOrder inOrder = inOrder(storeManager, relationPersistence);
+		final InOrder inOrder = inOrder(storeManager, relationPersistence);
 		inOrder.verify(storeManager).disableProject(PROJECTID);
 
 		verifyNoMoreInteractions(storeManager);
 		verifyZeroInteractions(relationPersistence);
 	}
-	
+
 	@Test
 	public void enableProjectForwardToStoreManager() throws Exception {
 		// given
-		PersistenceProject projectToDisable = mock(PersistenceProject.class);
+		final PersistenceProject projectToDisable = mock(PersistenceProject.class);
 		when(projectToDisable.getProjectId()).thenReturn(PROJECTID);
 
 		// when
 		dataPersistence.enableProject(projectToDisable);
 
 		// then
-		InOrder inOrder = inOrder(storeManager, relationPersistence);
+		final InOrder inOrder = inOrder(storeManager, relationPersistence);
 		inOrder.verify(storeManager).enableProject(PROJECTID);
 
 		verifyNoMoreInteractions(storeManager);
 		verifyZeroInteractions(relationPersistence);
 	}
-	
+
 	@Test
 	public void convertFromCmToStorable() throws Exception {
 		// given
-		ArgumentCaptor<StorableProject> storableCaptor = ArgumentCaptor.forClass(StorableProject.class);
-		DateTime now = new DateTime();
+		final ArgumentCaptor<StorableProject> storableCaptor = ArgumentCaptor.forClass(StorableProject.class);
+		final DateTime now = new DateTime();
 
-		PersistenceProject project = mock(PersistenceProject.class);
+		final PersistenceProject project = mock(PersistenceProject.class);
 		when(project.getProjectId()).thenReturn(PROJECTID);
 		when(project.getName()).thenReturn(NAME);
 		when(project.getDescription()).thenReturn(DESCRIPTION);
 		when(project.isActive()).thenReturn(STATUS);
 		when(project.getLastCheckin()).thenReturn(now);
 		when(project.getImportMapping()).thenReturn(IMPORT);
-		when(project.getExportMapping()).thenReturn(EXPORT);
-		
+
 		// when
 		dataPersistence.saveProject(project);
 
 		// then
-		InOrder inOrder = inOrder(storeManager, relationPersistence);
+		final InOrder inOrder = inOrder(storeManager, relationPersistence);
 		inOrder.verify(storeManager).write(storableCaptor.capture());
 		inOrder.verify(storeManager).read(PROJECTID);
-		StorableProject convertedProject = storableCaptor.getValue();
+		final StorableProject convertedProject = storableCaptor.getValue();
 		assertTrue(convertedProject.getProjectId().equals(PROJECTID));
 		assertTrue(convertedProject.getName().equals(NAME));
 		assertTrue(convertedProject.getDescription().equals(DESCRIPTION));
 		assertTrue(convertedProject.isActive() == STATUS);
 		assertTrue(convertedProject.getLastCheckin().equals(now));
 		assertTrue(convertedProject.getImportMapping().equals(IMPORT));
-		assertTrue(convertedProject.getExportMapping().equals(EXPORT));
 		verifyNoMoreInteractions(storeManager);
 		verifyZeroInteractions(relationPersistence);
 	}
@@ -208,18 +204,18 @@ public class DefaultBimDataPersistenceTest {
 	@Test
 	public void readAllProjects() throws Exception {
 		// given
-		ArgumentCaptor<Long> idCaptor = ArgumentCaptor.forClass(Long.class);
-		ArgumentCaptor<String> rootCaptor = ArgumentCaptor.forClass(String.class);
+		final ArgumentCaptor<Long> idCaptor = ArgumentCaptor.forClass(Long.class);
+		final ArgumentCaptor<String> rootCaptor = ArgumentCaptor.forClass(String.class);
 
-		List<StorableProject> projects = Lists.newArrayList();
+		final List<StorableProject> projects = Lists.newArrayList();
 
-		StorableProject project = new StorableProject();
+		final StorableProject project = new StorableProject();
 		project.setProjectId(PROJECTID);
 		project.setCardId(CMID);
 
 		projects.add(project);
 		when(storeManager.readAll()).thenReturn(projects);
-		StorableLayer root = mock(StorableLayer.class);
+		final StorableLayer root = mock(StorableLayer.class);
 		when(root.getClassName()).thenReturn(ROOT);
 		when(storeManager.findRoot()).thenReturn(root);
 		when(relationPersistence.readRelations(idCaptor.capture(), rootCaptor.capture())).thenReturn(null);
@@ -229,15 +225,15 @@ public class DefaultBimDataPersistenceTest {
 		dataPersistence.readAll();
 
 		// then
-		InOrder inOrder = inOrder(storeManager, relationPersistence);
+		final InOrder inOrder = inOrder(storeManager, relationPersistence);
 		inOrder.verify(storeManager).readAll();
 		inOrder.verify(storeManager).read(PROJECTID);
 		inOrder.verify(storeManager).findRoot();
-		Long cmId = idCaptor.getValue();
-		String rootClassName = rootCaptor.getValue();
+		final Long cmId = idCaptor.getValue();
+		final String rootClassName = rootCaptor.getValue();
 		inOrder.verify(relationPersistence).readRelations(cmId, rootClassName);
 		verifyNoMoreInteractions(storeManager, relationPersistence);
-		
+
 		assertTrue(cmId.equals(CMID));
 		assertTrue(rootClassName.equals(ROOT));
 	}
@@ -245,15 +241,15 @@ public class DefaultBimDataPersistenceTest {
 	@Test
 	public void readAllLayer() throws Exception {
 		// given
-		List<StorableLayer> mappers = Lists.newArrayList();
+		final List<StorableLayer> mappers = Lists.newArrayList();
 		mappers.add(new StorableLayer(THE_CLASS));
 		when(storeManager.readAllLayers()).thenReturn(mappers);
 
 		// when
-		List<StorableLayer> list = (List<StorableLayer>) dataPersistence.listLayers();
+		final List<StorableLayer> list = (List<StorableLayer>) dataPersistence.listLayers();
 
 		// then
-		InOrder inOrder = inOrder(relationPersistence, storeManager);
+		final InOrder inOrder = inOrder(relationPersistence, storeManager);
 		inOrder.verify(storeManager).readAllLayers();
 		assertTrue(list.size() == 1);
 		assertTrue(list.get(0).getClassName().equals(THE_CLASS));

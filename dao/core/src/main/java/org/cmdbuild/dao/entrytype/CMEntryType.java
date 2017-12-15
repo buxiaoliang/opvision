@@ -1,6 +1,7 @@
 package org.cmdbuild.dao.entrytype;
 
 import org.cmdbuild.auth.acl.CMPrivilegedObject;
+import org.cmdbuild.dao.entry.CMCard;
 
 public interface CMEntryType extends Deactivable, CMPrivilegedObject {
 
@@ -67,6 +68,8 @@ public interface CMEntryType extends Deactivable, CMPrivilegedObject {
 	Iterable<? extends CMAttribute> getAllAttributes();
 
 	CMAttribute getAttribute(String name);
+	
+//	CMAttribute getAttribute(String name, CMCard card);
 
 	String getKeyAttributeName();
 

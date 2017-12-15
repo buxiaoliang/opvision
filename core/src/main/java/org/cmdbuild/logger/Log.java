@@ -22,5 +22,6 @@ public final class Log {
 	public static final Logger SOAP = LoggerFactory.getLogger("soap");
 	public static final Logger SQL = org.cmdbuild.dao.driver.postgres.logging.LoggingSupport.sqlLogger;
 	public static final Logger WORKFLOW = LoggerFactory.getLogger("workflow");
+	public static final Logger CLUSTER = LoggerFactory.getLogger("cluster");
 
 }

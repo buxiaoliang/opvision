@@ -2,11 +2,11 @@ package org.cmdbuild.bim.model;
 
 public interface AttributeDefinition {
 
-	String getName();
+	String getIfcName();
 
-	String getLabel();
+	String getCmName();
 
-	void setLabel(String label);
+	void setCmName(String label);
 
 	EntityDefinition getReference();
 

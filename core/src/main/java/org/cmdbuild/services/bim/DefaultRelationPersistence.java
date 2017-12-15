@@ -5,7 +5,6 @@ import static org.cmdbuild.common.Constants.ID_ATTRIBUTE;
 import static org.cmdbuild.dao.query.clause.AnyAttribute.anyAttribute;
 import static org.cmdbuild.dao.query.clause.AnyClass.anyClass;
 import static org.cmdbuild.dao.query.clause.QueryAliasAttribute.attribute;
-import static org.cmdbuild.dao.query.clause.alias.Utils.as;
 import static org.cmdbuild.dao.query.clause.join.Over.over;
 import static org.cmdbuild.dao.query.clause.where.EqualsOperatorAndValue.eq;
 import static org.cmdbuild.dao.query.clause.where.SimpleWhereClause.condition;
@@ -23,7 +22,7 @@ import org.cmdbuild.dao.query.CMQueryResult;
 import org.cmdbuild.dao.query.CMQueryRow;
 import org.cmdbuild.dao.query.clause.QueryRelation;
 import org.cmdbuild.dao.query.clause.alias.Alias;
-import org.cmdbuild.dao.query.clause.alias.EntryTypeAlias;
+import org.cmdbuild.dao.query.clause.alias.Aliases;
 import org.cmdbuild.dao.view.CMDataView;
 
 import com.google.common.collect.Lists;
@@ -33,19 +32,19 @@ public class DefaultRelationPersistence implements RelationPersistence {
 	public static final String DEFAULT_DOMAIN_SUFFIX = TABLE_NAME;
 	final CMDataView dataView;
 
-	public DefaultRelationPersistence(CMDataView dataView) {
+	public DefaultRelationPersistence(final CMDataView dataView) {
 		this.dataView = dataView;
 	}
 
 	@Override
 	public ProjectRelations readRelations(final Long projectCardId, final String rootName) {
 		ArrayList<CMRelation> relations = Lists.newArrayList();
-		CMDomain domain = dataView.findDomain(rootName + DEFAULT_DOMAIN_SUFFIX);
+		final CMDomain domain = dataView.findDomain(rootName + DEFAULT_DOMAIN_SUFFIX);
 		if (domain != null) {
 			relations = getAllRelationsForDomain(domain, projectCardId);
 
-			List<String> bindedCardsList = Lists.newArrayList();
-			for (CMRelation relation : relations) {
+			final List<String> bindedCardsList = Lists.newArrayList();
+			for (final CMRelation relation : relations) {
 				bindedCardsList.add(relation.getCard1Id().toString());
 			}
 			final Iterable<String> bindedCards = bindedCardsList;
@@ -66,41 +65,41 @@ public class DefaultRelationPersistence implements RelationPersistence {
 		}
 	}
 
-	@Override
-	public void removeRelations(Long projectCardId, String rootClassName) {
-		CMDomain domain = dataView.findDomain(rootClassName + DEFAULT_DOMAIN_SUFFIX);
-		ArrayList<CMRelation> oldRelations = getAllRelationsForDomain(domain, projectCardId);
-		for (CMRelation relation : oldRelations) {
+	private void removeRelations(final Long projectCardId, final String rootClassName) {
+		final CMDomain domain = dataView.findDomain(rootClassName + DEFAULT_DOMAIN_SUFFIX);
+		final ArrayList<CMRelation> oldRelations = getAllRelationsForDomain(domain, projectCardId);
+		for (final CMRelation relation : oldRelations) {
 			dataView.delete(relation);
 		}
 	}
 
-	private ArrayList<CMRelation> getAllRelationsForDomain(CMDomain domain, Long projectCardId) {
-		ArrayList<CMRelation> oldRelations = Lists.newArrayList();
+	private ArrayList<CMRelation> getAllRelationsForDomain(final CMDomain domain, final Long projectCardId) {
+		final ArrayList<CMRelation> oldRelations = Lists.newArrayList();
 
-		CMClass projectClass = domain.getClass2();
-		CMClass rootClass = domain.getClass1();
+		final CMClass projectClass = domain.getClass2();
+		final CMClass rootClass = domain.getClass1();
 
-		Alias DOM_ALIAS = EntryTypeAlias.canonicalAlias(domain);
-		Alias DST_ALIAS = EntryTypeAlias.canonicalAlias(projectClass);
-		CMQueryResult result = dataView.select( //
-				anyAttribute(DOM_ALIAS), attribute(DST_ALIAS, DESCRIPTION_ATTRIBUTE)) //
+		final Alias DOM_ALIAS = Aliases.canonical(domain);
+		final Alias DST_ALIAS = Aliases.canonical(projectClass);
+		final CMQueryResult result = dataView
+				.select( //
+						anyAttribute(DOM_ALIAS), attribute(DST_ALIAS, DESCRIPTION_ATTRIBUTE)) //
 				.from(rootClass) //
-				.join(anyClass(), as(DST_ALIAS), over(domain, as(DOM_ALIAS))) //
+				.join(anyClass(), Aliases.as(DST_ALIAS), over(domain, Aliases.as(DOM_ALIAS))) //
 				.where(condition(attribute(DST_ALIAS, ID_ATTRIBUTE), eq(projectCardId)))//
 				.run();
 
-		for (java.util.Iterator<CMQueryRow> it = result.iterator(); it.hasNext();) {
-			CMQueryRow row = it.next();
-			QueryRelation queryRelation = row.getRelation(domain);
-			CMRelation relation = queryRelation.getRelation();
+		for (final java.util.Iterator<CMQueryRow> it = result.iterator(); it.hasNext();) {
+			final CMQueryRow row = it.next();
+			final QueryRelation queryRelation = row.getRelation(domain);
+			final CMRelation relation = queryRelation.getRelation();
 			oldRelations.add(relation);
 		}
 		return oldRelations;
 	}
 
 	@Override
-	public void writeRelations(Long projectCardId, Iterable<String> cardBinding, String className) {
+	public void writeRelations(final Long projectCardId, final Iterable<String> cardBinding, final String className) {
 
 		removeRelations(projectCardId, className);
 
@@ -108,23 +107,21 @@ public class DefaultRelationPersistence implements RelationPersistence {
 		final CMClass rootClass = dataView.findClass(className);
 		final CMDomain domain = dataView.findDomain(className + DEFAULT_DOMAIN_SUFFIX);
 
-		for (String cardId : cardBinding) {
-			CMRelationDefinition relationDefinition = dataView.createRelationFor(domain);
+		for (final String cardId : cardBinding) {
+			final CMRelationDefinition relationDefinition = dataView.createRelationFor(domain);
 
-			CMCard projectCard = dataView.select(attribute(projectsClass, DESCRIPTION_ATTRIBUTE)) //
+			final CMCard projectCard = dataView.select(attribute(projectsClass, DESCRIPTION_ATTRIBUTE)) //
 					.from(projectsClass) //
 					.where(condition(attribute(projectsClass, ID_ATTRIBUTE), eq(projectCardId))) //
 					.limit(1) //
-					.skipDefaultOrdering() //
 					.run() //
 					.getOnlyRow() //
 					.getCard(projectsClass);
 
-			CMCard rootCard = dataView.select(attribute(rootClass, DESCRIPTION_ATTRIBUTE)) //
+			final CMCard rootCard = dataView.select(attribute(rootClass, DESCRIPTION_ATTRIBUTE)) //
 					.from(rootClass) //
 					.where(condition(attribute(rootClass, ID_ATTRIBUTE), eq(Long.parseLong(cardId)))) //
 					.limit(1) //
-					.skipDefaultOrdering() //
 					.run() //
 					.getOnlyRow() //
 					.getCard(rootClass);

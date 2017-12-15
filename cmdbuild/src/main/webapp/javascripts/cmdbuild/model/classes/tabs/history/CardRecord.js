@@ -1,13 +1,11 @@
 (function() {
 
-	Ext.require([
-		'CMDBuild.core.configurations.DataFormat',
-		'CMDBuild.core.constants.Proxy'
-	]);
-
 	Ext.define('CMDBuild.model.classes.tabs.history.CardRecord', {
 		extend: 'Ext.data.Model',
-
+		uses: [
+			'CMDBuild.core.configurations.DataFormat',
+			'CMDBuild.core.constants.Proxy'
+		],
 		fields: [
 			{ name: CMDBuild.core.constants.Proxy.BEGIN_DATE, type: 'date', dateFormat: CMDBuild.core.configurations.DataFormat.getDateTime() },
 			{ name: CMDBuild.core.constants.Proxy.CLASS_NAME, type: 'string' },

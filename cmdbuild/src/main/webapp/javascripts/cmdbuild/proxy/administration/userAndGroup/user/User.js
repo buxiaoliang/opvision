@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.administration.userAndGroup.user.User', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.administration.userAndGroup.user.DefaultGroup',
 			'CMDBuild.model.administration.userAndGroup.user.User',

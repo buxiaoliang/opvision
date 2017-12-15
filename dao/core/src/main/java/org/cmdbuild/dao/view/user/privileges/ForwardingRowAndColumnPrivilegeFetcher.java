@@ -7,6 +7,7 @@ import org.cmdbuild.dao.query.clause.alias.Alias;
 import org.cmdbuild.dao.query.clause.where.WhereClause;
 
 import com.google.common.collect.ForwardingObject;
+import org.cmdbuild.dao.entry.CMCard;
 
 public abstract class ForwardingRowAndColumnPrivilegeFetcher extends ForwardingObject
 		implements RowAndColumnPrivilegeFetcher {
@@ -33,6 +34,11 @@ public abstract class ForwardingRowAndColumnPrivilegeFetcher extends ForwardingO
 	@Override
 	public Map<String, String> fetchAttributesPrivilegesFor(final CMEntryType entryType) {
 		return delegate().fetchAttributesPrivilegesFor(entryType);
+	}
+
+	@Override
+	public Map<String, String> fetchAttributesPrivilegesFor(CMEntryType entryType, CMCard card) {
+		return delegate().fetchAttributesPrivilegesFor(entryType, card);
 	}
 
 }

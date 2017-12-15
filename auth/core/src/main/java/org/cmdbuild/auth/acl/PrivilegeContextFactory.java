@@ -5,7 +5,7 @@ public interface PrivilegeContextFactory {
 	/**
 	 * Factory method
 	 * 
-	 * @param authUser
+	 * @param groups
 	 * @return an object containing all privileges for the user that logged in
 	 *         with a specific group
 	 */

@@ -31,7 +31,7 @@
 		bodyStyle: {
 			background: '#ffffff'
 		},
-
+		
 		/**
 		 * @returns {Void}
 		 *
@@ -69,8 +69,9 @@
 
 			// Add listener for beforeitemclick
 			this.on('beforeitemclick', function (view, record, item, index, e, eOpts) {
-				if (!Ext.isEmpty(this.delegate))
+				if (!Ext.isEmpty(this.delegate)){
 					this.delegate.cmfg('onAccordionBeforeItemClick', record);
+				}
 			}, this);
 		}
 	});

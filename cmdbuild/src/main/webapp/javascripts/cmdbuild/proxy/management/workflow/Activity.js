@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.management.workflow.Activity', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json'
 		],

@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.administration.configuration.Bim', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.administration.configuration.Bim'
 		],

@@ -1,27 +1,20 @@
 package org.cmdbuild.dao.entrytype;
 
-import static com.google.common.base.Predicates.alwaysTrue;
-import static com.google.common.base.Predicates.and;
 import static com.google.common.base.Predicates.compose;
 import static com.google.common.base.Predicates.equalTo;
 import static com.google.common.base.Predicates.instanceOf;
 import static com.google.common.base.Predicates.or;
 import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
 import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
-import static org.cmdbuild.dao.constants.Cardinality.CARDINALITY_1N;
-import static org.cmdbuild.dao.constants.Cardinality.CARDINALITY_N1;
 import static org.cmdbuild.dao.entrytype.Functions.anchestorOf;
 import static org.cmdbuild.dao.entrytype.Functions.attributeClassOrder;
 import static org.cmdbuild.dao.entrytype.Functions.attributeMode;
 import static org.cmdbuild.dao.entrytype.Functions.attributeName;
 import static org.cmdbuild.dao.entrytype.Functions.attributeType;
 import static org.cmdbuild.dao.entrytype.Functions.baseClass;
-import static org.cmdbuild.dao.entrytype.Functions.cardinality;
 import static org.cmdbuild.dao.entrytype.Functions.class1;
 import static org.cmdbuild.dao.entrytype.Functions.class2;
 import static org.cmdbuild.dao.entrytype.Functions.descendantOf;
-import static org.cmdbuild.dao.entrytype.Functions.disabled1;
-import static org.cmdbuild.dao.entrytype.Functions.disabled2;
 import static org.cmdbuild.dao.entrytype.Functions.functionParameterName;
 import static org.cmdbuild.dao.entrytype.Functions.id;
 import static org.cmdbuild.dao.entrytype.Functions.system;
@@ -53,14 +46,6 @@ public class Predicates {
 	public static <T extends CMDomain> Predicate<T> domainFor(final CMClass target) {
 		return or(domain(class1(), clazz(anchestorOf(target), equalTo(true))),
 				domain(class2(), clazz(anchestorOf(target), equalTo(true))));
-	}
-
-	/**
-	 * @deprecated Use basic predicates instead.
-	 */
-	@Deprecated
-	public static <T extends CMDomain> Predicate<T> disabledClass(final CMClass target) {
-		return or(domain(disabled1(), contains(target.getName())), domain(disabled2(), contains(target.getName())));
 	}
 
 	private static class Contains implements Predicate<Iterable<String>> {
@@ -112,28 +97,8 @@ public class Predicates {
 	 * @deprecated Use basic predicates instead.
 	 */
 	@Deprecated
-	public static <T extends CMDomain> Predicate<T> usableForReferences(final CMClass target) {
-		return or(
-				and(domain(cardinality(), equalTo(CARDINALITY_1N.value())),
-						domain(class2(), clazz(anchestorOf(target), equalTo(true)))),
-				and(domain(cardinality(), equalTo(CARDINALITY_N1.value())),
-						domain(class1(), clazz(anchestorOf(target), equalTo(true)))));
-	}
-
-	/**
-	 * @deprecated Use basic predicates instead.
-	 */
-	@Deprecated
 	public static <T extends CMEntryType> Predicate<T> isSystem() {
 		return isSystem(equalTo(true));
-	}
-
-	/**
-	 * @deprecated Use basic predicates instead.
-	 */
-	@Deprecated
-	public static <T extends CMDomain> Predicate<T> allDomains() {
-		return alwaysTrue();
 	}
 
 	/**

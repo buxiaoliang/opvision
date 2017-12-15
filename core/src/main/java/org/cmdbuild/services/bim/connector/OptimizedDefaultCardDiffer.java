@@ -91,8 +91,8 @@ public class OptimizedDefaultCardDiffer implements CardDiffer {
 						sendDelta = true;
 					}
 				} else {
-					final Object newAttributeValue = attributeType.convertValue(sourceEntity.getAttributeByName(
-							attributeName).getValue());
+					final Object newAttributeValue = attributeType
+							.convertValue(sourceEntity.getAttributeByName(attributeName).getValue());
 					if ((newAttributeValue != null && !newAttributeValue.equals(oldAttributeValue))
 							|| (newAttributeValue == null && oldAttributeValue != null)) {
 						cardDefinition.set(attributeName, newAttributeValue);

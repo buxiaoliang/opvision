@@ -1,6 +1,7 @@
 package unit.model.menu;
 
 import static com.google.common.reflect.Reflection.newProxy;
+import static org.cmdbuild.auth.context.PrivilegeContexts.systemPrivilegeContext;
 import static org.cmdbuild.common.utils.Reflection.unsupported;
 import static org.cmdbuild.services.store.menu.MenuConstants.ELEMENT_CLASS_ATTRIBUTE;
 import static org.cmdbuild.services.store.menu.MenuConstants.MENU_CLASS_NAME;
@@ -15,7 +16,6 @@ import static org.mockito.Mockito.when;
 import org.cmdbuild.auth.UserStore;
 import org.cmdbuild.auth.acl.CMGroup;
 import org.cmdbuild.auth.acl.PrivilegeContext;
-import org.cmdbuild.auth.context.SystemPrivilegeContext;
 import org.cmdbuild.auth.user.AuthenticatedUser;
 import org.cmdbuild.auth.user.OperationUser;
 import org.cmdbuild.dao.entry.CMCard;
@@ -112,7 +112,7 @@ public class MenuCardPredicateFactoryTest {
 		// given
 		final AuthenticatedUser user = newProxy(AuthenticatedUser.class, unsupported("should not be used"));
 		final CMGroup group = newProxy(CMGroup.class, unsupported("should not be used"));
-		final OperationUser operationUser = new OperationUser(user, new SystemPrivilegeContext(), group);
+		final OperationUser operationUser = new OperationUser(user, systemPrivilegeContext(), group);
 		doReturn(operationUser) //
 				.when(userStore).getUser();
 		final CMCard mockMenuCard = getMockMenuCard(MenuItemType.DASHBOARD);

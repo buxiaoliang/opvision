@@ -1,5 +1,6 @@
 package org.cmdbuild.dao.view.user;
 
+import org.cmdbuild.dao.entry.CMCard;
 import org.cmdbuild.dao.entrytype.CMAttribute;
 import org.cmdbuild.dao.entrytype.CMEntryType;
 import org.cmdbuild.dao.entrytype.CMEntryTypeVisitor;
@@ -37,6 +38,11 @@ public abstract class UserEntryType extends ForwardingEntryType {
 	@Override
 	public CMAttribute getAttribute(final String name) {
 		return view.proxy(super.getAttribute(name));
+	}
+
+//	@Override
+	public CMAttribute getAttribute(final String name, final CMCard card) {
+		return view.proxy(super.getAttribute(name), card);
 	}
 
 	@Override

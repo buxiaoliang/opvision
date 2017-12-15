@@ -16,6 +16,11 @@ public class BimserverProject implements BimProject {
 	}
 
 	@Override
+	public String getDescription() {
+		return project.getDescription();
+	}
+
+	@Override
 	public String getIdentifier() {
 		final long poid = project.getOid();
 		return String.valueOf(poid);
@@ -50,6 +55,16 @@ public class BimserverProject implements BimProject {
 	@Override
 	public void setLastCheckin(final DateTime lastCheckin) {
 		this.lastCheckin = lastCheckin;
+	}
+
+	@Override
+	public String getIfcVersion() {
+		return project.getSchema();
+	}
+
+	@Override
+	public void setDescription(final String description) {
+		project.setDescription(description);
 	}
 
 }

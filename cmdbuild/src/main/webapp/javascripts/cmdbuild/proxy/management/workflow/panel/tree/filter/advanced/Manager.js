@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.management.workflow.panel.tree.filter.advanced.Manager', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.management.workflow.panel.tree.filter.advanced.Filter',
 			'CMDBuild.proxy.index.Json'

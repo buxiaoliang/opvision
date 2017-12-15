@@ -3,6 +3,9 @@ package org.cmdbuild.dao.view.user;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
 import java.util.Map;
+import javax.annotation.Nullable;
+import org.cmdbuild.auth.acl.PrivilegeContext;
+import org.cmdbuild.dao.entry.CMCard;
 
 import org.cmdbuild.dao.entry.ForwardingAttribute;
 import org.cmdbuild.dao.entrytype.CMAttribute;
@@ -15,8 +18,11 @@ import org.cmdbuild.dao.view.user.privileges.RowAndColumnPrivilegeFetcher;
 
 public class UserAttribute extends ForwardingAttribute {
 
-	static UserAttribute newInstance(final UserDataView view, final CMAttribute inner,
-			final RowAndColumnPrivilegeFetcher rowAndColumnPrivilegeFetcher) {
+	static UserAttribute newInstance(final UserDataView view, final CMAttribute inner, final RowAndColumnPrivilegeFetcher rowAndColumnPrivilegeFetcher) {
+		return newInstance(view, inner, rowAndColumnPrivilegeFetcher, null);
+	}
+	
+	static UserAttribute newInstance(final UserDataView view, final CMAttribute inner, final RowAndColumnPrivilegeFetcher rowAndColumnPrivilegeFetcher, @Nullable final CMCard card) {
 		if (inner == null) {
 			return null;
 		}
@@ -30,10 +36,9 @@ public class UserAttribute extends ForwardingAttribute {
 			private final CMAttributeTypeVisitor delegate = NullAttributeTypeVisitor.getInstance();
 
 			private Mode output;
-
+			
 			public Mode mode() {
-				final Map<String, String> attributesPrivileges = rowAndColumnPrivilegeFetcher
-						.fetchAttributesPrivilegesFor(inner.getOwner());
+				final Map<String, String> attributesPrivileges = rowAndColumnPrivilegeFetcher.fetchAttributesPrivilegesFor(inner.getOwner(), card);
 				output = Mode.of(attributesPrivileges.get(inner.getName()));
 				inner.getType().accept(this);
 				return output;

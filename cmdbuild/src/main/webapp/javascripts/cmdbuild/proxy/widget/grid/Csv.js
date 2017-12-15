@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.widget.grid.Csv', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.interfaces.FormSubmit',
 			'CMDBuild.core.LoadMask',

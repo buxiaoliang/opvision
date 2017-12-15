@@ -1,14 +1,12 @@
 (function() {
 
-	Ext.require([
-		'CMDBuild.core.constants.Global',
-		'CMDBuild.core.constants.Proxy',
-		'CMDBuild.proxy.index.Json'
-	]);
-
 	Ext.define("CMDBuild.Management.MasterDetailCardGrid", {
 		extend: "CMDBuild.view.management.common.CMCardGrid",
-
+		uses: [
+			'CMDBuild.core.constants.Global',
+			'CMDBuild.core.constants.Proxy',
+			'CMDBuild.proxy.index.Json'
+		],
 		// configuration
 		cmAddPrintButton: false,
 		// configuration

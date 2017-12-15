@@ -1,9 +1,7 @@
 (function() {
 
-	Ext.require(['CMDBuild.proxy.Card']);
-
 	Ext.define("CMDBuild.data.CMDetailedCardDataSource", {
-
+		uses: ['CMDBuild.proxy.Card'], 
 		extend: "CMDBuild.data.CMMiniCardGridBaseDataSource",
 
 		constructor: function() {

@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.management.widget.linkCards.LinkCards', {
 		extend: 'Ext.panel.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Utils'
 		],

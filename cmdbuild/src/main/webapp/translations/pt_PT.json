@@ -1,6 +1,6 @@
 {
 	"description": "Português Portugal",
-	"release": "2.4-dev",
+	"release": "2.5-dev",
 	"administration": {
 		"description": "Módulo de Administração",
 		"modClass": {
@@ -317,7 +317,13 @@
 		"tooltip": {
 			"editParameters": "Editar parâmetros",
 			"reload": "Recarregar",
-			"showData": "Mostrar Dados"
+			"showData": "Mostrar Dados",
+			"showAll": "<em>Show all</em>",
+			"hideAll": "<em>Hide all</em>"
+		},
+		"button": {
+			"showAll": "<em>Show all</em>",
+			"hideAll": "<em>Hide all</em>"
 		},
 		"tree_names": {
 			"class": "Padrão",
@@ -560,7 +566,13 @@
 				"geo_attributes": "Atributos geográficos",
 				"gisNavigation": "Navegação GIS",
 				"position": "Posição",
-				"zoom": "Zoom"
+				"zoom": "Zoom",
+				"shape": "<em>Shape</em>",
+				"shapes": {
+					"circle": "<em>Circle</em>",
+					"rectangle": "<em>Rectangle</em>",
+					"star": "<em>Star</em>"
+				}
 			},
 			"maptoolbar": {
 				"add": "Adicionar",
@@ -922,6 +934,8 @@
 	"filterInputParameters": "<em>Filter input parameters</em>",
 	"filterParameters": "<em>Filter parameters</em>",
 	"filtersForGroups": "Filtros para grupos",
+	"filterTypeExpression": "<em>Expression</em>",
+	"filterTypeNormal": "<em>Normal</em>",
 	"filterView": "A partir do filtro",
 	"find": "<em>Find</em>",
 	"finish": "Terminar",
@@ -984,6 +998,7 @@
 	"initialLatitude": "Latitude inicial",
 	"initialLongitude": "Longitude inicial",
 	"initialZoomLevel": "Nível de zoom inicial",
+	"inputParameter": "Parâmetro de entrada",
 	"instance": "Instância",
 	"instanceName": "Nome da instância",
 	"inverseDescription": "Descrição inversa",
@@ -1237,7 +1252,6 @@
 	"set": "Configurado",
 	"setAsDefault": "Selecionar como padrão",
 	"setFilter": "Selecionar filtro",
-	"setLater": "Parâmetro de entrada",
 	"settleTimeMs": "<em>\"Settle time\" (ms)</em>",
 	"setup": "Opções gerais",
 	"showDetails": "Mostrar detalhes",

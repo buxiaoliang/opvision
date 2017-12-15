@@ -329,6 +329,7 @@ public class DefaultAuthenticationService implements AuthenticationService {
 			}
 		}
 		for (final CMRelationDefinition relation : relationsInUpdateOrder) {
+			relation.setUser(currentUser.get().getAuthenticatedUser().getUsername());
 			relation.update();
 		}
 
@@ -454,6 +455,7 @@ public class DefaultAuthenticationService implements AuthenticationService {
 				.set(Role.STARTING_CLASS, groupDTO.getStartingClassId()) //
 				.set(Role.ADMINISTRATOR, groupDTO.isAdministrator()) //
 				.set(Role.RESTRICTED_ADINISTRATOR, groupDTO.isRestrictedAdministrator()) //
+				.setUser(currentUser.get().getAuthenticatedUser().getUsername()) //
 				.save();
 		return groupFetcher.fetchGroupWithId(createdGroupCard.getId());
 	}
@@ -464,7 +466,8 @@ public class DefaultAuthenticationService implements AuthenticationService {
 		final CMCardDefinition groupToUpdate = view.update(groupCard) //
 				.set(Role.ACTIVE, groupDTO.isActive()) //
 				.set(Role.ADMINISTRATOR, groupDTO.isAdministrator()) //
-				.set(Role.RESTRICTED_ADINISTRATOR, groupDTO.isRestrictedAdministrator());
+				.set(Role.RESTRICTED_ADINISTRATOR, groupDTO.isRestrictedAdministrator())
+				.setUser(currentUser.get().getAuthenticatedUser().getUsername());
 		if (groupDTO.getDescription() != null) {
 			groupToUpdate.set(Role.DESCRIPTION, groupDTO.getDescription());
 		}
@@ -483,6 +486,7 @@ public class DefaultAuthenticationService implements AuthenticationService {
 		final CMCard groupCard = fetchGroupCardWithId(groupId);
 		final CMCard updatedGroupCard = view.update(groupCard) //
 				.set(Role.ACTIVE, active) //
+				.setUser(currentUser.get().getAuthenticatedUser().getUsername())
 				.save();
 		return fetchGroupWithId(updatedGroupCard.getId());
 	}

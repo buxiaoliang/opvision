@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.common.field.filter.advanced.window.panels.functions.FormPanel', {
 		extend: 'Ext.form.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.FieldWidths',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.common.field.filter.advanced.window.Functions'

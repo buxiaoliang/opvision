@@ -6,7 +6,7 @@
 	Ext.define('CMDBuild.controller.administration.localization.advancedTable.section.Abstract', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.localization.Localization'
 		],

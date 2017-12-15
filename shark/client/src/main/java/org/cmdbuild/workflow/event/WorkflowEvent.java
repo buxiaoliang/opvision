@@ -12,7 +12,7 @@ public class WorkflowEvent {
 	private final String processDefinitionId;
 	private final String processInstanceId;
 
-	private WorkflowEvent(final Type type, final String processDefinitionId, final String processInstanceId) {
+	public WorkflowEvent(final Type type, final String processDefinitionId, final String processInstanceId) {
 		Validate.notNull(type);
 		Validate.notEmpty(processDefinitionId);
 		Validate.notEmpty(processInstanceId);
@@ -39,6 +39,11 @@ public class WorkflowEvent {
 
 	public static WorkflowEvent newProcessUpdateEvent(final String processDefinitionId, final String processInstanceId) {
 		return new WorkflowEvent(Type.UPDATE, processDefinitionId, processInstanceId);
+	}
+
+	@Override
+	public String toString() {
+		return "WorkflowEvent{" + "type=" + type + ", processDefinitionId=" + processDefinitionId + ", processInstanceId=" + processInstanceId + '}';
 	}
 
 }

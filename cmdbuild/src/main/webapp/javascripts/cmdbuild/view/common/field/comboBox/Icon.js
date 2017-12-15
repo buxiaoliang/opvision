@@ -5,7 +5,7 @@
 
 		alias: 'widget.comboboxicon',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.common.field.comboBox.Icon}

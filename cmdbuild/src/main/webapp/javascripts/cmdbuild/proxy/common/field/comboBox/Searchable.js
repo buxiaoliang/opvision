@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.common.field.comboBox.Searchable', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json'
 		],

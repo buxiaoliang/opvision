@@ -2,7 +2,6 @@ package org.cmdbuild.services.bim;
 
 import static org.cmdbuild.data.store.Storables.storableOf;
 
-import org.cmdbuild.bim.service.BimError;
 import org.cmdbuild.data.store.Store;
 import org.cmdbuild.model.bim.StorableLayer;
 import org.cmdbuild.model.bim.StorableProject;
@@ -38,9 +37,6 @@ public class DefaultBimStoreManager implements BimStoreManager {
 		final StorableProject projectAlreadyStored = projectStore.read(storableOf(project.getProjectId()));
 		if (projectAlreadyStored != null) {
 			project.setName(projectAlreadyStored.getName());
-			if (project.getExportProjectId() == null) {
-				project.setExportProjectId(projectAlreadyStored.getExportProjectId());
-			}
 			if (project.getLastCheckin() == null) {
 				project.setLastCheckin(projectAlreadyStored.getLastCheckin());
 			}
@@ -67,6 +63,14 @@ public class DefaultBimStoreManager implements BimStoreManager {
 		projectToEnable.setActive(true);
 		write(projectToEnable);
 	}
+	
+
+	@Override
+	public String getMapping(String identifier) {
+		final StorableProject project = read(identifier);
+		return project.getImportMapping();
+	}
+
 
 	@Override
 	public Iterable<StorableLayer> readAllLayers() {
@@ -114,48 +118,9 @@ public class DefaultBimStoreManager implements BimStoreManager {
 	}
 
 	@Override
-	public void saveExportStatus(final String className, final String value) {
-		StorableLayer layerForClass = layerStore.read(storableOf(className));
-		final boolean exportValue = Boolean.parseBoolean(value);
-		if (layerForClass == null) {
-			layerForClass = new StorableLayer(className);
-			layerForClass.setExport(exportValue);
-			layerStore.create(layerForClass);
-		} else {
-			layerForClass.setExport(exportValue);
-			layerStore.update(layerForClass);
-		}
-	}
-
-	@Override
-	public void saveContainerStatus(final String className, final String value) {
-		StorableLayer layerForClass = layerStore.read(storableOf(className));
-		final boolean containerValue = Boolean.parseBoolean(value);
-		if (layerForClass == null) {
-			layerForClass = new StorableLayer(className);
-			layerForClass.setContainer(containerValue);
-			layerStore.create(layerForClass);
-		} else {
-			layerForClass.setContainer(containerValue);
-			layerStore.update(layerForClass);
-		}
-
-	}
-
-	@Override
 	public StorableLayer findRoot() {
 		for (final StorableLayer layer : layerStore.readAll()) {
 			if (layer.isRoot()) {
-				return layer;
-			}
-		}
-		return StorableLayer.NULL_LAYER;
-	}
-
-	@Override
-	public StorableLayer findContainer() {
-		for (final StorableLayer layer : layerStore.readAll()) {
-			if (layer.isContainer()) {
 				return layer;
 			}
 		}
@@ -170,16 +135,6 @@ public class DefaultBimStoreManager implements BimStoreManager {
 			response = layer.isActive();
 		}
 		return response;
-	}
-
-	@Override
-	public String getContainerClassName() {
-		final StorableLayer containerLayer = findContainer();
-		if (containerLayer == null) {
-			throw new BimError("Container layer not configured");
-		} else {
-			return containerLayer.getClassName();
-		}
 	}
 
 }

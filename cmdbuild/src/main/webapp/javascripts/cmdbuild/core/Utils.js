@@ -1,12 +1,11 @@
 (function () {
 
-	Ext.require(['CMDBuild.core.constants.Global']);
 
 	/**
 	 * New class to replace CMDBuild.Utils
 	 */
 	Ext.define('CMDBuild.core.Utils', {
-
+		uses: ['CMDBuild.core.constants.Global'],
 		singleton: true,
 
 		/**

@@ -10,7 +10,7 @@
 	 */
 	Ext.define('CMDBuild.proxy.Filter', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json'
 		],

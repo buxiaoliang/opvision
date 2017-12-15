@@ -124,7 +124,7 @@ public class CxfCardAttachments implements CardAttachments {
 			errorHandler.classNotFound(classId);
 		}
 		try {
-			dataAccessLogic.fetchCard(classId, cardId);
+			dataAccessLogic.fetchCMCard(classId, cardId);
 		} catch (final NoSuchElementException e) {
 			errorHandler.cardNotFound(cardId);
 		}
@@ -136,7 +136,7 @@ public class CxfCardAttachments implements CardAttachments {
 			errorHandler.classNotFound(classId);
 		}
 		try {
-			dataAccessLogic.fetchCard(classId, cardId);
+			dataAccessLogic.fetchCMCard(classId, cardId);
 		} catch (final NoSuchElementException e) {
 			errorHandler.cardNotFound(cardId);
 		}

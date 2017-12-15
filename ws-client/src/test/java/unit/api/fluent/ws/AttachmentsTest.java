@@ -17,10 +17,12 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import javax.activation.DataHandler;
 
+import org.mockito.Mockito;
 import org.cmdbuild.api.fluent.Attachment;
 import org.cmdbuild.api.fluent.AttachmentDescriptor;
 import org.cmdbuild.api.fluent.Attachments;
 import org.cmdbuild.api.fluent.CardDescriptor;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -38,6 +40,11 @@ public class AttachmentsTest extends AbstractWsFluentApiTest {
 	public void createAttachments() throws Exception {
 		final CardDescriptor source = api().existingCard(CLASS_NAME, CARD_ID);
 		attachments = api().existingCard(source).attachments();
+	}
+
+	@After
+	public void cleanupAttachments() {
+		attachments = null;
 	}
 
 	@Test
@@ -96,6 +103,8 @@ public class AttachmentsTest extends AbstractWsFluentApiTest {
 		doReturn("some other category").when(bar).getCategory();
 		doReturn(secondUrl).when(bar).getUrl();
 
+		doReturn(true).when(proxy()).uploadAttachment(Mockito.anyString(), Mockito.anyInt(), Mockito.any(DataHandler.class), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+		
 		// when
 		attachments.upload(foo, bar);
 
@@ -119,6 +128,8 @@ public class AttachmentsTest extends AbstractWsFluentApiTest {
 	public void uploadSingleAttachment() throws Exception {
 		// given
 		final String url = temporaryFolder.newFile().toURI().toURL().toString();
+		
+		doReturn(true).when(proxy()).uploadAttachment(Mockito.anyString(), Mockito.anyInt(), Mockito.any(DataHandler.class), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
 
 		// when
 		attachments.upload("foo", "this is foo", "some category", url);

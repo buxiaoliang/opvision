@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.administration.accordion.Lookup', {
 		extend: 'CMDBuild.controller.common.abstract.Accordion',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.lookup.Type'
 		],

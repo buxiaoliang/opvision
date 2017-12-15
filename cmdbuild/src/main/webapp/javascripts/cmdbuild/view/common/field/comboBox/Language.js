@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.common.field.comboBox.Language', {
 		extend: 'Ext.form.field.ComboBox',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.common.field.comboBox.Language'
 		],

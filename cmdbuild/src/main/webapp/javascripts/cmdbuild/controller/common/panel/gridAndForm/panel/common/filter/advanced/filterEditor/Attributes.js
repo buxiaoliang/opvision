@@ -6,7 +6,7 @@
 	Ext.define('CMDBuild.controller.common.panel.gridAndForm.panel.common.filter.advanced.filterEditor.Attributes', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Utils',
 			'CMDBuild.proxy.common.panel.gridAndForm.filter.advanced.filterEditor.Attributes'

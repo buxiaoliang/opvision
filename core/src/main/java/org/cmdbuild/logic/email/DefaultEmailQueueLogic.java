@@ -14,6 +14,8 @@ import org.cmdbuild.scheduler.command.BuildableCommandBasedJob;
 import org.cmdbuild.scheduler.command.Command;
 import org.joda.time.DateTime;
 
+import static org.cmdbuild.scheduler.CMDBuildSerializableJob.EmailQueueConventionalTaskId;
+
 public class DefaultEmailQueueLogic implements EmailQueueLogic {
 
 	private static class AdvancedCommand implements Command {
@@ -57,6 +59,7 @@ public class DefaultEmailQueueLogic implements EmailQueueLogic {
 		this.job = BuildableCommandBasedJob.newInstance() //
 				.withName(DefaultEmailQueueLogic.class.getName()) //
 				.withCommand(new AdvancedCommand(command, configuration)) //
+				.withTaskId(EmailQueueConventionalTaskId)
 				.build();
 	}
 

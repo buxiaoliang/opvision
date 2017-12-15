@@ -2,13 +2,14 @@
 
 	// TODO: fix to use class property requires (unusable at the moment because
 	// of class wrong name)
-	Ext.require([ 'CMDBuild.core.constants.Proxy',
-			'CMDBuild.proxy.administration.userAndGroup.group.tabs.DefaultFilters' ]);
 
-	Ext
-			.define(
-					'CMDBuild.controller.management.common.CMModController',
-					{
+	Ext.define('CMDBuild.controller.management.common.CMModController',
+					{	
+
+						uses: [
+							'CMDBuild.core.constants.Proxy',
+							'CMDBuild.proxy.administration.userAndGroup.group.tabs.DefaultFilters'
+						],
 						extend : 'CMDBuild.controller.CMBasePanelController',
 
 						mixins : {
@@ -159,7 +160,12 @@
 	Ext
 			.define(
 					'CMDBuild.controller.management.classes.CMModCardController',
-					{
+					{	
+						uses: [
+							'CMDBuild.core.constants.Proxy',
+							'CMDBuild.proxy.administration.userAndGroup.group.tabs.DefaultFilters'
+						],
+						
 						extend : 'CMDBuild.controller.management.common.CMModController',
 
 						/**

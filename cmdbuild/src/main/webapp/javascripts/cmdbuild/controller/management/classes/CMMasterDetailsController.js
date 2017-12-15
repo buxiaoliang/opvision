@@ -1,13 +1,12 @@
 (function() {
 
-	Ext.require(['CMDBuild.proxy.Card']);
 
 	var MD = "detail";
 	var FK = "foreignkey";
 
 	Ext.define("CMDBuild.controller.management.classes.masterDetails.CMMasterDetailsController", {
 		extend: "CMDBuild.controller.management.classes.CMModCardSubController",
-
+		uses: ['CMDBuild.proxy.Card'],
 		/**
 		 * @property {CMDBuild.controller.management.classes.common.attachment.Window}
 		 */

@@ -1,5 +1,6 @@
 package org.cmdbuild.dao.driver.postgres;
 
+import static com.google.common.base.Objects.equal;
 import static java.lang.String.format;
 
 import org.cmdbuild.dao.driver.postgres.Const.SystemAttributes;
@@ -11,7 +12,7 @@ import org.cmdbuild.dao.query.clause.alias.AliasVisitor;
 import org.cmdbuild.dao.query.clause.alias.EntryTypeAlias;
 import org.cmdbuild.dao.query.clause.alias.NameAlias;
 
-public class Utils {
+public final class Utils {
 
 	private static final String SYSTEM_SEPARATOR = "_";
 	private static final String USER_SEPARATOR = "#";
@@ -39,7 +40,7 @@ public class Utils {
 			@Override
 			public void visit(final EntryTypeAlias alias) {
 				final CMIdentifier identifier = alias.getEntryType().getIdentifier();
-				if (identifier.getNameSpace() != CMIdentifier.DEFAULT_NAMESPACE) {
+				if (!equal(identifier.getNameSpace(), CMIdentifier.DEFAULT_NAMESPACE)) {
 					entryTypeName.append(identifier.getNameSpace()).append(AliasQuoter.NAMESPACE_LOCALNAME_SEPARATOR);
 				}
 				entryTypeName.append(identifier.getLocalName());
@@ -61,7 +62,7 @@ public class Utils {
 			@Override
 			public void visit(final EntryTypeAlias alias) {
 				final CMIdentifier identifier = alias.getEntryType().getIdentifier();
-				if (identifier.getNameSpace() != CMIdentifier.DEFAULT_NAMESPACE) {
+				if (!equal(identifier.getNameSpace(), CMIdentifier.DEFAULT_NAMESPACE)) {
 					entryTypeName.append(identifier.getNameSpace()).append(AliasQuoter.NAMESPACE_LOCALNAME_SEPARATOR);
 				}
 				entryTypeName.append(identifier.getLocalName());

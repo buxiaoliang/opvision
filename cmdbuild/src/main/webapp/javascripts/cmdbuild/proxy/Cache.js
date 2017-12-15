@@ -5,7 +5,7 @@
 	 */
 	Ext.define('CMDBuild.proxy.Cache', {
 
-		requires: [
+		uses: [
 			'CMDBuild.cache.CMReferenceStoreModel',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.index.Json',

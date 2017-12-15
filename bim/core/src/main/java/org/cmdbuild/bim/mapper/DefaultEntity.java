@@ -9,19 +9,18 @@ import com.google.common.collect.Maps;
 
 public class DefaultEntity implements Entity {
 
-	private Map<String, Attribute> attributesMap;
+	private final Map<String, Attribute> attributesMap;
 	private final String typeName;
 	private final String key;
 
-	private DefaultEntity(String typeName, String key) {
+	private DefaultEntity(final String typeName, final String key) {
 		this.key = key;
 		this.typeName = typeName;
 		this.attributesMap = Maps.newHashMap();
 	}
-	
-	
-	public static DefaultEntity withTypeAndKey(final String typeName, final String key){
-		return new DefaultEntity(typeName,key);
+
+	public static DefaultEntity withTypeAndKey(final String typeName, final String key) {
+		return new DefaultEntity(typeName, key);
 	}
 
 	@Override
@@ -45,18 +44,23 @@ public class DefaultEntity implements Entity {
 	}
 
 	@Override
-	public Attribute getAttributeByName(String attributeName) {
-		return Attribute.class.cast(attributesMap.containsKey(attributeName) ? attributesMap.get(attributeName)
-				: Attribute.NULL_ATTRIBUTE);
+	public Attribute getAttributeByName(final String attributeName) {
+		return Attribute.class.cast(
+				attributesMap.containsKey(attributeName) ? attributesMap.get(attributeName) : Attribute.NULL_ATTRIBUTE);
 	}
 
-	public void addAttribute(Attribute attribute) {
+	public void addAttribute(final Attribute attribute) {
 		attributesMap.put(attribute.getName(), attribute);
 	}
 
 	@Override
 	public String toString() {
 		return typeName + ": " + getKey();
+	}
+
+	@Override
+	public String getGlobalId() {
+		throw new UnsupportedOperationException();
 	}
 
 }

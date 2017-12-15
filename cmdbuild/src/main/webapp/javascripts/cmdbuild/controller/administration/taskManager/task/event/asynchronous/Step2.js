@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.administration.taskManager.task.event.asynchronous.Step2', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.administration.taskManager.task.event.asynchronous.Asynchronous}
@@ -53,7 +53,8 @@
 
 						// Filter tabs
 						me.view.filterAttributeTab = Ext.create('CMDBuild.view.management.common.filter.CMFilterAttributes', {
-							attributes: attributes
+							attributes: attributes,
+							taskManager : true
 						});
 						me.view.filterRelationTab = Ext.create('CMDBuild.view.management.common.filter.CMRelations', {
 							className: me.className,

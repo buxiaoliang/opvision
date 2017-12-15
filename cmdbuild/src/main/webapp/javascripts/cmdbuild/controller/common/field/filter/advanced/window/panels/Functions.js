@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.common.field.filter.advanced.window.panels.Functions', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.common.field.filter.advanced.window.Window}

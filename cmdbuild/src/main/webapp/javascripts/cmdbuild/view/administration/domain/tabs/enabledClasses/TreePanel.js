@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.domain.tabs.enabledClasses.TreePanel', {
 		extend: 'Ext.tree.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.administration.domain.tabs.enabledClasses.TreeStore'
 		],

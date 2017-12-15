@@ -8,7 +8,7 @@
 	Ext.define('CMDBuild.core.cache.Store', {
 		extend: 'Ext.data.Store',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.interfaces.Ajax'
 		],

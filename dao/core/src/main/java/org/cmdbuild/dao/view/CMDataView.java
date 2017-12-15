@@ -1,5 +1,7 @@
 package org.cmdbuild.dao.view;
 
+import org.cmdbuild.auth.acl.PrivilegeContext;
+import org.cmdbuild.common.annotations.Experimental;
 import org.cmdbuild.dao.entry.CMCard;
 import org.cmdbuild.dao.entry.CMCard.CMCardDefinition;
 import org.cmdbuild.dao.entry.CMRelation;
@@ -31,7 +33,7 @@ public interface CMDataView {
 
 	/**
 	 * Returns the active classes.
-	 * 
+	 *
 	 * @return active classes
 	 */
 	Iterable<? extends CMClass> findClasses();
@@ -54,7 +56,7 @@ public interface CMDataView {
 
 	/**
 	 * Returns the active domains.
-	 * 
+	 *
 	 * @return active domains
 	 */
 	Iterable<? extends CMDomain> findDomains();
@@ -67,47 +69,47 @@ public interface CMDataView {
 
 	/**
 	 * Returns the functions defined in the schema.
-	 * 
+	 *
 	 * @return defined functions
 	 */
 	Iterable<? extends CMFunction> findAllFunctions();
 
 	/**
 	 * Deletes the specified entry type.
-	 * 
+	 *
 	 * @param entryType
 	 */
 	void delete(CMEntryType entryType);
 
 	/**
 	 * Returns an empty card to be modified and saved.
-	 * 
+	 *
 	 * Note: it does not create a card in the data store until
 	 * {@link CMCardDefinition#save()} is called on the resulting object.
-	 * 
+	 *
 	 * @param type
 	 *            class for the card
-	 * 
+	 *
 	 * @return an empty modifiable card
 	 */
 	CMCardDefinition createCardFor(CMClass type);
 
 	/**
 	 * Returns a modifiable card.
-	 * 
+	 *
 	 * Note: the changes are not saved in the data store until
 	 * {@link CMCardDefinition#save()} is called on the resulting object.
-	 * 
+	 *
 	 * @param card
 	 *            immutable card to be modified
-	 * 
+	 *
 	 * @return a modifiable card from the immutable card
 	 */
 	CMCardDefinition update(CMCard card);
 
 	/**
 	 * Deletes the specified card
-	 * 
+	 *
 	 * @param card
 	 */
 	void delete(CMCard card);
@@ -115,7 +117,7 @@ public interface CMDataView {
 	/**
 	 * Method that returns a mutable relation object. This object is a new
 	 * relation which will be created and stored in the database
-	 * 
+	 *
 	 * @param domain
 	 *            the domain which the relation will belong to
 	 * @return a mutable object
@@ -125,7 +127,7 @@ public interface CMDataView {
 	/**
 	 * Method that returns a mutable relation object. This object is an object
 	 * representing a relation which already exists in the database
-	 * 
+	 *
 	 * @param domain
 	 *            the domain which the relation belongs to
 	 * @return a mutable object
@@ -134,14 +136,14 @@ public interface CMDataView {
 
 	/**
 	 * Deletes the specified relation
-	 * 
+	 *
 	 * @param relation
 	 */
 	void delete(CMRelation relation);
 
 	/**
 	 * Starts a query. Invoke {@link QuerySpecsBuilder.run()} to execute it.
-	 * 
+	 *
 	 * @param attrDef
 	 *            select parameters
 	 * @return the builder for a new query
@@ -150,16 +152,16 @@ public interface CMDataView {
 
 	/**
 	 * Executes a query returning its result.
-	 * 
+	 *
 	 * @param querySpecs
-	 * 
+	 *
 	 * @return the query result
 	 */
 	CMQueryResult executeQuery(QuerySpecs querySpecs);
 
 	/**
 	 * Clears all the contents for the specified type.
-	 * 
+	 *
 	 * @param type
 	 *            is the type that is to be cleared.
 	 */
@@ -170,5 +172,12 @@ public interface CMDataView {
 	CMClass getReportClass();
 
 	Iterable<? extends WhereClause> getAdditionalFiltersFor(CMEntryType classToFilter);
+
+	/**
+	 * If allowed it switches to a version of the current {@link CMDataView}
+	 * with the specified {@link PrivilegeContext}.
+	 */
+	@Experimental
+	CMDataView use(PrivilegeContext value);
 
 }

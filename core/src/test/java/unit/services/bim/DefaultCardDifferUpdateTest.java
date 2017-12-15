@@ -17,8 +17,8 @@ import org.cmdbuild.dao.entrytype.CMClass;
 import org.cmdbuild.dao.entrytype.attributetype.CMAttributeType;
 import org.cmdbuild.dao.view.CMDataView;
 import org.cmdbuild.logic.data.lookup.LookupLogic;
+import org.cmdbuild.services.bim.BimDataView;
 import org.cmdbuild.services.bim.connector.DefaultCardDiffer;
-import org.cmdbuild.services.bim.connector.MapperRules;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -32,12 +32,12 @@ public class DefaultCardDifferUpdateTest {
 	private static final Object OTHER_CODE = "CodeValue2";
 	private DefaultCardDiffer differ;
 	private final CMDataView dataView = mock(CMDataView.class);
-	private final MapperRules mapperRules = mock(MapperRules.class);
+	private final BimDataView bimDataView = mock(BimDataView.class);
 	private final LookupLogic lookupLogic = mock(LookupLogic.class);
 
 	@Before
 	public void setUp() {
-		this.differ = new DefaultCardDiffer(dataView, lookupLogic, mapperRules);
+		this.differ = new DefaultCardDiffer(dataView, lookupLogic, bimDataView);
 	}
 
 	@Test
@@ -54,7 +54,7 @@ public class DefaultCardDifferUpdateTest {
 		differ.updateCard(source, target);
 
 		// then
-		verifyZeroInteractions(dataView, mapperRules, lookupLogic);
+		verifyZeroInteractions(dataView, bimDataView, lookupLogic);
 	}
 
 	@Test
@@ -74,7 +74,7 @@ public class DefaultCardDifferUpdateTest {
 		differ.updateCard(source, target);
 
 		// then
-		verifyZeroInteractions(mapperRules, lookupLogic);
+		verifyZeroInteractions(bimDataView, lookupLogic);
 		final InOrder inorder = inOrder(dataView);
 		inorder.verify(dataView).update(target);
 		verifyNoMoreInteractions(dataView);
@@ -101,7 +101,7 @@ public class DefaultCardDifferUpdateTest {
 		differ.updateCard(source, target);
 
 		// then
-		verifyZeroInteractions(mapperRules, lookupLogic);
+		verifyZeroInteractions(bimDataView, lookupLogic);
 		final InOrder inorder = inOrder(dataView);
 		inorder.verify(dataView).update(target);
 		verifyNoMoreInteractions(dataView);
@@ -139,7 +139,7 @@ public class DefaultCardDifferUpdateTest {
 		differ.updateCard(source, target);
 
 		// then
-		verifyZeroInteractions(mapperRules, lookupLogic);
+		verifyZeroInteractions(bimDataView, lookupLogic);
 		final InOrder inorder = inOrder(dataView, cardDefinition);
 		inorder.verify(dataView).update(target);
 		verifyNoMoreInteractions(dataView, cardDefinition);
@@ -178,7 +178,7 @@ public class DefaultCardDifferUpdateTest {
 		differ.updateCard(source, target);
 
 		// then
-		verifyZeroInteractions(mapperRules, lookupLogic);
+		verifyZeroInteractions(bimDataView, lookupLogic);
 		final InOrder inorder = inOrder(dataView, cardDefinition);
 		inorder.verify(dataView).update(target);
 		inorder.verify(cardDefinition).set(CODE_ATTRIBUTE, THECODE);
@@ -218,7 +218,7 @@ public class DefaultCardDifferUpdateTest {
 		differ.updateCard(source, target);
 
 		// then
-		verifyZeroInteractions(mapperRules, lookupLogic);
+		verifyZeroInteractions(bimDataView, lookupLogic);
 		final InOrder inorder = inOrder(dataView, cardDefinition);
 		inorder.verify(dataView).update(target);
 		inorder.verify(cardDefinition).set(CODE_ATTRIBUTE, null);
@@ -258,7 +258,7 @@ public class DefaultCardDifferUpdateTest {
 		differ.updateCard(source, target);
 
 		// then
-		verifyZeroInteractions(mapperRules, lookupLogic);
+		verifyZeroInteractions(bimDataView, lookupLogic);
 		final InOrder inorder = inOrder(dataView, cardDefinition);
 		inorder.verify(dataView).update(target);
 		verifyNoMoreInteractions(dataView, cardDefinition);

@@ -15,7 +15,7 @@
 	Ext.define('CMDBuild.controller.common.panel.module.attachment.Tab', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {Object}
@@ -89,7 +89,7 @@
 		 * @returns {Void}
 		 */
 		onPanelModuleAttachmentTabBackButtonClick: function () {
-			this.cmfg('panelGridAndFormPanelFormTabActiveSet', 'formTabAttachment');
+			this.cmfg('panelGridAndFormPanelFormTabActiveSet', 0);
 		},
 
 		/**

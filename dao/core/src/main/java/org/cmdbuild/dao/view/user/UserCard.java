@@ -38,7 +38,8 @@ public class UserCard extends ForwardingCard {
 		this.allValues = Maps.newHashMap();
 		for (final Entry<String, Object> entry : inner.getAllValues()) {
 			final String name = entry.getKey();
-			final CMAttribute attribute = userClass.getAttribute(name);
+			//TODO try to edit this for attribute permission
+			final CMAttribute attribute = userClass.getAttribute(name, inner);
 			if (attribute == null) {
 				continue;
 			}

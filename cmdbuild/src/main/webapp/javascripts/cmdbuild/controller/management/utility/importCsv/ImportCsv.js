@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.management.utility.importCsv.ImportCsv', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Message',
 			'CMDBuild.proxy.utility.importCsv.ImportCsv'

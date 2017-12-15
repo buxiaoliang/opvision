@@ -7,84 +7,64 @@ public interface BimPersistence {
 
 	public interface PersistenceProject {
 
-		String getProjectId();
-
-		String getName();
-
-		String getDescription();
+		Iterable<String> getCardBinding();
 
 		Long getCmId();
 
-		boolean isActive();
-
-		boolean isSynch();
+		String getDescription();
 
 		String getImportMapping();
 
-		void setImportMapping(String importMapping);
-
-		String getExportMapping();
-
-		String getExportProjectId();
-
 		DateTime getLastCheckin();
 
-		Iterable<String> getCardBinding();
+		String getName();
 
-		void setSynch(boolean synch);
+		String getProjectId();
 
-		void setProjectId(String projectId);
+		boolean isActive();
+
+		void setActive(boolean active);
+
+		void setCardBinding(Iterable<String> cardBinding);
+
+		void setDescription(String description);
+
+		void setImportMapping(String importMapping);
 
 		void setLastCheckin(DateTime lastCheckin);
 
 		void setName(String name);
 
-		void setDescription(String description);
-
-		void setCardBinding(Iterable<String> cardBinding);
-
-		void setActive(boolean active);
-
-		String getShapeProjectId();
-
-		void setExportProjectId(String projectId);
+		void setProjectId(String projectId);
 
 	}
-
-	void saveProject(PersistenceProject project);
-
-	Iterable<PersistenceProject> readAll();
-
-	PersistenceProject read(String projectId);
 
 	void disableProject(PersistenceProject project);
 
 	void enableProject(PersistenceProject project);
 
-	Iterable<StorableLayer> listLayers();
-
-	void saveActiveFlag(String className, String value);
-
-	void saveRootFlag(String className, boolean value);
-
-	void saveExportFlag(String className, String value);
-
-	void saveContainerFlag(String className, String value);
-
-	void saveRootReferenceName(String className, String value);
-
 	StorableLayer findRoot();
-
-	StorableLayer findContainer();
 
 	String getProjectIdFromCardId(Long cardId);
 
-	Long getCardIdFromProjectId(String projectId);
-
 	boolean isActiveLayer(String classname);
 
-	String getContainerClassName();
+	Iterable<StorableLayer> listLayers();
+
+	PersistenceProject read(String projectId);
+
+	Iterable<PersistenceProject> readAll();
 
 	StorableLayer readLayer(String className);
+	
+	String getMapping(PersistenceProject project);
+
+	void saveActiveFlag(String className, String value);
+
+	void saveProject(PersistenceProject project);
+
+	void saveRootFlag(String className, boolean value);
+
+	void saveRootReferenceName(String className, String value);
 
 }

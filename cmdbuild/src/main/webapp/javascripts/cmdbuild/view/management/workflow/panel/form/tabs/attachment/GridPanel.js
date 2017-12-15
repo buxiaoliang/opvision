@@ -8,7 +8,7 @@
 	Ext.define('CMDBuild.view.management.workflow.panel.form.tabs.attachment.GridPanel', {
 		extend: 'Ext.grid.Panel',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.configurations.DataFormat',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.proxy.common.panel.module.attachment.Attachment'

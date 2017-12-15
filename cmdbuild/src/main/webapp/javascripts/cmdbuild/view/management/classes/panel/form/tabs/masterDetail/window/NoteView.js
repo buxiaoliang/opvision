@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.management.classes.panel.form.tabs.masterDetail.window.NoteView', {
 		extend: 'CMDBuild.core.window.AbstractCustomModal',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.management.classes.panel.form.tabs.masterDetail.window.Note}

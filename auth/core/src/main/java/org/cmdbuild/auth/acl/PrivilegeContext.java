@@ -23,6 +23,19 @@ public interface PrivilegeContext {
 		public List<String> getAttributesPrivileges();
 
 	}
+	
+	/**
+	 * a container of privileges, useful when we have different privilege groups
+	 * with different metadata (example: WRITE with filter field=A and READ with filter field=B)
+	 */
+	interface PrivilegesContainer {
+		
+		public List<CMPrivilege> getObjectPrivileges();
+
+		public PrivilegedObjectMetadata getPrivilegedObjectMetadata();
+		
+		public String getPrivilegesGroupId();
+	}
 
 	boolean hasPrivilege(CMPrivilege privilege);
 
@@ -58,6 +71,16 @@ public interface PrivilegeContext {
 	 * @return
 	 */
 	PrivilegedObjectMetadata getMetadata(CMPrivilegedObject privilegedObject);
+	
+	/**
+	 * get list of ALL privileges/metadata of an object; new privileges interface, to support multi group permission model
+	 * this method is supposed to be used from interface services, to build complex filters with different permissions 
+	 * @param privilegedObject
+	 * @return 
+	 */
+	public Iterable<PrivilegesContainer> getAllPrivilegesContainers(CMPrivilegedObject privilegedObject);
+	
+	public List<PrivilegeContext> getPrivilegeContextList();
 
 	/**
 	 * Reports currently use SQL for queries, so there is no way to give safe

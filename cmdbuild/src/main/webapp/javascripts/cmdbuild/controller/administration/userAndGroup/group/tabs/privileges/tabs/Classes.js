@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.controller.administration.userAndGroup.group.tabs.privileges.tabs.Classes', {
 		extend: 'CMDBuild.controller.common.abstract.Base',
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.core.Message',
 			'CMDBuild.proxy.administration.userAndGroup.group.tabs.privileges.Classes'

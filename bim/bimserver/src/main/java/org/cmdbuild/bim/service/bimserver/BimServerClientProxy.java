@@ -1,8 +1,7 @@
 package org.cmdbuild.bim.service.bimserver;
 
 import org.bimserver.client.BimServerClient;
-import org.bimserver.client.BimServerClientFactory;
-import org.bimserver.client.soap.SoapBimServerClientFactory;
+import org.bimserver.client.json.JsonBimServerClientFactory;
 import org.bimserver.shared.UsernamePasswordAuthenticationInfo;
 import org.cmdbuild.bim.logging.LoggingSupport;
 import org.slf4j.Logger;
@@ -14,13 +13,13 @@ public class BimServerClientProxy {
 	BimServerClient client;
 	boolean connectionStatus;
 
-	boolean connect(BimserverConfiguration configuration) {
+	boolean connect(final BimserverConfiguration configuration) {
 		if (configuration.isEnabled()) {
 			if (isConnected()) {
 				connectionStatus = true;
 			} else {
-				BimServerClientFactory factory = new SoapBimServerClientFactory(configuration.getUrl());
 				try {
+					final JsonBimServerClientFactory factory = new JsonBimServerClientFactory(configuration.getUrl());
 					client = factory.create(new UsernamePasswordAuthenticationInfo(configuration.getUsername(),
 							configuration.getPassword()));
 					connectionStatus = true;
@@ -39,8 +38,8 @@ public class BimServerClientProxy {
 		boolean pingSuccess = false;
 		if (connectionStatus) {
 			try {
-				pingSuccess = client.getBimsie1AuthInterface().isLoggedIn();
-			} catch (Throwable t) {
+				pingSuccess = client.getBimServerAuthInterface().isLoggedIn();
+			} catch (final Throwable t) {
 			}
 		}
 		return pingSuccess;

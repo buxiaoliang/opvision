@@ -6,7 +6,7 @@ public class ReferenceAttributeDefinition extends DefaultAttributeDefinition {
 
 	private EntityDefinition reference;
 
-	public ReferenceAttributeDefinition(String attributeName) {
+	public ReferenceAttributeDefinition(final String attributeName) {
 		super(attributeName);
 	}
 
@@ -15,12 +15,13 @@ public class ReferenceAttributeDefinition extends DefaultAttributeDefinition {
 		return reference;
 	}
 
-	public void setReference(EntityDefinition referencedEntity) {
+	public void setReference(final EntityDefinition referencedEntity) {
 		this.reference = referencedEntity;
 	}
-	
-	public String toString(){
-		return "REFERENCE TO --> " + this.getName();
+
+	@Override
+	public String toString() {
+		return "REFERENCE TO --> " + this.getIfcName();
 	}
 
 }

@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.proxy.administration.filter.group.Group', {
 
-		requires: [
+		uses: [
 			'CMDBuild.core.constants.Global',
 			'CMDBuild.core.constants.Proxy',
 			'CMDBuild.model.administration.filter.group.Store',

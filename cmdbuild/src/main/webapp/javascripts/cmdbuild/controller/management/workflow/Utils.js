@@ -2,7 +2,7 @@
 
 	Ext.define('CMDBuild.controller.management.workflow.Utils', {
 
-		requires: ['CMDBuild.core.constants.WorkflowStates'],
+		uses: ['CMDBuild.core.constants.WorkflowStates'],
 
 		singleton: true,
 

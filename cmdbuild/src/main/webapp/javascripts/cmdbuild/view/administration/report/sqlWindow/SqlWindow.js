@@ -3,7 +3,7 @@
 	Ext.define('CMDBuild.view.administration.report.sqlWindow.SqlWindow', {
 		extend: 'CMDBuild.core.window.AbstractModal',
 
-		requires: ['CMDBuild.core.constants.Proxy'],
+		uses: ['CMDBuild.core.constants.Proxy'],
 
 		/**
 		 * @cfg {CMDBuild.controller.administration.report.SqlWindow}

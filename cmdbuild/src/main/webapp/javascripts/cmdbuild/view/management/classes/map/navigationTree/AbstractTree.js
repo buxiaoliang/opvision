@@ -1,6 +1,6 @@
 (function() {
 	Ext.define('CMDBuild.view.management.classes.map.navigationTree.AbstractTree', {
-		requires : [ 'CMDBuild.view.management.classes.map.proxy.NavigationTree' ],
+		uses : [ 'CMDBuild.view.management.classes.map.proxy.NavigationTree' ],
 		root : undefined,
 		setInteractionDocument : function(interactionDocument) {
 			this.interactionDocument = interactionDocument;
